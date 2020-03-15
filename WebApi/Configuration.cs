@@ -39,5 +39,10 @@ namespace YukiDrive
         /// </summary>
         /// <value></value>
         public static string[] Scopes => new string[] { "Files.ReadWrite.All" };
+
+        /// <summary>
+        /// 代理路径
+        /// </summary>
+        public static string Proxy => configurationRoot["Proxy"];
     }
 }

@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Graph;
 using Microsoft.Graph.Auth;
 using Microsoft.Identity.Client;
+using YukiDrive.Models;
 using YukiDrive.Services;
-using YukiDrive.Services.Interfaces;
 
 namespace YukiDrive.Controllers
 {
@@ -34,9 +34,8 @@ namespace YukiDrive.Controllers
         /// 从 Oauth 重定向的url
         /// </summary>
         /// <returns></returns>
-        [HttpGet("bind/new/?code={code}&session_state={state}")]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> NewBinding(string code, string state)
+        [HttpGet("bind/new")]
+        public async Task<IActionResult> NewBinding(string code,string session_state)
         {
             try
             {
