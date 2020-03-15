@@ -56,6 +56,7 @@ namespace YukiDrive.Services
             return file;
         }
 
+        #region PrivateMethod
         private DriveFile SaveItem(DriveItem result)
         {
             DriveFile file = new DriveFile()
@@ -101,7 +102,7 @@ namespace YukiDrive.Services
             return files;
         }
 
-
+        #endregion
 
     }
 }

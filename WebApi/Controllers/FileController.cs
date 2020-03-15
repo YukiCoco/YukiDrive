@@ -16,8 +16,20 @@ namespace YukiDrive.Controllers
         }
 
         [HttpGet("test")]
-        public string test(){
-            return "Hello,World";
+        public string Test(){
+            System.Console.WriteLine(YukiDrive.Configuration.ConnectionString);
+            return "233333";
+        }
+
+        // catch-all 参数匹配路径
+        /// <summary>
+        /// 返回下载路径
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        [HttpGet("down/{**path}")]
+        public string Download(string path){
+            return path;
         }
     }
 }
