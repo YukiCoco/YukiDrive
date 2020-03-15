@@ -44,5 +44,15 @@ namespace YukiDrive
         /// 代理路径
         /// </summary>
         public static string Proxy => configurationRoot["Proxy"];
+
+        /// <summary>
+        /// 账户名称
+        /// </summary>
+        public static string AccountName => configurationRoot["AccountName"];
+
+        /// <summary>
+        /// 域名
+        /// </summary>
+        public static string DominName => configurationRoot["DominName"];
     }
 }

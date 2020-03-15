@@ -30,7 +30,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace YukiDrive.Helper
+namespace YukiDrive.Helpers
 {
     /// <summary>
     /// Helper class to call a protected API and process its result

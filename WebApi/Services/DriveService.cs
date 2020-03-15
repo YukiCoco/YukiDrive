@@ -5,7 +5,6 @@ using Microsoft.Graph;
 using Microsoft.Graph.Auth;
 using Microsoft.Identity.Client;
 using System.Net.Http;
-using YukiDrive.Helper;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using System.Net;
@@ -30,37 +29,60 @@ namespace YukiDrive.Services
             //缓存Token
             TokenCacheHelper.EnableSerialization(app.UserTokenCache);
         }
+        /// <summary>
+        /// 获取根目录的所有项目
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<DriveFile>> GetRootItems()
         {
             var result = await drive.Root.Children.Request().GetAsync();
             List<DriveFile> files = SaveItems(result);
             return files;
         }
+        /// <summary>
+        /// 根据id获取文件夹下所有项目
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<List<DriveFile>> GetDriveItemsById(string id)
         {
             var result = await drive.Items[id].Children.Request().GetAsync();
             List<DriveFile> files = SaveItems(result);
             return files;
         }
+        /// <summary>
+        /// 根据路径获取文件夹下所有项目
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public async Task<List<DriveFile>> GetDriveItemsByPath(string path)
         {
             var result = await drive.Root.ItemWithPath(path).Children.Request().GetAsync();
             List<DriveFile> files = SaveItems(result);
             return files;
         }
+        /// <summary>
+        /// 根据路径获取项目
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public async Task<DriveFile> GetDriveItemByPath(string path)
         {
             var result = await drive.Root.ItemWithPath(path).Request().GetAsync();
             DriveFile file = SaveItem(result);
             return file;
         }
+        /// <summary>
+        /// 根据id获取项目
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<DriveFile> GetDriveItemById(string id)
         {
             var result = await drive.Items[id].Request().GetAsync();
             DriveFile file = SaveItem(result);
             return file;
         }
-
         #region PrivateMethod
         private DriveFile SaveItem(DriveItem result)
         {

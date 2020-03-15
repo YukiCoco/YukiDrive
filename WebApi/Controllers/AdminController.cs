@@ -15,8 +15,8 @@ namespace YukiDrive.Controllers
     [Route("[controller]")]
     public class AdminController : ControllerBase
     {
-        private DriveAccountService driveAccount;
-        public AdminController(DriveAccountService driveAccount){
+        private IDriveAccountService driveAccount;
+        public AdminController(IDriveAccountService driveAccount){
             this.driveAccount = driveAccount;
         }
         /// <summary>
@@ -43,6 +43,21 @@ namespace YukiDrive.Controllers
             }
             catch (Exception ex)
             {
+                return BadRequest(ex.Message);
+            }
+            return Ok("success");
+        }
+
+        /// <summary>
+        /// 添加 SharePoint Site
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("site")]
+        public async Task<IActionResult> AddSite(string siteName){
+            try{
+                await driveAccount.AddSiteId(siteName);
+            }
+            catch(Exception ex){
                 return BadRequest(ex.Message);
             }
             return Ok("success");
