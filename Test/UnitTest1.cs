@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System.Linq;
 using System.Net;
 using YukiDrive.Services;
+using YukiDrive.Contexts;
 
 namespace Test
 {
@@ -64,7 +65,13 @@ namespace Test
         [TestMethod]
         public void TestMethod1()
         {
-            
+            DriveAccountService driveAccountService = new DriveAccountService(new SiteContext());
+            DriveService service = new DriveService(driveAccountService,new SiteContext(),new DriveContext());
+            var result = service.GetRootItems("YukiDrive_Debug").Result;
+            foreach (var item in result)
+            {
+                Debug.WriteLine(item.Name);
+            }
         }
 
         IConfidentialClientApplication app;
@@ -83,38 +90,38 @@ namespace Test
         [TestMethod]
         public void OnedriveFile()
         {
-            //天朝国情
-            HttpClient.DefaultProxy = new WebProxy("http://127.0.0.1:7890");
-            InitDrive();
-            //Debug.WriteLine(app.GetAuthorizationRequestUrl(scopes).ExecuteAsync().Result.AbsoluteUri);
-            AuthorizationCodeProvider authProvider = new AuthorizationCodeProvider(app);
-            //var result = authProvider.ClientApplication.AcquireTokenByAuthorizationCode(scopes, "OAQABAAIAAABeAFzDwllzTYGDLh_qYbH8L7gUEfgmy7oOvDXlHN45HZz4OzLZa1OMywteS-aSzSXRrXLDvY_I7wqI3xNcQ-JqTvWrZzkeapNv6ayKuVPkNFrJ7ScQox-FLiSK_sHrW_TtDWY_3OKnOlI59WakzlrzsbJzafJlfwS_hir6IrgU55ouIRP0Q-wS1WkAhTbYI1_KmW1ZEDTEBXIgxVUOOxYdei4jvP6lQ3r6PMPzIZj2ytfb0vcr4cwiyjTb38a3HvNtiAmqtO3cL4iOZ4z6WVFtBNF3puFaphHvq42Q9d99Az-I6gnUNuO3w7NvLcALdfDEvAi5NlF_DBfw2UD2VMJ4l5uK0ldFzgaksT5T4Cg57XUf9mH-XWxGtPo1REwsyq4iRLSRphSGCaUMoc6C2UXGD4dBnTYh6SJxOjF_tYqDiuv7dja0njaadsnWcdxy1uXP6Dz7RP-I7bUKKzjkpZF7IpTRi1kfAF5ttslMIdMPp4fnJtnNGF40m7fT5AWm7I2oqUvBs9HR2-LupHoT6ZekZD-YNbsCTO0x_lJuSTyTU6nTZnkl2thhfXExSvdt7Sw_M1eN__MkxMlWo9XsKBJyFXSUB6HnELI10PSreifqSmwovNj5kN07ODzOraEvVgKTH5QmPChvAypcZOS6B3hz-Mq5O3nudhKp0UQerMwlOyAA").ExecuteAsync().Result;
-            var result = authProvider.ClientApplication.AcquireTokenSilent(scopes, "Sakura@yukistudio.onmicrosoft.com").ExecuteAsync().Result;
-            //Debug.WriteLine(result.AccessToken);
-            string siteId = getSiteId(result);
-            //GraphServiceClient graph = new GraphServiceClient(authProvider);
+            // //天朝国情
+            // HttpClient.DefaultProxy = new WebProxy("http://127.0.0.1:7890");
+            // InitDrive();
+            // //Debug.WriteLine(app.GetAuthorizationRequestUrl(scopes).ExecuteAsync().Result.AbsoluteUri);
+            // AuthorizationCodeProvider authProvider = new AuthorizationCodeProvider(app);
+            // //var result = authProvider.ClientApplication.AcquireTokenByAuthorizationCode(scopes, "OAQABAAIAAABeAFzDwllzTYGDLh_qYbH8L7gUEfgmy7oOvDXlHN45HZz4OzLZa1OMywteS-aSzSXRrXLDvY_I7wqI3xNcQ-JqTvWrZzkeapNv6ayKuVPkNFrJ7ScQox-FLiSK_sHrW_TtDWY_3OKnOlI59WakzlrzsbJzafJlfwS_hir6IrgU55ouIRP0Q-wS1WkAhTbYI1_KmW1ZEDTEBXIgxVUOOxYdei4jvP6lQ3r6PMPzIZj2ytfb0vcr4cwiyjTb38a3HvNtiAmqtO3cL4iOZ4z6WVFtBNF3puFaphHvq42Q9d99Az-I6gnUNuO3w7NvLcALdfDEvAi5NlF_DBfw2UD2VMJ4l5uK0ldFzgaksT5T4Cg57XUf9mH-XWxGtPo1REwsyq4iRLSRphSGCaUMoc6C2UXGD4dBnTYh6SJxOjF_tYqDiuv7dja0njaadsnWcdxy1uXP6Dz7RP-I7bUKKzjkpZF7IpTRi1kfAF5ttslMIdMPp4fnJtnNGF40m7fT5AWm7I2oqUvBs9HR2-LupHoT6ZekZD-YNbsCTO0x_lJuSTyTU6nTZnkl2thhfXExSvdt7Sw_M1eN__MkxMlWo9XsKBJyFXSUB6HnELI10PSreifqSmwovNj5kN07ODzOraEvVgKTH5QmPChvAypcZOS6B3hz-Mq5O3nudhKp0UQerMwlOyAA").ExecuteAsync().Result;
+            // var result = authProvider.ClientApplication.AcquireTokenSilent(scopes, "Sakura@yukistudio.onmicrosoft.com").ExecuteAsync().Result;
+            // //Debug.WriteLine(result.AccessToken);
+            // string siteId = getSiteId(result);
+            // //GraphServiceClient graph = new GraphServiceClient(authProvider);
 
-            //启用代理
-            // Configure your proxy
-            var httpClientHandler = new HttpClientHandler
-            {
-                Proxy = new WebProxy("http://127.0.0.1:7890"),
-                UseDefaultCredentials = true
-            };
-            var httpProvider = new HttpProvider(httpClientHandler, false);
-            GraphServiceClient graph = new GraphServiceClient(authProvider,httpProvider);
+            // //启用代理
+            // // Configure your proxy
+            // var httpClientHandler = new HttpClientHandler
+            // {
+            //     Proxy = new WebProxy("http://127.0.0.1:7890"),
+            //     UseDefaultCredentials = true
+            // };
+            // var httpProvider = new HttpProvider(httpClientHandler, false);
+            // GraphServiceClient graph = new GraphServiceClient(authProvider,httpProvider);
 
-            //获取根
-            var drive = graph.Sites[siteId].Drive;
-            //YukiDrive.Services.DriveService onedrive = new YukiDrive.Services.DriveService(new YukiDrive.Services);
-            var files = onedrive.GetDriveItemsByPath("TestDiretory").Result;
-            //var files = onedrive.GetDriveFiles("014CGQVIS74I522TCE6NGYOA3UMWXILLCW").Result;
-            foreach (var item in files)
-            {
-                Debug.WriteLine(item.DownloadUrl);
-            }
-            // var item = onedrive.GetDriveItemByPath("TestDiretory/B825BE8D-330C-40D2-BE0C-CE4C408107F8.png").Result;
-            // Debug.WriteLine(item.DownloadUrl);
+            // //获取根
+            // var drive = graph.Sites[siteId].Drive;
+            // YukiDrive.Services.DriveService onedrive = new YukiDrive.Services.DriveService(new YukiDrive.Services.DriveAccountService(new YukiDrive.Contexts.SiteContext()));
+            // var files = onedrive.GetDriveItemsByPath("TestDiretory").Result;
+            // //var files = onedrive.GetDriveFiles("014CGQVIS74I522TCE6NGYOA3UMWXILLCW").Result;
+            // foreach (var item in files)
+            // {
+            //     Debug.WriteLine(item.DownloadUrl);
+            // }
+            // // var item = onedrive.GetDriveItemByPath("TestDiretory/B825BE8D-330C-40D2-BE0C-CE4C408107F8.png").Result;
+            // // Debug.WriteLine(item.DownloadUrl);
         }
 
         private static string getSiteId(AuthenticationResult result)

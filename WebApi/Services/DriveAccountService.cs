@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO;
 using System;
 using System.Linq;
@@ -26,14 +27,35 @@ namespace YukiDrive.Services
         public Microsoft.Graph.GraphServiceClient Graph { get; set; }
         public DriveAccountService(SiteContext siteContext)
         {
-            app = ConfidentialClientApplicationBuilder
+            if (Configuration.Type == Configuration.OfficeType.China)
+            {
+                app = ConfidentialClientApplicationBuilder
             .Create(Configuration.ClientId)
             .WithClientSecret(Configuration.ClientSecret)
             .WithRedirectUri(Configuration.RedirectUri)
+            .WithAuthority(AzureCloudInstance.AzureChina, "common")
             .Build();
+            }
+            else
+            {
+                app = ConfidentialClientApplicationBuilder
+            .Create(Configuration.ClientId)
+            .WithClientSecret(Configuration.ClientSecret)
+            .WithRedirectUri(Configuration.RedirectUri)
+            .WithAuthority(AzureCloudInstance.AzurePublic, "common")
+            .Build();
+            }
             //缓存Token
             TokenCacheHelper.EnableSerialization(app.UserTokenCache);
-            authProvider = new AuthorizationCodeProvider(app);
+            //这里要传入一个 Scope 否则默认使用 https://graph.microsoft.com/.default
+            //而导致无法使用世纪互联版本
+            authProvider = new AuthorizationCodeProvider(app, Configuration.Scopes);
+            //获取Token
+            if (File.Exists(TokenCacheHelper.CacheFilePath))
+            {
+                authorizeResult = authProvider.ClientApplication.AcquireTokenSilent(Configuration.Scopes, Configuration.AccountName).ExecuteAsync().Result;
+                //Debug.WriteLine(authorizeResult.AccessToken);
+            }
             //启用代理
             if (!string.IsNullOrEmpty(Configuration.Proxy))
             {
@@ -43,18 +65,15 @@ namespace YukiDrive.Services
                     Proxy = new WebProxy(Configuration.Proxy),
                     UseDefaultCredentials = true
                 };
-                var httpProvider = new Microsoft.Graph.HttpProvider(httpClientHandler, false){
+                var httpProvider = new Microsoft.Graph.HttpProvider(httpClientHandler, false)
+                {
                     OverallTimeout = TimeSpan.FromSeconds(10)
                 };
-                Graph = new Microsoft.Graph.GraphServiceClient(authProvider, httpProvider);
+                Graph = new Microsoft.Graph.GraphServiceClient($"{Configuration.GraphApi}/v1.0", authProvider, httpProvider);
             }
             else
             {
-                Graph = new Microsoft.Graph.GraphServiceClient(authProvider);
-            }
-            if (File.Exists(TokenCacheHelper.CacheFilePath))
-            {
-                authorizeResult = authProvider.ClientApplication.AcquireTokenSilent(Configuration.Scopes, Configuration.AccountName).ExecuteAsync().Result;
+                Graph = new Microsoft.Graph.GraphServiceClient($"{Configuration.GraphApi}/v1.0", authProvider);
             }
             this.siteContext = siteContext;
         }
@@ -91,7 +110,7 @@ namespace YukiDrive.Services
             {
                 httpClient.Timeout = TimeSpan.FromSeconds(10);
                 var apiCaller = new ProtectedApiCallHelper(httpClient);
-                await apiCaller.CallWebApiAndProcessResultASync($"https://graph.microsoft.com/v1.0/sites/{Configuration.DominName}:/sites/{siteName}", authorizeResult.AccessToken, (result) =>
+                await apiCaller.CallWebApiAndProcessResultASync($"{Configuration.GraphApi}/v1.0/sites/{Configuration.DominName}:/sites/{siteName}", authorizeResult.AccessToken, (result) =>
                 {
                     site.SiteId = result.Properties().Single((prop) => prop.Name == "id").Value.ToString();
                     site.Name = result.Properties().Single((prop) => prop.Name == "name").Value.ToString();
@@ -101,7 +120,8 @@ namespace YukiDrive.Services
             await siteContext.SaveChangesAsync();
         }
 
-        public List<Site> GetSites(){
+        public List<Site> GetSites()
+        {
             List<Site> result = siteContext.Sites.ToList();
             return result;
         }

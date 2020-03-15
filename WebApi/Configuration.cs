@@ -54,5 +54,24 @@ namespace YukiDrive
         /// 域名
         /// </summary>
         public static string DominName => configurationRoot["DominName"];
+
+        /// <summary>
+        /// Office 类型
+        /// </summary>
+        /// <param name="="></param>
+        /// <returns></returns>
+        public static OfficeType Type => (configurationRoot["Type"] == "China") ? OfficeType.China : OfficeType.Global;
+
+        /// <summary>
+        /// Graph Api
+        /// </summary>
+        /// <param name="="></param>
+        /// <returns></returns>
+        public static string GraphApi => (configurationRoot["Type"] == "China") ? "https://microsoftgraph.chinacloudapi.cn" : "https://graph.microsoft.com";
+        public enum OfficeType
+        {
+            Global,
+            China
+        }
     }
 }
