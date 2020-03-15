@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using YukiDrive.Services;
 
 namespace YukiDrive.Controllers
 {
@@ -11,8 +12,9 @@ namespace YukiDrive.Controllers
     [Route("[controller]")]
     public class FileController : ControllerBase
     {
-        public FileController(){
-
+        IDriveService service;
+        public FileController(IDriveService service){
+            this.service = service;
         }
 
         [HttpGet("test")]
@@ -27,9 +29,10 @@ namespace YukiDrive.Controllers
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        [HttpGet("down/{**path}")]
-        public string Download(string path){
-            return path;
+        [HttpGet("down/{siteName}/{**path}")]
+        public async Task<IActionResult> Download(string siteName,string path){
+            var result = await service.GetDriveItemByPath(path,siteName);
+            return Ok(result);
         }
     }
 }

@@ -64,6 +64,7 @@ namespace Test
         [TestMethod]
         public void TestMethod1()
         {
+            
         }
 
         IConfidentialClientApplication app;
@@ -105,7 +106,7 @@ namespace Test
 
             //获取根
             var drive = graph.Sites[siteId].Drive;
-            YukiDrive.Services.DriveService onedrive = new YukiDrive.Services.DriveService(drive);
+            //YukiDrive.Services.DriveService onedrive = new YukiDrive.Services.DriveService(new YukiDrive.Services);
             var files = onedrive.GetDriveItemsByPath("TestDiretory").Result;
             //var files = onedrive.GetDriveFiles("014CGQVIS74I522TCE6NGYOA3UMWXILLCW").Result;
             foreach (var item in files)

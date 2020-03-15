@@ -28,8 +28,12 @@ namespace YukiDrive
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            //不要被 CG 采用单一实例
+            services.AddSingleton<IDriveAccountService>(new DriveAccountService(new SiteContext()));
             services.AddDbContext<SiteContext>();
-            services.AddScoped<IDriveAccountService,DriveAccountService>();
+            services.AddDbContext<DriveContext>();
+            services.AddScoped<IDriveService,DriveService>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

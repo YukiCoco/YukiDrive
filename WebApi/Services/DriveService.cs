@@ -11,30 +11,31 @@ using System.Net;
 using YukiDrive.Models;
 using System.Threading.Tasks;
 using YukiDrive.Helpers;
+using YukiDrive.Contexts;
 
 namespace YukiDrive.Services
 {
-    public class DriveService
+    public class DriveService : IDriveService
     {
-        private IDriveRequestBuilder drive;
-        public IConfidentialClientApplication app;
-        public DriveService(IDriveRequestBuilder drive)
+        IDriveAccountService accountService;
+        GraphServiceClient graph;
+        SiteContext siteContext;
+        DriveContext driveContext;
+        public DriveService(IDriveAccountService accountService,SiteContext siteContext,DriveContext driveContext)
         {
-            this.drive = drive;
-            app = ConfidentialClientApplicationBuilder
-            .Create(Configuration.ClientId)
-            .WithClientSecret(Configuration.ClientSecret)
-            .WithRedirectUri(Configuration.RedirectUri)
-            .Build();
-            //缓存Token
-            TokenCacheHelper.EnableSerialization(app.UserTokenCache);
+            this.accountService = accountService;
+            graph = accountService.Graph;
+            this.siteContext = siteContext;
+            this.driveContext = driveContext;
         }
         /// <summary>
         /// 获取根目录的所有项目
         /// </summary>
         /// <returns></returns>
-        public async Task<List<DriveFile>> GetRootItems()
+        public async Task<List<DriveFile>> GetRootItems(string name)
         {
+            string siteId = GetSiteId(name);
+            var drive = graph.Sites[siteId].Drive;
             var result = await drive.Root.Children.Request().GetAsync();
             List<DriveFile> files = SaveItems(result);
             return files;
@@ -44,8 +45,10 @@ namespace YukiDrive.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<List<DriveFile>> GetDriveItemsById(string id)
+        public async Task<List<DriveFile>> GetDriveItemsById(string id,string name)
         {
+            string siteId = GetSiteId(name);
+            var drive = graph.Sites[siteId].Drive;
             var result = await drive.Items[id].Children.Request().GetAsync();
             List<DriveFile> files = SaveItems(result);
             return files;
@@ -55,8 +58,10 @@ namespace YukiDrive.Services
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public async Task<List<DriveFile>> GetDriveItemsByPath(string path)
+        public async Task<List<DriveFile>> GetDriveItemsByPath(string path,string name)
         {
+            string siteId = GetSiteId(name);
+            var drive = graph.Sites[siteId].Drive;
             var result = await drive.Root.ItemWithPath(path).Children.Request().GetAsync();
             List<DriveFile> files = SaveItems(result);
             return files;
@@ -66,8 +71,10 @@ namespace YukiDrive.Services
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public async Task<DriveFile> GetDriveItemByPath(string path)
+        public async Task<DriveFile> GetDriveItemByPath(string path,string name)
         {
+            string siteId = GetSiteId(name);
+            var drive = graph.Sites[siteId].Drive;
             var result = await drive.Root.ItemWithPath(path).Request().GetAsync();
             DriveFile file = SaveItem(result);
             return file;
@@ -77,8 +84,10 @@ namespace YukiDrive.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<DriveFile> GetDriveItemById(string id)
+        public async Task<DriveFile> GetDriveItemById(string id,string name)
         {
+            string siteId = GetSiteId(name);
+            var drive = graph.Sites[siteId].Drive;
             var result = await drive.Items[id].Request().GetAsync();
             DriveFile file = SaveItem(result);
             return file;
@@ -129,6 +138,14 @@ namespace YukiDrive.Services
             return files;
         }
 
+        /// <summary>
+        /// 根据名称返回siteid
+        /// </summary>
+        /// <returns></returns>
+        private string GetSiteId(string name){
+            Models.Site site = siteContext.Sites.Single(site => site.Name == name);
+            return site.SiteId;
+        }
         #endregion
 
     }

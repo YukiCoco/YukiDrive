@@ -8,6 +8,7 @@ using Microsoft.Identity.Client;
 using YukiDrive.Helpers;
 using YukiDrive.Contexts;
 using YukiDrive.Models;
+using System.Net;
 
 namespace YukiDrive.Services
 {
@@ -17,7 +18,13 @@ namespace YukiDrive.Services
         private AuthenticationResult authorizeResult;
         private AuthorizationCodeProvider authProvider;
         private SiteContext siteContext;
-        public DriveAccountService(SiteContext siteContext){
+        /// <summary>
+        /// Graph实例
+        /// </summary>
+        /// <value></value>
+        public Microsoft.Graph.GraphServiceClient Graph { get; set; }
+        public DriveAccountService(SiteContext siteContext)
+        {
             app = ConfidentialClientApplicationBuilder
             .Create(Configuration.ClientId)
             .WithClientSecret(Configuration.ClientSecret)
@@ -26,7 +33,24 @@ namespace YukiDrive.Services
             //缓存Token
             TokenCacheHelper.EnableSerialization(app.UserTokenCache);
             authProvider = new AuthorizationCodeProvider(app);
-            if(File.Exists(TokenCacheHelper.CacheFilePath)){
+            //启用代理
+            if (!string.IsNullOrEmpty(Configuration.Proxy))
+            {
+                // Configure your proxy
+                var httpClientHandler = new HttpClientHandler
+                {
+                    Proxy = new WebProxy(Configuration.Proxy),
+                    UseDefaultCredentials = true
+                };
+                var httpProvider = new Microsoft.Graph.HttpProvider(httpClientHandler, false);
+                Graph = new Microsoft.Graph.GraphServiceClient(authProvider, httpProvider);
+            }
+            else
+            {
+                Graph = new Microsoft.Graph.GraphServiceClient(authProvider);
+            }
+            if (File.Exists(TokenCacheHelper.CacheFilePath))
+            {
                 authorizeResult = authProvider.ClientApplication.AcquireTokenSilent(Configuration.Scopes, Configuration.AccountName).ExecuteAsync().Result;
             }
             this.siteContext = siteContext;
@@ -35,7 +59,8 @@ namespace YukiDrive.Services
         /// 返回 Oauth 验证url
         /// </summary>
         /// <returns></returns>
-        public async Task<string> GetAuthorizationRequestUrl(){
+        public async Task<string> GetAuthorizationRequestUrl()
+        {
             var redirectUrl = await app.GetAuthorizationRequestUrl(Configuration.Scopes).ExecuteAsync();
             return redirectUrl.AbsoluteUri;
         }
@@ -44,7 +69,8 @@ namespace YukiDrive.Services
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public async Task<AuthenticationResult> Authorize(string code){
+        public async Task<AuthenticationResult> Authorize(string code)
+        {
             AuthorizationCodeProvider authProvider = new AuthorizationCodeProvider(app);
             var result = await authProvider.ClientApplication.AcquireTokenByAuthorizationCode(Configuration.Scopes, code).ExecuteAsync();
             return result;

@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.Graph.Auth;
 using Microsoft.Identity.Client;
 
 namespace YukiDrive.Services
@@ -23,5 +24,11 @@ namespace YukiDrive.Services
         /// <param name="dominName"></param>
         /// <returns></returns>
         public Task AddSiteId(string siteName);
+
+        /// <summary>
+        /// Graph实例
+        /// </summary>
+        /// <value></value>
+        public Microsoft.Graph.GraphServiceClient Graph {get; set;}
     }
 }
