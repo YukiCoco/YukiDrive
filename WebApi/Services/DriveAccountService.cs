@@ -7,6 +7,7 @@ using Microsoft.Graph.Auth;
 using Microsoft.Identity.Client;
 using YukiDrive.Helpers;
 using YukiDrive.Contexts;
+using YukiDrive.Models;
 
 namespace YukiDrive.Services
 {
@@ -49,23 +50,25 @@ namespace YukiDrive.Services
             return result;
         }
         /// <summary>
-        /// 添加 SharePoint Site-ID
+        /// 添加 SharePoint Site-ID 到数据库
         /// </summary>
         /// <param name="siteName"></param>
         /// <param name="dominName"></param>
         /// <returns></returns>
         public async Task AddSiteId(string siteName)
         {
+            Site site = new Site();
             using (HttpClient httpClient = new HttpClient())
             {
                 httpClient.Timeout = TimeSpan.FromSeconds(10);
                 var apiCaller = new ProtectedApiCallHelper(httpClient);
-                string siteId = "";
                 await apiCaller.CallWebApiAndProcessResultASync($"https://graph.microsoft.com/v1.0/sites/{Configuration.DominName}:/sites/{siteName}", authorizeResult.AccessToken, (result) =>
                 {
-                    siteId = result.Properties().Single((prop) => prop.Name == "id").Value.ToString();
+                    site.SiteId = result.Properties().Single((prop) => prop.Name == "id").Value.ToString();
+                    site.Name = result.Properties().Single((prop) => prop.Name == "name").Value.ToString();
                 });
             }
+            await siteContext.Sites.AddAsync(site);
         }
     }
 }
