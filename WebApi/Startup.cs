@@ -29,10 +29,10 @@ namespace YukiDrive
         {
             services.AddControllers();
             //不要被 CG 采用单一实例
-            services.AddSingleton<IDriveAccountService>(new DriveAccountService(new SiteContext()));
-            services.AddDbContext<SiteContext>();
-            services.AddDbContext<DriveContext>();
-            services.AddScoped<IDriveService,DriveService>();
+            services.AddSingleton<IDriveAccountService,DriveAccountService>(provider => new DriveAccountService(new SiteContext()));
+            services.AddDbContext<SiteContext>(ServiceLifetime.Transient);
+            services.AddDbContext<DriveContext>(ServiceLifetime.Transient);
+            services.AddTransient<IDriveService,DriveService>();
             
         }
 

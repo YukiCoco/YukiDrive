@@ -9,6 +9,7 @@ using YukiDrive.Helpers;
 using YukiDrive.Contexts;
 using YukiDrive.Models;
 using System.Net;
+using System.Collections.Generic;
 
 namespace YukiDrive.Services
 {
@@ -42,7 +43,9 @@ namespace YukiDrive.Services
                     Proxy = new WebProxy(Configuration.Proxy),
                     UseDefaultCredentials = true
                 };
-                var httpProvider = new Microsoft.Graph.HttpProvider(httpClientHandler, false);
+                var httpProvider = new Microsoft.Graph.HttpProvider(httpClientHandler, false){
+                    OverallTimeout = TimeSpan.FromSeconds(10)
+                };
                 Graph = new Microsoft.Graph.GraphServiceClient(authProvider, httpProvider);
             }
             else
@@ -96,6 +99,11 @@ namespace YukiDrive.Services
             }
             await siteContext.Sites.AddAsync(site);
             await siteContext.SaveChangesAsync();
+        }
+
+        public List<Site> GetSites(){
+            List<Site> result = siteContext.Sites.ToList();
+            return result;
         }
     }
 }

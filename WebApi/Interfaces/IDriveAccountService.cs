@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Graph.Auth;
 using Microsoft.Identity.Client;
+using YukiDrive.Models;
 
 namespace YukiDrive.Services
 {
@@ -30,5 +32,10 @@ namespace YukiDrive.Services
         /// </summary>
         /// <value></value>
         public Microsoft.Graph.GraphServiceClient Graph {get; set;}
+        /// <summary>
+        /// 返回所有 sharepoint site
+        /// </summary>
+        /// <returns></returns>
+        public List<Site> GetSites();
     }
 }
