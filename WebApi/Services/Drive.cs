@@ -11,20 +11,26 @@ using System.Linq;
 using System.Net;
 using YukiDrive.Models;
 using System.Threading.Tasks;
+using YukiDrive.Helpers;
+using YukiDrive.Services.Interfaces;
 
 namespace YukiDrive.Services
 {
-    public class Drive
+    public class DriveService
     {
         private IDriveRequestBuilder drive;
-        public Drive(IDriveRequestBuilder drive)
+        public IConfidentialClientApplication app;
+        public DriveService(IDriveRequestBuilder drive)
         {
             this.drive = drive;
+            app = ConfidentialClientApplicationBuilder
+            .Create(Configuration.ClientId)
+            .WithClientSecret(Configuration.ClientSecret)
+            .WithRedirectUri(Configuration.RedirectUri)
+            .Build();
+            //缓存Token
+            TokenCacheHelper.EnableSerialization(app.UserTokenCache);
         }
-        /// <summary>
-        /// 获取根文件夹下所有内容
-        /// </summary>
-        /// <returns></returns>
         public async Task<List<DriveFile>> GetRootItems()
         {
             var result = await drive.Root.Children.Request().GetAsync();

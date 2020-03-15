@@ -1,15 +1,24 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Graph;
 using Microsoft.Graph.Auth;
 using Microsoft.Identity.Client;
+using YukiDrive.Services;
+using YukiDrive.Services.Interfaces;
+
 namespace YukiDrive.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AdminController
+    public class AdminController : ControllerBase
     {
+        private DriveAccountService driveAccount;
+        public AdminController(DriveAccountService driveAccount){
+            this.driveAccount = driveAccount;
+        }
         /// <summary>
         /// 重定向到 M$ 的 Oauth
         /// </summary>
@@ -17,15 +26,27 @@ namespace YukiDrive.Controllers
         [HttpGet("bind/url")]
         public async Task<RedirectResult> RedirectToBinding()
         {
-            IConfidentialClientApplication app;
-            app = ConfidentialClientApplicationBuilder
-            .Create(Configuration.ClientId)
-            .WithClientSecret(Configuration.ClientSecret)
-            .WithRedirectUri(Configuration.RedirectUri)
-            .Build();
-            var redirectUrl = await app.GetAuthorizationRequestUrl(Configuration.Scopes).ExecuteAsync();
-            var result = new RedirectResult(redirectUrl.AbsoluteUri);
+            string url = await driveAccount.GetAuthorizationRequestUrl();
+            var result = new RedirectResult(url);
             return result;
+        }
+        /// <summary>
+        /// 从 Oauth 重定向的url
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("bind/new/?code={code}&session_state={state}")]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> NewBinding(string code, string state)
+        {
+            try
+            {
+                var result = await driveAccount.Authorize(code);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok("success");
         }
     }
 }

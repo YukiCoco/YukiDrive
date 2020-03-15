@@ -105,7 +105,7 @@ namespace Test
 
             //获取根
             var drive = graph.Sites[siteId].Drive;
-            YukiDrive.Services.Drive onedrive = new YukiDrive.Services.Drive(drive);
+            YukiDrive.Services.DriveService onedrive = new YukiDrive.Services.DriveService(drive);
             var files = onedrive.GetDriveItemsByPath("TestDiretory").Result;
             //var files = onedrive.GetDriveFiles("014CGQVIS74I522TCE6NGYOA3UMWXILLCW").Result;
             foreach (var item in files)
