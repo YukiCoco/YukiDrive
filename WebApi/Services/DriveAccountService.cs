@@ -69,6 +69,7 @@ namespace YukiDrive.Services
                 });
             }
             await siteContext.Sites.AddAsync(site);
+            await siteContext.SaveChangesAsync();
         }
     }
 }
