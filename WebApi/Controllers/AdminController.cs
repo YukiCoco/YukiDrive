@@ -12,7 +12,7 @@ using YukiDrive.Services;
 namespace YukiDrive.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class AdminController : ControllerBase
     {
         private IDriveAccountService driveAccount;

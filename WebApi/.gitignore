@@ -38,3 +38,5 @@ msbuild.wrn
 .vs/
 #token
 TokenCache.*
+
+AdminUser.lock

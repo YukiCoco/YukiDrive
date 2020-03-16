@@ -1,3 +1,4 @@
+using System.Threading;
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using System.Linq;
 using System.Net;
 using YukiDrive.Services;
 using YukiDrive.Contexts;
+using YukiDrive;
 
 namespace Test
 {
@@ -62,6 +64,14 @@ namespace Test
     [TestClass]
     public class UnitTest1
     {
+        [TestMethod]
+        public void TestJson(){
+            while(true){
+                
+                //Debug.WriteLine(Configuration.builder.);
+                Thread.Sleep(1000);
+            }
+        }
         [TestMethod]
         public void TestMethod1()
         {
@@ -124,20 +134,20 @@ namespace Test
             // // Debug.WriteLine(item.DownloadUrl);
         }
 
-        private static string getSiteId(AuthenticationResult result)
-        {
-            using (HttpClient httpClient = new HttpClient())
-            {
-                httpClient.Timeout = TimeSpan.FromSeconds(10);
-                var apiCaller = new ProtectedApiCallHelper(httpClient);
-                string siteId = "";
-                apiCaller.CallWebApiAndProcessResultASync("https://graph.microsoft.com/v1.0/sites/yukistudio.sharepoint.com:/sites/test", result.AccessToken, (result) =>
-                {
-                    siteId = result.Properties().Single((prop) => prop.Name == "id").Value.ToString();
-                }).Wait();
-                return siteId;
-            }
-        }
+        // private static string getSiteId(AuthenticationResult result)
+        // {
+        //     using (HttpClient httpClient = new HttpClient())
+        //     {
+        //         httpClient.Timeout = TimeSpan.FromSeconds(10);
+        //         var apiCaller = new ProtectedApiCallHelper(httpClient);
+        //         string siteId = "";
+        //         apiCaller.CallWebApiAndProcessResultASync("https://graph.microsoft.com/v1.0/sites/yukistudio.sharepoint.com:/sites/test", result.AccessToken, (result) =>
+        //         {
+        //             siteId = result.Properties().Single((prop) => prop.Name == "id").Value.ToString();
+        //         }).Wait();
+        //         return siteId;
+        //     }
+        // }
 
         /// <summary>
         /// Display the result of the Web API call
@@ -150,7 +160,7 @@ namespace Test
                 Debug.WriteLine($"{child.Name} = {child.Value}");
             }
         }
-        public async void DoAsync()
+        public void DoAsync()
         {
 
             // ClientCredentialProvider authProvider = new ClientCredentialProvider(confidentialClientApplication);

@@ -7,12 +7,13 @@ namespace YukiDrive
     public class Configuration
     {
         private static IConfigurationRoot configurationRoot;
+        private static IConfigurationBuilder builder;
         static Configuration()
         {
             //throw new Exception(Directory.GetCurrentDirectory());
             //File.WriteAllText("debug.log",Directory.GetCurrentDirectory());
-            var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", true, reloadOnChange: true);
-            configurationRoot = config.Build();
+            builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", true, reloadOnChange: true);
+            configurationRoot = builder.Build();
         }
         /// <summary>
         /// 数据库连接字符串
@@ -73,5 +74,20 @@ namespace YukiDrive
             Global,
             China
         }
+
+        /// <summary>
+        /// 验证密钥
+        /// </summary>
+        public static string Secret => configurationRoot["Secret"];
+
+        /// <summary>
+        /// 管理员名称
+        /// </summary>
+        public static string AdminName => configurationRoot["AdminName"];
+
+        /// <summary>
+        /// 管理员密码
+        /// </summary>
+        public static string AdminPassword => configurationRoot["AdminPassword"];
     }
 }
