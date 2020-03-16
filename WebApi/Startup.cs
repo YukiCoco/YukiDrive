@@ -115,6 +115,10 @@ namespace YukiDrive
             app.UseAuthentication();
             //授权
             app.UseAuthorization();
+            //spa
+            app.UseSpa(config => {
+                config.Options.SourcePath = "wwwroot";
+            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

@@ -20,7 +20,6 @@ namespace YukiDrive.Controllers
         /// 返回所有sites
         /// </summary>
         /// <returns></returns>
-        
         [HttpGet("site")]
         public IActionResult GetSites(){
             return Ok(siteService.GetSites());
