@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Graph;
@@ -11,6 +12,7 @@ using YukiDrive.Services;
 
 namespace YukiDrive.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class AdminController : ControllerBase
@@ -34,6 +36,7 @@ namespace YukiDrive.Controllers
         /// 从 Oauth 重定向的url
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         [HttpGet("bind/new")]
         public async Task<IActionResult> NewBinding(string code,string session_state)
         {
