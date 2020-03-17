@@ -67,10 +67,16 @@ import Cookies from 'js-cookie'
                   username:this.UserName,
                   password:this.UserPassword
               }).then(response => {
-                  console.log(response)
+                  //登录成功
+                  if(!response.data.error){
                   Cookies.set('token',response.data.token,{
-                      expires: 7
+                    expires: 7
                   })
+                  this.$store.commit('openSnackBar','登录成功')
+                  console.log(response.data)
+                  } else {
+                      this.$store.commit('openSnackBar',response.data.message)
+                  }
               })
           }
       },
