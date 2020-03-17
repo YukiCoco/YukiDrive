@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/:siteName?/:folderPath*', //Zero or more
     name: 'Index',
     component: Index
   },

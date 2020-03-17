@@ -37,7 +37,7 @@ namespace YukiDrive.Services
             string siteId = GetSiteId(siteName);
             var drive = graph.Sites[siteId].Drive;
             var result = await drive.Root.Children.Request().GetAsync();
-            List<DriveFile> files = SaveItems(result);
+            List<DriveFile> files = GetItems(result);
             return files;
         }
         /// <summary>
@@ -50,7 +50,7 @@ namespace YukiDrive.Services
             string siteId = GetSiteId(siteName);
             var drive = graph.Sites[siteId].Drive;
             var result = await drive.Items[id].Children.Request().GetAsync();
-            List<DriveFile> files = SaveItems(result);
+            List<DriveFile> files = GetItems(result);
             return files;
         }
         /// <summary>
@@ -63,7 +63,7 @@ namespace YukiDrive.Services
             string siteId = GetSiteId(siteName);
             var drive = graph.Sites[siteId].Drive;
             var result = await drive.Root.ItemWithPath(path).Children.Request().GetAsync();
-            List<DriveFile> files = SaveItems(result);
+            List<DriveFile> files = GetItems(result);
             return files;
         }
         /// <summary>
@@ -76,7 +76,7 @@ namespace YukiDrive.Services
             string siteId = GetSiteId(siteName);
             var drive = graph.Sites[siteId].Drive;
             var result = await drive.Root.ItemWithPath(path).Request().GetAsync();
-            DriveFile file = SaveItem(result);
+            DriveFile file = GetItem(result);
             return file;
         }
         /// <summary>
@@ -89,11 +89,11 @@ namespace YukiDrive.Services
             string siteId = GetSiteId(siteName);
             var drive = graph.Sites[siteId].Drive;
             var result = await drive.Items[id].Request().GetAsync();
-            DriveFile file = SaveItem(result);
+            DriveFile file = GetItem(result);
             return file;
         }
         #region PrivateMethod
-        private DriveFile SaveItem(DriveItem result)
+        private DriveFile GetItem(DriveItem result)
         {
             DriveFile file = new DriveFile()
             {
@@ -113,7 +113,7 @@ namespace YukiDrive.Services
             return file;
         }
 
-        private List<DriveFile> SaveItems(IDriveItemChildrenCollectionPage result)
+        private List<DriveFile> GetItems(IDriveItemChildrenCollectionPage result)
         {
             List<DriveFile> files = new List<DriveFile>();
             foreach (var item in result)

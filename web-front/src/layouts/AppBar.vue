@@ -7,7 +7,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn icon>
+        <!-- <v-btn icon>
             <v-icon>mdi-heart</v-icon>
         </v-btn>
 
@@ -27,7 +27,7 @@
                     <v-list-item-title>Option {{ n }}</v-list-item-title>
                 </v-list-item>
             </v-list>
-        </v-menu>
+        </v-menu> -->
     </v-app-bar>
 </div>
 </template>

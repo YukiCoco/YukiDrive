@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <AppBar />
+    <!-- <AppBar /> -->
     <Drawer />
     <v-content>
       <router-view />
@@ -9,13 +9,13 @@
 </template>
 
 <script>
-import AppBar from './layouts/AppBar';
+//import AppBar from './layouts/AppBar';
 import Drawer from './layouts/Drawer'
 
 export default {
   name: 'App',
   components: {
-    AppBar,
+    //AppBar,
     Drawer
   },
   data: () => ({

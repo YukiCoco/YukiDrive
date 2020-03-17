@@ -28,7 +28,7 @@ namespace YukiDrive.Controllers
         /// 根据路径获取文件夹内容
         /// </summary>
         /// <returns></returns>
-        [HttpGet("show/{siteName}/{path?}")]
+        [HttpGet("show/{siteName}/{**path}")]
         public async Task<IActionResult> GetDrectory(string siteName,string path){
             if(string.IsNullOrEmpty(path)){
                 var result = await driveService.GetRootItems(siteName);
