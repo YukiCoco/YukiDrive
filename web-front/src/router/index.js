@@ -1,10 +1,22 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Index from '../components/Index'
+import Admin from '../components/Admin'
+import Login from '../components/Login'
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/admin',
+    name: 'admin',
+    component: Admin
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
+  },
   {
     path: '/:siteName?/:folderPath*', //Zero or more
     name: 'Index',
