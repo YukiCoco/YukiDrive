@@ -17,7 +17,7 @@ namespace YukiDrive.Services
     public class DriveAccountService : IDriveAccountService
     {
         private IConfidentialClientApplication app;
-        private AuthenticationResult authorizeResult;
+        public AuthenticationResult authorizeResult;
         private AuthorizationCodeProvider authProvider;
         private SiteContext siteContext;
         /// <summary>
@@ -124,6 +124,20 @@ namespace YukiDrive.Services
         {
             List<Site> result = siteContext.Sites.ToList();
             return result;
+        }
+
+        /// <summary>
+        /// 获取 Drive Info
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<Microsoft.Graph.Quota>> GetDriveInfo(){
+            List<Microsoft.Graph.Quota> drivesQuota = new List<Microsoft.Graph.Quota>();
+            foreach (var item in siteContext.Sites.ToArray())
+            {
+                var drive = await Graph.Sites[item.SiteId].Drive.Request().GetAsync();
+                drivesQuota.Add(drive.Quota);
+            }
+            return drivesQuota;
         }
     }
 }

@@ -66,5 +66,19 @@ namespace YukiDrive.Controllers
             }
             return Ok("success");
         }
+
+        /// <summary>
+        /// 获取基本内容
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("info")]
+        public async Task<IActionResult> GetInfo(){
+            var driveInfo = await driveAccount.GetDriveInfo();
+            return Ok(new {
+                OfficeName = Configuration.AccountName,
+                OfficeType = Configuration.Type,
+                DriveInfo = driveInfo
+            });
+        }
     }
 }

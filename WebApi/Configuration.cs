@@ -39,7 +39,7 @@ namespace YukiDrive
         /// 返回 Scopes
         /// </summary>
         /// <value></value>
-        public static string[] Scopes => new string[] { "Files.ReadWrite.All" };
+        public static string[] Scopes => new string[] { "Sites.ReadWrite.All" ,"Files.ReadWrite.All" };
 
         /// <summary>
         /// 代理路径

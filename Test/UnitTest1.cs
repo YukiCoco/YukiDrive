@@ -65,9 +65,11 @@ namespace Test
     public class UnitTest1
     {
         [TestMethod]
-        public void TestJson(){
-            while(true){
-                
+        public void TestJson()
+        {
+            while (true)
+            {
+
                 //Debug.WriteLine(Configuration.builder.);
                 Thread.Sleep(1000);
             }
@@ -76,12 +78,10 @@ namespace Test
         public void TestMethod1()
         {
             DriveAccountService driveAccountService = new DriveAccountService(new SiteContext());
-            DriveService service = new DriveService(driveAccountService,new SiteContext(),new DriveContext());
-            var result = service.GetRootItems("YukiDrive_Debug").Result;
-            foreach (var item in result)
-            {
-                Debug.WriteLine(item.Name);
-            }
+            DriveService service = new DriveService(driveAccountService, new SiteContext(), new DriveContext());
+            //var drive = driveAccountService.Graph.Sites["alphaone.sharepoint.cn,217fb322-ee69-4fe7-af84-a1d018d1cf2b,c5bc7d0b-0a0f-49f6-9589-61481d4266ab"].Drive.Request().GetAsync().Result;
+            Debug.WriteLine(driveAccountService.Graph.Sites["alphaone.sharepoint.cn,217fb322-ee69-4fe7-af84-a1d018d1cf2b,c5bc7d0b-0a0f-49f6-9589-61481d4266ab"].Drive.RequestUrl);
+            Debug.WriteLine(driveAccountService.authorizeResult.AccessToken);
         }
 
         IConfidentialClientApplication app;
@@ -126,7 +126,7 @@ namespace Test
             // YukiDrive.Services.DriveService onedrive = new YukiDrive.Services.DriveService(new YukiDrive.Services.DriveAccountService(new YukiDrive.Contexts.SiteContext()));
             // var files = onedrive.GetDriveItemsByPath("TestDiretory").Result;
             // //var files = onedrive.GetDriveFiles("014CGQVIS74I522TCE6NGYOA3UMWXILLCW").Result;
-            // foreach (var item in files)
+            // foreach (var item in files)G
             // {
             //     Debug.WriteLine(item.DownloadUrl);
             // }

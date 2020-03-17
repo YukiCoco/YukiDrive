@@ -37,5 +37,11 @@ namespace YukiDrive.Services
         /// </summary>
         /// <returns></returns>
         public List<Site> GetSites();
+
+        /// <summary>
+        /// 获取驱动器信息
+        /// </summary>
+        /// <returns></returns>
+        public Task<List<Microsoft.Graph.Quota>> GetDriveInfo();
     }
 }
