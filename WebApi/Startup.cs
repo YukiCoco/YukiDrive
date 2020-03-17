@@ -26,6 +26,7 @@ namespace YukiDrive
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            //首次使用，添加管理员账户
             if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "AdminUser.lock")))
             {
                 using (UserService userService = new UserService(new UserContext()))
@@ -53,6 +54,9 @@ namespace YukiDrive
             services.AddTransient<IDriveService, DriveService>();
             services.AddDbContext<UserContext>(ServiceLifetime.Scoped);
             services.AddScoped<IUserService, UserService>();
+            //设置
+            services.AddDbContext<SettingContext>();
+            services.AddScoped<SettingService>();
             //配置身份验证
             var key = Encoding.ASCII.GetBytes(YukiDrive.Configuration.Secret);
             services.AddAuthentication(x =>
