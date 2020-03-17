@@ -25,6 +25,7 @@ namespace YukiDrive.Controllers
         /// 重定向到 M$ 的 Oauth
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         [HttpGet("bind/url")]
         public async Task<RedirectResult> RedirectToBinding()
         {
