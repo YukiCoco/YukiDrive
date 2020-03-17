@@ -42,7 +42,9 @@ namespace YukiDrive.Controllers
             var user = userService.Authenticate(model.Username, model.Password);
 
             if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+                return Ok(new {
+                    error = true,
+                    message = "Username or password is incorrect" });
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Configuration.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -60,6 +62,7 @@ namespace YukiDrive.Controllers
             // return basic user info and authentication token
             return Ok(new
             {
+                error = false,
                 Id = user.Id,
                 Username = user.Username,
                 Token = tokenString
