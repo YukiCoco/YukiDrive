@@ -3,6 +3,7 @@
     <v-row>
         <v-col cols="12" sm="12" offset-md="2" md="8" align="start" justify="center">
             <v-card>
+                <v-progress-linear indeterminate v-if="isInProgressing"></v-progress-linear>
                 <div v-if="router.length != 0">
                     <v-breadcrumbs :items="router" class="pl-4 pb-0 pt-4"></v-breadcrumbs>
                     <v-divider class="ml-4 mr-4 mt-1"></v-divider>
@@ -56,21 +57,22 @@ export default {
             files: [],
             folders: [],
             router: [],
-            currentSiteName: this.$route.params.siteName
+            currentSiteName: this.$route.params.siteName,
+            isInProgressing : false
         }
     },
     mounted() {
-        if(this.$route.params.folderPath){
+        if (this.$route.params.folderPath) {
             this.changeRouter()
             this.show(this.$route.params.folderPath)
-        } else{
+        } else {
             this.show()
         }
     },
     watch: {
         '$route'() {
             this.show(this.$route.params.folderPath)
-            if(this.$route.params.folderPath){
+            if (this.$route.params.folderPath) {
                 this.changeRouter()
             } else {
                 this.router.splice(0)
@@ -78,7 +80,11 @@ export default {
         }
     },
     methods: {
+        changeProgressBar : function(){
+            this.isInProgressing = !this.isInProgressing
+        },
         show: function (path = "") {
+            this.changeProgressBar()
             this.folders.splice(0)
             this.files.splice(0)
             axios.get(`https://localhost:5001/api/show/${this.currentSiteName}/${path}`).then(response => {
@@ -89,13 +95,14 @@ export default {
                     } else {
                         element.icon = getIcon(element.name)
                         this.files.push(element)
-                        if(this.$route.params.folderPath){
+                        if (this.$route.params.folderPath) {
                             element.downloadUrl = `https://localhost:5001/api/down/${this.currentSiteName}/${this.$route.params.folderPath}/${element.name}`
-                        } else{
+                        } else {
                             element.downloadUrl = `https://localhost:5001/api/down/${this.currentSiteName}/${element.name}`
                         }
                     }
                 });
+                this.changeProgressBar()
             })
         },
         changeRouter: function () {
@@ -104,7 +111,7 @@ export default {
             folders.forEach(element => {
                 //正则获取路径字符串
                 let regex = new RegExp(`${element}.*`)
-                let path = this.$route.params.folderPath.replace(regex,element)
+                let path = this.$route.params.folderPath.replace(regex, element)
                 console.log(`/${this.$route.params.siteName}/${path}`)
                 this.router.push({
                     text: element,
