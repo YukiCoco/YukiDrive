@@ -18,8 +18,10 @@ namespace YukiDrive.Controllers
     public class AdminController : ControllerBase
     {
         private IDriveAccountService driveAccount;
-        public AdminController(IDriveAccountService driveAccount){
+        private SettingService setting;
+        public AdminController(IDriveAccountService driveAccount,SettingService setting){
             this.driveAccount = driveAccount;
+            this.setting = setting;
         }
         /// <summary>
         /// 重定向到 M$ 的 Oauth
@@ -75,9 +77,12 @@ namespace YukiDrive.Controllers
         public async Task<IActionResult> GetInfo(){
             var driveInfo = await driveAccount.GetDriveInfo();
             return Ok(new {
-                OfficeName = Configuration.AccountName,
-                OfficeType = Configuration.Type,
-                DriveInfo = driveInfo
+                officeName = Configuration.AccountName,
+                officeType = Configuration.Type,
+                driveInfo = driveInfo,
+                appName = setting.Get("AppName"),
+                webName = setting.Get("WebName"),
+                navImg = setting.Get("NavImg")
             });
         }
     }
