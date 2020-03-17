@@ -1,7 +1,7 @@
 <template>
 <div>
-    <v-app-bar app>
-        <v-app-bar-nav-icon @click="changeDrawer" class="d-md-none"></v-app-bar-nav-icon>
+    <v-app-bar class="d-flex d-lg-none">
+        <v-app-bar-nav-icon @click="changeDrawer"></v-app-bar-nav-icon>
 
         <v-toolbar-title>Yuki Drive</v-toolbar-title>
 

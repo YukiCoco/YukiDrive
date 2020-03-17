@@ -34,7 +34,7 @@
                                     <v-list-item-subtitle v-text="item.createdTime"></v-list-item-subtitle>
                                 </v-list-item-content>
                                 <v-list-item-action>
-                                    <v-btn icon>
+                                    <v-btn icon :href="item.downloadUrl">
                                         <v-icon>mdi-download</v-icon>
                                     </v-btn>
                                 </v-list-item-action>
@@ -81,7 +81,6 @@ export default {
         show: function (path = "") {
             this.folders.splice(0)
             this.files.splice(0)
-            console.log(`https://localhost:5001/api/show/${this.currentSiteName}/${path}`)
             axios.get(`https://localhost:5001/api/show/${this.currentSiteName}/${path}`).then(response => {
                 response.data.forEach(element => {
                     element.createdTime = (new Date(element.createdTime)).toLocaleString()
@@ -90,6 +89,11 @@ export default {
                     } else {
                         element.icon = getIcon(element.name)
                         this.files.push(element)
+                        if(this.$route.params.folderPath){
+                            element.downloadUrl = `https://localhost:5001/api/down/${this.currentSiteName}/${this.$route.params.folderPath}/${element.name}`
+                        } else{
+                            element.downloadUrl = `https://localhost:5001/api/down/${this.currentSiteName}/${element.name}`
+                        }
                     }
                 });
             })
