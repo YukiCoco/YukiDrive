@@ -30,10 +30,11 @@ namespace YukiDrive
             {
                 using (UserService userService = new UserService(new UserContext()))
                 {
-                    User adminUser = new User(){
+                    User adminUser = new User()
+                    {
                         Username = YukiDrive.Configuration.AdminName
                     };
-                    userService.Create(adminUser,YukiDrive.Configuration.AdminPassword);
+                    userService.Create(adminUser, YukiDrive.Configuration.AdminPassword);
                 }
                 File.Create(Path.Combine(Directory.GetCurrentDirectory(), "AdminUser.lock"));
             }
@@ -75,14 +76,17 @@ namespace YukiDrive
                         }
                         return Task.CompletedTask;
                     },
-                    OnAuthenticationFailed = context => {
+                    OnAuthenticationFailed = context =>
+                    {
                         context.Fail("Authentication Failed");
                         return Task.CompletedTask;
                     },
-                    OnChallenge = async context => {
+                    OnChallenge = async context =>
+                    {
                         await context.HttpContext.Response.BodyWriter.WriteAsync(new ReadOnlyMemory<byte>(Encoding.UTF8.GetBytes("Unauthrized")));
                     },
-                    OnForbidden = context => {
+                    OnForbidden = context =>
+                    {
                         context.Fail("Forbidden");
                         return Task.CompletedTask;
                     }
@@ -105,6 +109,11 @@ namespace YukiDrive
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // global cors policy
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -116,7 +125,8 @@ namespace YukiDrive
             //授权
             app.UseAuthorization();
             //spa
-            app.UseSpa(config => {
+            app.UseSpa(config =>
+            {
                 config.Options.SourcePath = "wwwroot";
             });
             app.UseEndpoints(endpoints =>
