@@ -51,5 +51,13 @@ namespace YukiDrive.Services
         /// <param name="nickName"></param>
         /// <returns></returns>
         public Task Unbind(string nickName);
+
+        /// <summary>
+        /// 站点重命名
+        /// </summary>
+        /// <param name="oldName"></param>
+        /// <param name="newName"></param>
+        /// <returns></returns>
+        public Task SiteRename(string oldName,string newName);
     }
 }

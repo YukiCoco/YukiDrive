@@ -139,6 +139,28 @@ namespace YukiDrive.Controllers
             });
         }
 
+        /// <summary>
+        /// 解除绑定
+        /// </summary>
+        /// <param name="nickName"></param>
+        /// <returns></returns>
+        [HttpPost("site/rename")]
+        public async Task<IActionResult> SiteRename(SiteRenameModel model)
+        {
+            Response response = new Response(){
+                Error = false,
+                Message = "success"
+            }
+            try{
+                await driveAccount.SiteRename(model.oldName,model.nickName);
+            }
+            catch(Exception ex){
+                response.Error = true;
+                response.Message = ex.Message;
+            }
+            return Ok(response);
+        }
+
         #region 接收表单模型
         public class UpdateSettings
         {
@@ -150,6 +172,11 @@ namespace YukiDrive.Controllers
         public class AddSiteModel
         {
             public string siteName { get; set; }
+            public string nickName { get; set; }
+        }
+
+        public class SiteRenameModel{
+            public string oldName { get; set; }
             public string nickName { get; set; }
         }
         #endregion

@@ -122,8 +122,11 @@ namespace YukiDrive.Services
                     {
                         await siteContext.Sites.AddAsync(site);
                         await siteContext.SaveChangesAsync();
-                    } else {
-                        return new Response(){
+                    }
+                    else
+                    {
+                        return new Response()
+                        {
                             Error = true,
                             Message = "站点已存在"
                         };
@@ -162,6 +165,22 @@ namespace YukiDrive.Services
         {
             siteContext.Sites.Remove(siteContext.Sites.Single(site => site.NickName == nickName));
             await siteContext.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// 重命名
+        /// </summary>
+        /// <param name="oldName"></param>
+        /// <param name="newName"></param>
+        /// <returns></returns>
+        public async Task SiteRename(string oldName, string newName)
+        {
+            if(siteContext.Sites.Any(site => site.NickName == oldName)){
+                var site = siteContext.Sites.Single(site => site.NickName == oldName);
+                site.NickName = newName;
+                await siteContext.Sites.AddAsync(site);
+                await siteContext.SaveChangesAsync();
+            }
         }
         public class DriveInfo
         {
