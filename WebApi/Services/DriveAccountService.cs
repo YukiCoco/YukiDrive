@@ -103,7 +103,7 @@ namespace YukiDrive.Services
         /// <param name="siteName"></param>
         /// <param name="dominName"></param>
         /// <returns></returns>
-        public async Task AddSiteId(string siteName)
+        public async Task AddSiteId(string siteName,string nickName)
         {
             Site site = new Site();
             using (HttpClient httpClient = new HttpClient())
@@ -114,6 +114,7 @@ namespace YukiDrive.Services
                 {
                     site.SiteId = result.Properties().Single((prop) => prop.Name == "id").Value.ToString();
                     site.Name = result.Properties().Single((prop) => prop.Name == "name").Value.ToString();
+                    site.NickName = nickName;
                 });
             }
             await siteContext.Sites.AddAsync(site);
@@ -142,7 +143,11 @@ namespace YukiDrive.Services
             }
             return drivesInfo;
         }
-
+        
+        public async Task Unbind(string nickName){
+            siteContext.Sites.Remove(siteContext.Sites.Single(site => site.NickName == nickName));
+            await siteContext.SaveChangesAsync();
+        }
         public class DriveInfo{
             public Microsoft.Graph.Quota Quota { get; set; }
             public string NickName { get; set; }

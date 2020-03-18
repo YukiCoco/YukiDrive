@@ -7,7 +7,7 @@
                     <v-toolbar-title>SharePoint 账户</v-toolbar-title>
                 </v-toolbar>
                 <v-card-text>
-                    <p>Office 区域：{{ settings.officeType }}</p>
+                    <p>账户类型：{{ settings.officeType }}</p>
                     <p>当前账户：{{ settings.officeName }}</p>
                 </v-card-text>
                 <v-card-actions>
@@ -51,24 +51,17 @@
                     <v-container>
                         <v-row>
                             <v-col cols="12" xs="12">
-                                <v-text-field label="网站名称"
-                                :value="settings.webName"
-                                >
+                                <v-text-field label="网站名称" v-model="settings.webName">
                                 </v-text-field>
-                                <v-text-field label="导航栏显示名"
-                                :value="settings.appName">
+                                <v-text-field label="导航栏显示名" hint="左侧导航栏头部显示的文字" v-model="settings.appName">
                                 </v-text-field>
-                                <v-text-field
-                                    label="导航栏背景图片"
-                                    hint="左侧导航栏背景图片，留空则不显示"
-                                    :value="settings.navImg"
-                                ></v-text-field>
+                                <v-text-field label="导航栏背景图片" hint="左侧导航栏背景图片，留空则不显示" v-model="settings.navImg"></v-text-field>
                             </v-col>
                         </v-row>
                     </v-container>
                 </v-form>
                 <v-card-actions>
-                    <v-btn text>提交</v-btn>
+                    <v-btn @click="updateSettings" text>提交</v-btn>
                 </v-card-actions>
             </v-card>
         </v-col>
@@ -77,37 +70,46 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie'
-import { bytesToSize } from '../helpers/helper.js'
-import axios from 'axios'
+import * as helper from '../helpers/helper.js'
 export default {
     data() {
         return {
-            drives:[],
-            settings:null
+            drives: [],
+            settings: {
+                officeName: undefined,
+                officeType: undefined,
+                appName: undefined,
+                webName: undefined,
+                navImg: undefined
+            }
         }
     },
     mounted() {
-        axios.get("https://localhost:5001/api/admin/info",{
-            headers: {
-                'Authorization' : `Bearer ${Cookies.get('token')}`
-            }
-        }).then(response => {
+        helper.getWithToken("https://localhost:5001/api/admin/info", null, response => {
             response.data.driveInfo.forEach(element => {
-                element.showTotal = bytesToSize(element.quota.total)
-                element.showUsed = bytesToSize(element.quota.used)
+                element.showTotal = helper.bytesToSize(element.quota.total)
+                element.showUsed = helper.bytesToSize(element.quota.used)
                 element.percent = (element.quota.used / element.quota.total) * 100
                 element.name = element.nickName
                 this.drives.push(element)
             });
             this.settings = {
-                officeName : response.data.officeName,
-                officeType : response.data.officeType,
-                appName : response.data.appName,
-                webName : response.data.webName,
-                navImg : response.data.navImg
+                officeName: response.data.officeName,
+                officeType: response.data.officeType,
+                appName: response.data.appName,
+                webName: response.data.webName,
+                navImg: response.data.navImg
             }
         })
+    },
+    methods: {
+        updateSettings: function(){
+            helper.postWithToken("https://localhost:5001/api/admin/setting",this.settings,response => {
+                if(!response.error){
+                    this.$store.commit('openSnackBar','更新成功！')
+                }
+            })
+        }
     },
 }
 </script>

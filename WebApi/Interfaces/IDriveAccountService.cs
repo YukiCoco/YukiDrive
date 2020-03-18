@@ -26,7 +26,7 @@ namespace YukiDrive.Services
         /// <param name="siteName"></param>
         /// <param name="dominName"></param>
         /// <returns></returns>
-        public Task AddSiteId(string siteName);
+        public Task AddSiteId(string siteName,string nickName);
 
         /// <summary>
         /// Graph实例
@@ -44,5 +44,12 @@ namespace YukiDrive.Services
         /// </summary>
         /// <returns></returns>
         public Task<List<DriveInfo>> GetDriveInfo();
+
+        /// <summary>
+        /// 解除绑定
+        /// </summary>
+        /// <param name="nickName"></param>
+        /// <returns></returns>
+        public Task Unbind(string nickName);
     }
 }

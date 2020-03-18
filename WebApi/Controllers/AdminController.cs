@@ -68,11 +68,11 @@ namespace YukiDrive.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("site")]
-        public async Task<IActionResult> AddSite(string siteName)
+        public async Task<IActionResult> AddSite(string siteName,string nickName)
         {
             try
             {
-                await driveAccount.AddSiteId(siteName);
+                await driveAccount.AddSiteId(siteName,nickName);
             }
             catch (Exception ex)
             {
