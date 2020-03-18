@@ -178,7 +178,7 @@ namespace YukiDrive.Services
             if(siteContext.Sites.Any(site => site.NickName == oldName)){
                 var site = siteContext.Sites.Single(site => site.NickName == oldName);
                 site.NickName = newName;
-                await siteContext.Sites.AddAsync(site);
+                siteContext.Sites.Update(site);
                 await siteContext.SaveChangesAsync();
             }
         }
