@@ -150,7 +150,7 @@ namespace YukiDrive.Controllers
             Response response = new Response(){
                 Error = false,
                 Message = "success"
-            }
+            };
             try{
                 await driveAccount.SiteRename(model.oldName,model.nickName);
             }
