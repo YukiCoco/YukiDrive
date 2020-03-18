@@ -19,7 +19,8 @@ namespace YukiDrive.Controllers
     {
         private IDriveAccountService driveAccount;
         private SettingService setting;
-        public AdminController(IDriveAccountService driveAccount,SettingService setting){
+        public AdminController(IDriveAccountService driveAccount, SettingService setting)
+        {
             this.driveAccount = driveAccount;
             this.setting = setting;
         }
@@ -41,7 +42,7 @@ namespace YukiDrive.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("bind/new")]
-        public async Task<IActionResult> NewBinding(string code,string session_state)
+        public async Task<IActionResult> NewBinding(string code, string session_state)
         {
             try
             {
@@ -49,9 +50,17 @@ namespace YukiDrive.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Ok(new Response()
+                {
+                    Error = true,
+                    Message = ex.Message
+                });
             }
-            return Ok("success");
+            return Ok(new Response()
+            {
+                Error = false,
+                Message = "success"
+            });
         }
 
         /// <summary>
@@ -59,14 +68,25 @@ namespace YukiDrive.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("site")]
-        public async Task<IActionResult> AddSite(string siteName){
-            try{
+        public async Task<IActionResult> AddSite(string siteName)
+        {
+            try
+            {
                 await driveAccount.AddSiteId(siteName);
             }
-            catch(Exception ex){
-                return BadRequest(ex.Message);
+            catch (Exception ex)
+            {
+                return Ok(new Response()
+                {
+                    Error = true,
+                    Message = ex.Message
+                });
             }
-            return Ok("success");
+            return Ok(new Response()
+            {
+                Error = false,
+                Message = "success"
+            });
         }
 
         /// <summary>
@@ -74,9 +94,11 @@ namespace YukiDrive.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("info")]
-        public async Task<IActionResult> GetInfo(){
+        public async Task<IActionResult> GetInfo()
+        {
             var driveInfo = await driveAccount.GetDriveInfo();
-            return Ok(new {
+            return Ok(new
+            {
                 officeName = Configuration.AccountName,
                 officeType = Configuration.Type,
                 driveInfo = driveInfo,
@@ -85,5 +107,32 @@ namespace YukiDrive.Controllers
                 navImg = setting.Get("NavImg")
             });
         }
+
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <returns></returns>
+        [HttpPost("setting")]
+        public async Task<IActionResult> UpdateSetting(UpdateSettings toSaveSetting)
+        {
+            await setting.Set("appName", toSaveSetting.appName);
+            await setting.Set("webName", toSaveSetting.webName);
+            await setting.Set("navImg", toSaveSetting.navImg);
+            return Ok(new Response()
+            {
+                Error = false,
+                Message = "success"
+            });
+        }
+
+        #region 接收表单模型
+        public class UpdateSettings
+        {
+            public string appName { get; set; }
+            public string webName { get; set; }
+            public string navImg { get; set; }
+        }
+        #endregion
     }
 }

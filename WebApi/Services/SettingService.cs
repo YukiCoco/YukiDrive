@@ -18,7 +18,7 @@ namespace YukiDrive.Services
         /// <param name="key"></param>
         /// <returns></returns>
         public string Get(string key){
-            var result = context.settings.SingleOrDefault(setting => setting.Key == key).Value;
+            var result = context.Settings.SingleOrDefault(setting => setting.Key == key).Value;
             if(result == null){
                 return null;
             }
@@ -33,16 +33,16 @@ namespace YukiDrive.Services
         /// <returns></returns>
         public async Task Set(string key,string value){
             //已经存在
-            if(context.settings.Any(setting => setting.Key == key)){
-                Setting setting = context.settings.Single(setting => setting.Key == value);
+            if(context.Settings.Any(setting => setting.Key == key)){
+                Setting setting = context.Settings.Single(setting => setting.Key == value);
                 setting.Value = value;
-                context.settings.Update(setting);
+                context.Settings.Update(setting);
             } else {
                 Setting setting = new Setting(){
                     Key = key,
                     Value = value
                 };
-                await context.settings.AddAsync(setting);
+                await context.Settings.AddAsync(setting);
             }
             await context.SaveChangesAsync();
         }

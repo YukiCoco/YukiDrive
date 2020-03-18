@@ -12,6 +12,11 @@ export default new Vuex.Store({
     snackbar:{
       message: null,
       isOpen: false
+    },
+    settings:{
+      appName:null,
+      webName:null,
+      navImg:null
     }
   },
   mutations: {
@@ -24,6 +29,11 @@ export default new Vuex.Store({
     },
     changeSnackBarStatus(state,payload){
       state.snackbar.isOpen = payload
+    },
+    changeSettings(state,payload){
+      state.settings.appName = payload.appName
+      state.settings.webName = payload.webName
+      state.settings.navImg = payload.navImg
     }
   },
   actions: {

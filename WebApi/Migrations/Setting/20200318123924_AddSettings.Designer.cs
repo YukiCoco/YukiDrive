@@ -4,12 +4,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YukiDrive.Contexts;
-using YukiDrive.Services;
 
 namespace YukiDrive.Migrations.Setting
 {
     [DbContext(typeof(SettingContext))]
-    [Migration("20200317181821_AddSettings")]
+    [Migration("20200318123924_AddSettings")]
     partial class AddSettings
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,7 +33,7 @@ namespace YukiDrive.Migrations.Setting
 
                     b.HasKey("id");
 
-                    b.ToTable("settings");
+                    b.ToTable("Settings");
                 });
 #pragma warning restore 612, 618
         }

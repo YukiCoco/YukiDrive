@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Graph.Auth;
 using Microsoft.Identity.Client;
 using YukiDrive.Models;
+using static YukiDrive.Services.DriveAccountService;
 
 namespace YukiDrive.Services
 {
@@ -42,6 +43,6 @@ namespace YukiDrive.Services
         /// 获取驱动器信息
         /// </summary>
         /// <returns></returns>
-        public Task<List<Microsoft.Graph.Quota>> GetDriveInfo();
+        public Task<List<DriveInfo>> GetDriveInfo();
     }
 }

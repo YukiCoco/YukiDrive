@@ -12,16 +12,22 @@ namespace YukiDrive.Controllers
     {
         IDriveAccountService siteService;
         IDriveService driveService;
-        public DefaultController(IDriveAccountService siteService,IDriveService driveService){
+        SettingService setting;
+
+
+        public DefaultController(IDriveAccountService siteService, IDriveService driveService, SettingService setting)
+        {
             this.siteService = siteService;
             this.driveService = driveService;
+            this.setting = setting;
         }
         /// <summary>
         /// 返回所有sites
         /// </summary>
         /// <returns></returns>
         [HttpGet("site")]
-        public IActionResult GetSites(){
+        public IActionResult GetSites()
+        {
             return Ok(siteService.GetSites());
         }
         /// <summary>
@@ -29,14 +35,31 @@ namespace YukiDrive.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("show/{siteName}/{**path}")]
-        public async Task<IActionResult> GetDrectory(string siteName,string path){
-            if(string.IsNullOrEmpty(path)){
+        public async Task<IActionResult> GetDrectory(string siteName, string path)
+        {
+            if (string.IsNullOrEmpty(siteName))
+            {
+                return Ok(new Response()
+                {
+                    Error = true,
+                    Message = "找不到请求的 Site Name"
+                });
+            }
+            if (string.IsNullOrEmpty(path))
+            {
                 var result = await driveService.GetRootItems(siteName);
                 return Ok(result);
-            } else{
-                var result = await driveService.GetDriveItemsByPath(path,siteName);
-                if(result == null){
-                    return NotFound($"路径{path}不存在");
+            }
+            else
+            {
+                var result = await driveService.GetDriveItemsByPath(path, siteName);
+                if (result == null)
+                {
+                    return Ok(new Response()
+                    {
+                        Error = true,
+                        Message = $"路径{path}不存在"
+                    });
                 }
                 return Ok(result);
             }
@@ -58,8 +81,27 @@ namespace YukiDrive.Controllers
             }
             else
             {
-                return NotFound($"路径{path}不存在");
+                return Ok(new Response()
+                {
+                    Error = true,
+                    Message = $"路径{path}不存在"
+                });
             }
+        }
+
+        /// <summary>
+        /// 获取基本信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("info")]
+        public IActionResult GetInfo()
+        {
+            return Ok(new
+            {
+                appName = setting.Get("AppName"),
+                webName = setting.Get("WebName"),
+                navImg = setting.Get("NavImg")
+            });
         }
     }
 }

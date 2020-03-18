@@ -21,16 +21,18 @@
                 </v-toolbar>
                 <v-container>
                     <v-row>
-                        <v-col cols="12" md="6" lg="4">
+                        <v-col cols="12" md="6" lg="4" v-for="(item, index) in drives" :key="index">
                             <v-card outlined>
                                 <v-card-title class="d-flex justify-center">
                                     DriveName
                                 </v-card-title>
                                 <v-card-text class="d-flex justify-center">
-                                    <v-progress-circular size="150" width="20" color="primary"></v-progress-circular>
+                                    <v-progress-circular size="200" width="20" color="primary" :value="item.percent">
+                                        {{item.showUsed}} / {{item.showTotal}}
+                                    </v-progress-circular>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-btn text>修改昵称</v-btn>
+                                    <v-btn text>修改名称</v-btn>
                                     <v-btn text>解绑</v-btn>
                                 </v-card-actions>
                             </v-card>
@@ -72,10 +74,29 @@
 </template>
 
 <script>
-//import Cookies from 'js-cookie'
-//import { bytesToSize } from '../helpers/helper.js'
+import Cookies from 'js-cookie'
+import { bytesToSize } from '../helpers/helper.js'
+import axios from 'axios'
 export default {
-
+    data() {
+        return {
+            drives:[]
+        }
+    },
+    mounted() {
+        axios.get("https://localhost:5001/api/admin/info",{
+            headers: {
+                'Authorization' : `Bearer ${Cookies.get('token')}`
+            }
+        }).then(response => {
+            response.data.driveInfo.forEach(element => {
+                element.showTotal = bytesToSize(element.total)
+                element.showUsed = bytesToSize(element.used)
+                element.percent = (element.used / element.total) * 100
+                this.drives.push(element)
+            });
+        })
+    },
 }
 </script>
 

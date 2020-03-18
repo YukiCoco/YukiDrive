@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YukiDrive.Contexts;
-using YukiDrive.Services;
 
 namespace YukiDrive.Migrations.Setting
 {
@@ -32,7 +31,7 @@ namespace YukiDrive.Migrations.Setting
 
                     b.HasKey("id");
 
-                    b.ToTable("settings");
+                    b.ToTable("Settings");
                 });
 #pragma warning restore 612, 618
         }

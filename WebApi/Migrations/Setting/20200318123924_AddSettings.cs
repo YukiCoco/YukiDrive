@@ -7,7 +7,7 @@ namespace YukiDrive.Migrations.Setting
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "settings",
+                name: "Settings",
                 columns: table => new
                 {
                     id = table.Column<int>(nullable: false)
@@ -17,14 +17,14 @@ namespace YukiDrive.Migrations.Setting
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_settings", x => x.id);
+                    table.PrimaryKey("PK_Settings", x => x.id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "settings");
+                name: "Settings");
         }
     }
 }

@@ -5,7 +5,7 @@ namespace YukiDrive.Contexts
 {
     public class SettingContext : DbContext
     {
-        public DbSet<Setting> settings { get; set; }
+        public DbSet<Setting> Settings { get; set; }
 
         public SettingContext() : base()
         {

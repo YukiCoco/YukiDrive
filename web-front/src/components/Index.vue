@@ -108,11 +108,15 @@ export default {
         changeRouter: function () {
             this.router.splice(0)
             let folders = this.$route.params.folderPath.split('/')
+            this.router.push({
+                    text: '根目录',
+                    href: `#/${this.$route.params.siteName}`,
+                    disabled: false
+            })
             folders.forEach(element => {
                 //正则获取路径字符串
                 let regex = new RegExp(`${element}.*`)
                 let path = this.$route.params.folderPath.replace(regex, element)
-                console.log(`/${this.$route.params.siteName}/${path}`)
                 this.router.push({
                     text: element,
                     href: `#/${this.$route.params.siteName}/${path}`,

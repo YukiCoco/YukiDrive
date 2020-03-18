@@ -130,14 +130,22 @@ namespace YukiDrive.Services
         /// 获取 Drive Info
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Microsoft.Graph.Quota>> GetDriveInfo(){
-            List<Microsoft.Graph.Quota> drivesQuota = new List<Microsoft.Graph.Quota>();
+        public async Task<List<DriveInfo>> GetDriveInfo(){
+            List<DriveInfo> drivesInfo = new List<DriveInfo>();
             foreach (var item in siteContext.Sites.ToArray())
             {
                 var drive = await Graph.Sites[item.SiteId].Drive.Request().GetAsync();
-                drivesQuota.Add(drive.Quota);
+                drivesInfo.Add(new DriveInfo(){
+                    Quota = drive.Quota,
+                    NickName = item.NickName
+                });
             }
-            return drivesQuota;
+            return drivesInfo;
+        }
+
+        public class DriveInfo{
+            public Microsoft.Graph.Quota Quota { get; set; }
+            public string NickName { get; set; }
         }
     }
 }
