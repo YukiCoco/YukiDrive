@@ -30,3 +30,14 @@ export function getWithToken(url, data, callback) {
         }
     }).then(callback)
 }
+
+export function deleteWithToken(url, data, callback) {
+    axios({
+        url: url,
+        method: 'delete',
+        params: data,
+        headers: {
+            'Authorization': `Bearer ${Cookies.get('token')}`
+        }
+    }).then(callback)
+}

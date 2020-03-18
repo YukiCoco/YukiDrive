@@ -68,11 +68,11 @@ namespace YukiDrive.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("site")]
-        public async Task<IActionResult> AddSite(string siteName,string nickName)
+        public async Task<IActionResult> AddSite(AddSiteModel model)
         {
             try
             {
-                await driveAccount.AddSiteId(siteName,nickName);
+                await driveAccount.AddSiteId(model.siteName, model.nickName);
             }
             catch (Exception ex)
             {
@@ -100,7 +100,7 @@ namespace YukiDrive.Controllers
             return Ok(new
             {
                 officeName = Configuration.AccountName,
-                officeType = Enum.GetName(typeof(Configuration.OfficeType),Configuration.Type),
+                officeType = Enum.GetName(typeof(Configuration.OfficeType), Configuration.Type),
                 driveInfo = driveInfo,
                 appName = setting.Get("AppName"),
                 webName = setting.Get("WebName"),
@@ -126,12 +126,34 @@ namespace YukiDrive.Controllers
             });
         }
 
+        /// <summary>
+        /// 解除绑定
+        /// </summary>
+        /// <param name="nickName"></param>
+        /// <returns></returns>
+        [HttpDelete("site")]
+        public async Task<IActionResult> Unbind(string nickName)
+        {
+            await driveAccount.Unbind(nickName);
+            return Ok(new Response()
+            {
+                Error = false,
+                Message = "success"
+            });
+        }
+
         #region 接收表单模型
         public class UpdateSettings
         {
             public string appName { get; set; }
             public string webName { get; set; }
             public string navImg { get; set; }
+        }
+
+        public class AddSiteModel
+        {
+            public string siteName { get; set; }
+            public string nickName { get; set; }
         }
         #endregion
     }

@@ -33,14 +33,14 @@
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-btn text>修改名称</v-btn>
-                                    <v-btn text>解绑</v-btn>
+                                    <v-btn text @click="unbind(item.name)">解绑</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-col>
                     </v-row>
                 </v-container>
                 <v-card-actions>
-                    <v-btn text>添加站点</v-btn>
+                    <v-btn @click="newBindDialog = true" text>添加站点</v-btn>
                 </v-card-actions>
             </v-card>
             <v-card class="mt-4">
@@ -66,6 +66,31 @@
             </v-card>
         </v-col>
     </v-row>
+    <v-dialog v-model="newBindDialog" width="500">
+        <v-card>
+            <v-card-title class="headline" primary-title>
+                新增绑定
+            </v-card-title>
+            <v-card-text>
+                <v-form>
+                    <v-text-field label="站点名称" v-model="newBind.siteName">
+                    </v-text-field>
+                    <v-text-field label="显示名" v-model="newBind.nickName">
+                    </v-text-field>
+                </v-form>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="secondary" text @click="newBindDialog = false">
+                    取消
+                </v-btn>
+                <v-btn color="primary" text @click="addSite">
+                    提交
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </v-container>
 </template>
 
@@ -81,7 +106,12 @@ export default {
                 appName: undefined,
                 webName: undefined,
                 navImg: undefined
-            }
+            },
+            newBind: {
+                siteName: undefined,
+                nickName:undefined
+            },
+            newBindDialog: false
         }
     },
     mounted() {
@@ -103,10 +133,32 @@ export default {
         })
     },
     methods: {
-        updateSettings: function(){
-            helper.postWithToken("https://localhost:5001/api/admin/setting",this.settings,response => {
-                if(!response.error){
-                    this.$store.commit('openSnackBar','更新成功！')
+        updateSettings: function () {
+            helper.postWithToken("https://localhost:5001/api/admin/setting", this.settings, response => {
+                if (!response.data.error) {
+                    this.$store.commit('openSnackBar', '更新成功！')
+                }
+            })
+        },
+        addSite: function(){
+            helper.postWithToken("https://localhost:5001/api/admin/site",this.newBind,response => {
+                if (!response.data.error) {
+                    this.$store.commit('openSnackBar', '绑定成功！')
+                    this.newBindDialog = false
+                } else {
+                    this.$store.commit('openSnackBar', '绑定失败：' + response.data.message)
+                }
+            })
+        },
+        unbind: function(nickName){
+            helper.deleteWithToken("https://localhost:5001/api/admin/site",{
+                nickName : nickName
+            },response => {
+                if (!response.data.error) {
+                    this.$store.commit('openSnackBar', '已解除绑定')
+                    this.newBindDialog = false
+                } else {
+                    this.$store.commit('openSnackBar', '操作失败：' + response.data.message)
                 }
             })
         }
