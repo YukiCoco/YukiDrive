@@ -29,6 +29,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using YukiDrive.Models;
 
 namespace YukiDrive.Helpers
 {
@@ -55,7 +56,7 @@ namespace YukiDrive.Helpers
         /// <param name="webApiUrl">Url of the Web API to call (supposed to return Json)</param>
         /// <param name="accessToken">Access token used as a bearer security token to call the Web API</param>
         /// <param name="processResult">Callback used to process the result of the call to the Web API</param>
-        public async Task CallWebApiAndProcessResultASync(string webApiUrl, string accessToken, Action<JObject> processResult)
+        public async Task<Response> CallWebApiAndProcessResultASync(string webApiUrl, string accessToken, Action<JObject> processResult)
         {
             if (!string.IsNullOrEmpty(accessToken))
             {
@@ -65,27 +66,47 @@ namespace YukiDrive.Helpers
                     HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 }
                 defaultRequetHeaders.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
-
-                HttpResponseMessage response = await HttpClient.GetAsync(webApiUrl);
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    string json = await response.Content.ReadAsStringAsync();
-                    JObject result = JsonConvert.DeserializeObject(json) as JObject;
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    processResult(result);
+                    HttpResponseMessage response = await HttpClient.GetAsync(webApiUrl);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string json = await response.Content.ReadAsStringAsync();
+                        JObject result = JsonConvert.DeserializeObject(json) as JObject;
+                        processResult(result);
+                        return new Response()
+                        {
+                            Error = false
+                        };
+                    }
+                    else
+                    {
+                        string content = await response.Content.ReadAsStringAsync();
+                    }
                 }
-                else
+                catch (System.Exception ex)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Failed to call the Web Api: {response.StatusCode}");
-                    string content = await response.Content.ReadAsStringAsync();
-
-                    // Note that if you got reponse.Code == 403 and reponse.content.code == "Authorization_RequestDenied"
-                    // this is because the tenant admin as not granted consent for the application to call the Web API
-                    Console.WriteLine($"Content: {content}");
+                    return new Response()
+                    {
+                        Error = true,
+                        Message = "未提供 Token",
+                        Exception = ex
+                    };
                 }
-                Console.ResetColor();
             }
+            else
+            {
+                return new Response()
+                {
+                    Error = true,
+                    Message = "未提供 Token"
+                };
+            }
+            return new Response()
+            {
+                Error = true,
+                Message = "未知错误"
+            };
         }
     }
 }

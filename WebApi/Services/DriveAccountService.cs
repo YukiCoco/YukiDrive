@@ -103,22 +103,26 @@ namespace YukiDrive.Services
         /// <param name="siteName"></param>
         /// <param name="dominName"></param>
         /// <returns></returns>
-        public async Task AddSiteId(string siteName,string nickName)
+        public async Task<Response> AddSiteId(string siteName, string nickName)
         {
             Site site = new Site();
             using (HttpClient httpClient = new HttpClient())
             {
-                httpClient.Timeout = TimeSpan.FromSeconds(10);
+                httpClient.Timeout = TimeSpan.FromSeconds(20);
                 var apiCaller = new ProtectedApiCallHelper(httpClient);
-                await apiCaller.CallWebApiAndProcessResultASync($"{Configuration.GraphApi}/v1.0/sites/{Configuration.DominName}:/sites/{siteName}", authorizeResult.AccessToken, (result) =>
+                var result = await apiCaller.CallWebApiAndProcessResultASync($"{Configuration.GraphApi}/v1.0/sites/{Configuration.DominName}:/sites/{siteName}", authorizeResult.AccessToken, (result) =>
                 {
                     site.SiteId = result.Properties().Single((prop) => prop.Name == "id").Value.ToString();
                     site.Name = result.Properties().Single((prop) => prop.Name == "name").Value.ToString();
                     site.NickName = nickName;
                 });
+                if (!result.Error)
+                {
+                    await siteContext.Sites.AddAsync(site);
+                    await siteContext.SaveChangesAsync();
+                }
+                return result;
             }
-            await siteContext.Sites.AddAsync(site);
-            await siteContext.SaveChangesAsync();
         }
 
         public List<Site> GetSites()
@@ -131,24 +135,28 @@ namespace YukiDrive.Services
         /// 获取 Drive Info
         /// </summary>
         /// <returns></returns>
-        public async Task<List<DriveInfo>> GetDriveInfo(){
+        public async Task<List<DriveInfo>> GetDriveInfo()
+        {
             List<DriveInfo> drivesInfo = new List<DriveInfo>();
             foreach (var item in siteContext.Sites.ToArray())
             {
                 var drive = await Graph.Sites[item.SiteId].Drive.Request().GetAsync();
-                drivesInfo.Add(new DriveInfo(){
+                drivesInfo.Add(new DriveInfo()
+                {
                     Quota = drive.Quota,
                     NickName = item.NickName
                 });
             }
             return drivesInfo;
         }
-        
-        public async Task Unbind(string nickName){
+
+        public async Task Unbind(string nickName)
+        {
             siteContext.Sites.Remove(siteContext.Sites.Single(site => site.NickName == nickName));
             await siteContext.SaveChangesAsync();
         }
-        public class DriveInfo{
+        public class DriveInfo
+        {
             public Microsoft.Graph.Quota Quota { get; set; }
             public string NickName { get; set; }
         }

@@ -137,6 +137,8 @@ export default {
             helper.postWithToken("https://localhost:5001/api/admin/setting", this.settings, response => {
                 if (!response.data.error) {
                     this.$store.commit('openSnackBar', '更新成功！')
+                    //刷新此页
+                    this.$router.go(0)
                 }
             })
         },
@@ -145,6 +147,8 @@ export default {
                 if (!response.data.error) {
                     this.$store.commit('openSnackBar', '绑定成功！')
                     this.newBindDialog = false
+                    //刷新此页
+                    this.$router.go(0)
                 } else {
                     this.$store.commit('openSnackBar', '绑定失败：' + response.data.message)
                 }
@@ -157,6 +161,8 @@ export default {
                 if (!response.data.error) {
                     this.$store.commit('openSnackBar', '已解除绑定')
                     this.newBindDialog = false
+                    //刷新此页
+                    this.$router.go(0)
                 } else {
                     this.$store.commit('openSnackBar', '操作失败：' + response.data.message)
                 }

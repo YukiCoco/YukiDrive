@@ -44,23 +44,19 @@ namespace YukiDrive.Controllers
         [HttpGet("bind/new")]
         public async Task<IActionResult> NewBinding(string code, string session_state)
         {
+            var response = new Response(){
+                Error = false
+            };
             try
             {
                 var result = await driveAccount.Authorize(code);
             }
             catch (Exception ex)
             {
-                return Ok(new Response()
-                {
-                    Error = true,
-                    Message = ex.Message
-                });
+                response.Error = true;
+                response.Message = ex.Message;
             }
-            return Ok(new Response()
-            {
-                Error = false,
-                Message = "success"
-            });
+            return Ok(response);
         }
 
         /// <summary>
@@ -70,23 +66,17 @@ namespace YukiDrive.Controllers
         [HttpPost("site")]
         public async Task<IActionResult> AddSite(AddSiteModel model)
         {
+            Response result =  new Response();
             try
             {
-                await driveAccount.AddSiteId(model.siteName, model.nickName);
+                result = await driveAccount.AddSiteId(model.siteName, model.nickName);
             }
             catch (Exception ex)
             {
-                return Ok(new Response()
-                {
-                    Error = true,
-                    Message = ex.Message
-                });
+                result.Error = true;
+                result.Message = ex.Message;
             }
-            return Ok(new Response()
-            {
-                Error = false,
-                Message = "success"
-            });
+            return Ok(result);
         }
 
         /// <summary>
@@ -96,8 +86,9 @@ namespace YukiDrive.Controllers
         [HttpGet("info")]
         public async Task<IActionResult> GetInfo()
         {
-            var driveInfo = await driveAccount.GetDriveInfo();
-            return Ok(new
+            try{
+                var driveInfo = await driveAccount.GetDriveInfo();
+                return Ok(new
             {
                 officeName = Configuration.AccountName,
                 officeType = Enum.GetName(typeof(Configuration.OfficeType), Configuration.Type),
@@ -106,6 +97,12 @@ namespace YukiDrive.Controllers
                 webName = setting.Get("WebName"),
                 navImg = setting.Get("NavImg")
             });
+            } catch(Exception ex){
+                return Ok(new Response(){
+                    Error = true,
+                    Message = ex.Message
+                });
+            }
         }
 
         /// <summary>

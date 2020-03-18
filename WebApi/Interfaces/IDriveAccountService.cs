@@ -26,7 +26,7 @@ namespace YukiDrive.Services
         /// <param name="siteName"></param>
         /// <param name="dominName"></param>
         /// <returns></returns>
-        public Task AddSiteId(string siteName,string nickName);
+        public Task<Response> AddSiteId(string siteName,string nickName);
 
         /// <summary>
         /// Graph实例
