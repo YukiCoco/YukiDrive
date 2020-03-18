@@ -62,6 +62,7 @@ export default {
         }
     },
     mounted() {
+        //存在子路径
         if (this.$route.params.folderPath) {
             this.changeRouter()
             this.show(this.$route.params.folderPath)
@@ -75,6 +76,7 @@ export default {
             if (this.$route.params.folderPath) {
                 this.changeRouter()
             } else {
+                //清除顶部导航
                 this.router.splice(0)
             }
         }
@@ -87,7 +89,8 @@ export default {
             this.changeProgressBar()
             this.folders.splice(0)
             this.files.splice(0)
-            axios.get(`https://localhost:5001/api/show/${this.currentSiteName}/${path}`).then(response => {
+            // currentSiteName 显示错误 需要使用 this.$route.params.siteName
+            axios.get(`https://localhost:5001/api/show/${this.$route.params.siteName}/${path}`).then(response => {
                 response.data.forEach(element => {
                     element.createdTime = (new Date(element.createdTime)).toLocaleString()
                     if (element.downloadUrl == null) {

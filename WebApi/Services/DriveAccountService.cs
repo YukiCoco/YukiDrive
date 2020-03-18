@@ -118,8 +118,16 @@ namespace YukiDrive.Services
                 });
                 if (!result.Error)
                 {
-                    await siteContext.Sites.AddAsync(site);
-                    await siteContext.SaveChangesAsync();
+                    if (!siteContext.Sites.Any(s => s.SiteId == site.SiteId))
+                    {
+                        await siteContext.Sites.AddAsync(site);
+                        await siteContext.SaveChangesAsync();
+                    } else {
+                        return new Response(){
+                            Error = true,
+                            Message = "站点已存在"
+                        };
+                    }
                 }
                 return result;
             }

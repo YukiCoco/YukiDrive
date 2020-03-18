@@ -73,7 +73,7 @@ import Cookies from 'js-cookie'
                     expires: 7
                   })
                   this.$store.commit('openSnackBar','登录成功')
-                  console.log(response.data)
+                  this.$router.push('admin')
                   } else {
                       this.$store.commit('openSnackBar',response.data.message)
                   }
