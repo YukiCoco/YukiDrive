@@ -29,7 +29,7 @@ namespace YukiDrive
             //首次使用，添加管理员账户
             using (SettingService settingService = new SettingService(new SettingContext()))
             {
-                if (settingService.Get("isInit") == null)
+                if (settingService.Get("IsInit") == null)
                 {
                     using (UserService userService = new UserService(new UserContext()))
                     {
@@ -39,7 +39,7 @@ namespace YukiDrive
                         };
                         userService.Create(adminUser, YukiDrive.Configuration.AdminPassword);
                     }
-                    settingService.Set("isInit","true").Wait();
+                    settingService.Set("IsInit","true").Wait();
                 }
             }
         }
