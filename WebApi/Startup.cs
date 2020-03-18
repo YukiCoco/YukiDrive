@@ -39,7 +39,7 @@ namespace YukiDrive
                         };
                         userService.Create(adminUser, YukiDrive.Configuration.AdminPassword);
                     }
-                    settingService.Set("isInit","true").Start();
+                    settingService.Set("isInit","true").Wait();
                 }
             }
         }

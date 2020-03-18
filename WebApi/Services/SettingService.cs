@@ -19,10 +19,11 @@ namespace YukiDrive.Services
         /// <param name="key"></param>
         /// <returns></returns>
         public string Get(string key){
-            var result = context.Settings.SingleOrDefault(setting => setting.Key == key).Value;
-            if(result == null){
+            //判断是否存在
+            if(!context.Settings.Any(setting => setting.Key == key)){
                 return null;
             }
+            var result = context.Settings.SingleOrDefault(setting => setting.Key == key).Value;
             return result;
         }
 
