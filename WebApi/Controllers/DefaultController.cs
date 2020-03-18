@@ -100,7 +100,8 @@ namespace YukiDrive.Controllers
             {
                 appName = setting.Get("AppName"),
                 webName = setting.Get("WebName"),
-                navImg = setting.Get("NavImg")
+                navImg = setting.Get("NavImg"),
+                defaultDrive = setting.Get("DefaultDrive")
             });
         }
     }

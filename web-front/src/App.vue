@@ -1,12 +1,12 @@
 <template>
-  <v-app>
+<v-app>
     <AppBar />
     <Drawer />
     <v-content>
-      <router-view />
-      <Snackbar />
+        <router-view />
+        <Snackbar />
     </v-content>
-  </v-app>
+</v-app>
 </template>
 
 <script>
@@ -16,24 +16,30 @@ import Snackbar from './layouts/Snackbar'
 import axios from 'axios'
 
 export default {
-  name: 'App',
-  components: {
-    AppBar,
-    Drawer,
-    Snackbar
-  },
-  data: () => ({
-    //
-  }),
-  mounted() {
-    axios.get('https://localhost:5001/api/info').then(response => {
-      this.$store.commit('changeSettings',{
-        appName : response.data.appName,
-        webName : response.data.webName,
-        navImg : response.data.navImg
-      })
-      document.title = response.data.webName;
-    })
-  },
+    name: 'App',
+    components: {
+        AppBar,
+        Drawer,
+        Snackbar
+    },
+    data: () => ({
+        //
+    }),
+    mounted() {
+        axios.get('https://localhost:5001/api/info').then(response => {
+            this.$store.commit('changeSettings', {
+                appName: response.data.appName,
+                webName: response.data.webName,
+                navImg: response.data.navImg,
+                defaultDrive: response.data.defaultDrive
+            })
+            //更新网页 Title
+            document.title = response.data.webName
+            //没有指定驱动器 跳转到默认驱动器
+            if (this.$route.path == '/') {
+                this.$router.push(this.$store.state.settings.defaultDrive)
+            }
+        })
+    },
 };
 </script>

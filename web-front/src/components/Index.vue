@@ -58,7 +58,7 @@ export default {
             folders: [],
             router: [],
             currentSiteName: this.$route.params.siteName,
-            isInProgressing : false
+            isInProgressing: false
         }
     },
     mounted() {
@@ -66,7 +66,7 @@ export default {
         if (this.$route.params.folderPath) {
             this.changeRouter()
             this.show(this.$route.params.folderPath)
-        } else {
+        } else if (this.$route.params.siteName) {
             this.show()
         }
     },
@@ -82,7 +82,7 @@ export default {
         }
     },
     methods: {
-        changeProgressBar : function(){
+        changeProgressBar: function () {
             this.isInProgressing = !this.isInProgressing
         },
         show: function (path = "") {
@@ -112,9 +112,9 @@ export default {
             this.router.splice(0)
             let folders = this.$route.params.folderPath.split('/')
             this.router.push({
-                    text: '根目录',
-                    href: `#/${this.$route.params.siteName}`,
-                    disabled: false
+                text: '根目录',
+                href: `#/${this.$route.params.siteName}`,
+                disabled: false
             })
             folders.forEach(element => {
                 //正则获取路径字符串

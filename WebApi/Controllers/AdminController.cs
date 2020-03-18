@@ -95,7 +95,8 @@ namespace YukiDrive.Controllers
                 driveInfo = driveInfo,
                 appName = setting.Get("AppName"),
                 webName = setting.Get("WebName"),
-                navImg = setting.Get("NavImg")
+                navImg = setting.Get("NavImg"),
+                defaultDrive = setting.Get("DefaultDrive")
             });
             } catch(Exception ex){
                 return Ok(new Response(){
@@ -167,6 +168,7 @@ namespace YukiDrive.Controllers
             public string appName { get; set; }
             public string webName { get; set; }
             public string navImg { get; set; }
+            public string defaultDrive { get; set; }
         }
 
         public class AddSiteModel

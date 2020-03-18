@@ -56,6 +56,8 @@
                                 <v-text-field label="导航栏显示名" hint="左侧导航栏头部显示的文字" v-model="settings.appName">
                                 </v-text-field>
                                 <v-text-field label="导航栏背景图片" hint="左侧导航栏背景图片，留空则不显示" v-model="settings.navImg"></v-text-field>
+                                <v-text-field label="设置主驱动器" hint="将被设置为打开网站默认显示的驱动器" v-model="settings.defaultDrive">
+                                </v-text-field>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -128,7 +130,8 @@ export default {
                 officeType: undefined,
                 appName: undefined,
                 webName: undefined,
-                navImg: undefined
+                navImg: undefined,
+                defaultDrive: undefined
             },
             newBind: {
                 siteName: undefined,
@@ -144,19 +147,21 @@ export default {
     },
     mounted() {
         helper.getWithToken("https://localhost:5001/api/admin/info", null, response => {
+            //计算驱动器容量
             response.data.driveInfo.forEach(element => {
                 element.showTotal = helper.bytesToSize(element.quota.total)
                 element.showUsed = helper.bytesToSize(element.quota.used)
                 element.percent = (element.quota.used / element.quota.total) * 100
                 element.name = element.nickName
                 this.drives.push(element)
-            });
+            })
             this.settings = {
                 officeName: response.data.officeName,
                 officeType: response.data.officeType,
                 appName: response.data.appName,
                 webName: response.data.webName,
-                navImg: response.data.navImg
+                navImg: response.data.navImg,
+                defaultDrive: response.data.defaultDrive
             }
         })
     },

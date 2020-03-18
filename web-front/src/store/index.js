@@ -8,15 +8,16 @@ export default new Vuex.Store({
     custom: {
       appName: 'YukiDrive',
     },
-    isDrawerOpen : null,
+    isDrawerOpen : undefined,
     snackbar:{
-      message: null,
+      message: undefined,
       isOpen: false
     },
     settings:{
-      appName:null,
-      webName:null,
-      navImg:null
+      appName:undefined,
+      webName:undefined,
+      navImg:undefined,
+      defaultDrive:undefined
     }
   },
   mutations: {
@@ -34,6 +35,7 @@ export default new Vuex.Store({
       state.settings.appName = payload.appName
       state.settings.webName = payload.webName
       state.settings.navImg = payload.navImg
+      state.settings.defaultDrive = payload.defaultDrive
     }
   },
   actions: {
