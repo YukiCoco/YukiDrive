@@ -32,7 +32,7 @@
                                     </v-progress-circular>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-btn text>修改名称</v-btn>
+                                    <v-btn text @click="openEditDriveDialog(item.name)">修改名称</v-btn>
                                     <v-btn text @click="unbind(item.name)">解绑</v-btn>
                                 </v-card-actions>
                             </v-card>
@@ -40,7 +40,7 @@
                     </v-row>
                 </v-container>
                 <v-card-actions>
-                    <v-btn @click="newBindDialog = true" text>添加站点</v-btn>
+                    <v-btn @click="dialog.newBindDialog = true" text>添加站点</v-btn>
                 </v-card-actions>
             </v-card>
             <v-card class="mt-4">
@@ -66,26 +66,49 @@
             </v-card>
         </v-col>
     </v-row>
-    <v-dialog v-model="newBindDialog" width="500">
+    <v-dialog v-model="dialog.newBindDialog" width="500">
         <v-card>
             <v-card-title class="headline" primary-title>
                 新增绑定
             </v-card-title>
             <v-card-text>
                 <v-form>
-                    <v-text-field label="站点名称" v-model="newBind.siteName">
+                    <v-text-field label="站点名称" hint="创建 SharePoint 站点时输入的名称" v-model="newBind.siteName">
                     </v-text-field>
-                    <v-text-field label="显示名" v-model="newBind.nickName">
+                    <v-text-field label="显示名" hint="这将用于在左边导航中显示" v-model="newBind.nickName">
                     </v-text-field>
                 </v-form>
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="secondary" text @click="newBindDialog = false">
+                <v-btn color="secondary" text @click="dialog.newBindDialog = false">
                     取消
                 </v-btn>
                 <v-btn color="primary" text @click="addSite">
+                    提交
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialog.editDriveDialog" width="500">
+        <v-card>
+            <v-card-title class="headline" primary-title>
+                修改驱动器名称
+            </v-card-title>
+            <v-card-text>
+                <v-form>
+                    <v-text-field label="新名称" v-model="newDriveName">
+                    </v-text-field>
+                </v-form>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="secondary" text @click="dialog.editDriveDialog = false">
+                    取消
+                </v-btn>
+                <v-btn color="primary" text @click="editDriveName">
                     提交
                 </v-btn>
             </v-card-actions>
@@ -109,9 +132,14 @@ export default {
             },
             newBind: {
                 siteName: undefined,
-                nickName:undefined
+                nickName: undefined
             },
-            newBindDialog: false
+            dialog: {
+                newBindDialog: false,
+                editDriveDialog: false
+            },
+            toEditDriveName: undefined,
+            newDriveName: undefined
         }
     },
     mounted() {
@@ -142,11 +170,11 @@ export default {
                 }
             })
         },
-        addSite: function(){
-            helper.postWithToken("https://localhost:5001/api/admin/site",this.newBind,response => {
+        addSite: function () {
+            helper.postWithToken("https://localhost:5001/api/admin/site", this.newBind, response => {
                 if (!response.data.error) {
                     this.$store.commit('openSnackBar', '绑定成功！')
-                    this.newBindDialog = false
+                    this.dialog.newBindDialog = false
                     //刷新此页
                     this.$router.go(0)
                 } else {
@@ -154,13 +182,32 @@ export default {
                 }
             })
         },
-        unbind: function(nickName){
-            helper.deleteWithToken("https://localhost:5001/api/admin/site",{
-                nickName : nickName
-            },response => {
+        unbind: function (nickName) {
+            helper.deleteWithToken("https://localhost:5001/api/admin/site", {
+                nickName: nickName
+            }, response => {
                 if (!response.data.error) {
                     this.$store.commit('openSnackBar', '已解除绑定')
-                    this.newBindDialog = false
+                    this.dialog.newBindDialog = false
+                    //刷新此页
+                    this.$router.go(0)
+                } else {
+                    this.$store.commit('openSnackBar', '操作失败：' + response.data.message)
+                }
+            })
+        },
+        openEditDriveDialog: function (nickName) {
+            this.toEditDriveName = nickName
+            this.dialog.editDriveDialog = true
+        },
+        editDriveName: function () {
+            helper.postWithToken("https://localhost:5001/api/admin/site/rename", {
+                oldName: this.toEditDriveName,
+                nickName: this.newDriveName
+            }, response => {
+                if (!response.data.error) {
+                    this.$store.commit('openSnackBar', '已更新驱动器名称')
+                    this.dialog.newBindDialog = false
                     //刷新此页
                     this.$router.go(0)
                 } else {

@@ -14,7 +14,7 @@
                 <v-icon>mdi-microsoft-onedrive</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-                <v-list-item-title>{{ site.name }}</v-list-item-title>
+                <v-list-item-title>{{ site.nickName }}</v-list-item-title>
             </v-list-item-content>
         </v-list-item>
     </v-list>
