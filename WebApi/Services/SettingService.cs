@@ -36,7 +36,7 @@ namespace YukiDrive.Services
         public async Task Set(string key,string value){
             //已经存在
             if(context.Settings.Any(setting => setting.Key == key)){
-                Setting setting = context.Settings.Single(setting => setting.Key == value);
+                Setting setting = context.Settings.Single(setting => setting.Key == key);
                 setting.Value = value;
                 context.Settings.Update(setting);
             } else {

@@ -7,8 +7,8 @@
                     <v-toolbar-title>SharePoint 账户</v-toolbar-title>
                 </v-toolbar>
                 <v-card-text>
-                    <p>Office 区域：China</p>
-                    <p>当前账户：YukinoCoco@outlook.com</p>
+                    <p>Office 区域：{{ settings.officeType }}</p>
+                    <p>当前账户：{{ settings.officeName }}</p>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn text href="https://localhost:5001/api/admin/bind/url">登录</v-btn>
@@ -24,7 +24,7 @@
                         <v-col cols="12" md="6" lg="4" v-for="(item, index) in drives" :key="index">
                             <v-card outlined>
                                 <v-card-title class="d-flex justify-center">
-                                    DriveName
+                                    {{ item.name }}
                                 </v-card-title>
                                 <v-card-text class="d-flex justify-center">
                                     <v-progress-circular size="200" width="20" color="primary" :value="item.percent">
@@ -51,14 +51,17 @@
                     <v-container>
                         <v-row>
                             <v-col cols="12" xs="12">
-                                <v-text-field label="网站名称">
+                                <v-text-field label="网站名称"
+                                :value="settings.webName"
+                                >
                                 </v-text-field>
                                 <v-text-field label="导航栏显示名"
-                                value="Yuki Drive">
+                                :value="settings.appName">
                                 </v-text-field>
                                 <v-text-field
                                     label="导航栏背景图片"
                                     hint="左侧导航栏背景图片，留空则不显示"
+                                    :value="settings.navImg"
                                 ></v-text-field>
                             </v-col>
                         </v-row>
@@ -80,7 +83,8 @@ import axios from 'axios'
 export default {
     data() {
         return {
-            drives:[]
+            drives:[],
+            settings:null
         }
     },
     mounted() {
@@ -90,11 +94,19 @@ export default {
             }
         }).then(response => {
             response.data.driveInfo.forEach(element => {
-                element.showTotal = bytesToSize(element.total)
-                element.showUsed = bytesToSize(element.used)
-                element.percent = (element.used / element.total) * 100
+                element.showTotal = bytesToSize(element.quota.total)
+                element.showUsed = bytesToSize(element.quota.used)
+                element.percent = (element.quota.used / element.quota.total) * 100
+                element.name = element.nickName
                 this.drives.push(element)
             });
+            this.settings = {
+                officeName : response.data.officeName,
+                officeType : response.data.officeType,
+                appName : response.data.appName,
+                webName : response.data.webName,
+                navImg : response.data.navImg
+            }
         })
     },
 }

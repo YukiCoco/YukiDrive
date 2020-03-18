@@ -100,7 +100,7 @@ namespace YukiDrive.Controllers
             return Ok(new
             {
                 officeName = Configuration.AccountName,
-                officeType = Configuration.Type,
+                officeType = Enum.GetName(typeof(Configuration.OfficeType),Configuration.Type),
                 driveInfo = driveInfo,
                 appName = setting.Get("AppName"),
                 webName = setting.Get("WebName"),
@@ -116,9 +116,9 @@ namespace YukiDrive.Controllers
         [HttpPost("setting")]
         public async Task<IActionResult> UpdateSetting(UpdateSettings toSaveSetting)
         {
-            await setting.Set("appName", toSaveSetting.appName);
-            await setting.Set("webName", toSaveSetting.webName);
-            await setting.Set("navImg", toSaveSetting.navImg);
+            await setting.Set("AppName", toSaveSetting.appName);
+            await setting.Set("WebName", toSaveSetting.webName);
+            await setting.Set("NavImg", toSaveSetting.navImg);
             return Ok(new Response()
             {
                 Error = false,
