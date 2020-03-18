@@ -27,17 +27,20 @@ namespace YukiDrive
         {
             Configuration = configuration;
             //首次使用，添加管理员账户
-            if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "AdminUser.lock")))
+            using (SettingService settingService = new SettingService(new SettingContext()))
             {
-                using (UserService userService = new UserService(new UserContext()))
+                if (settingService.Get("isInit") == null)
                 {
-                    User adminUser = new User()
+                    using (UserService userService = new UserService(new UserContext()))
                     {
-                        Username = YukiDrive.Configuration.AdminName
-                    };
-                    userService.Create(adminUser, YukiDrive.Configuration.AdminPassword);
+                        User adminUser = new User()
+                        {
+                            Username = YukiDrive.Configuration.AdminName
+                        };
+                        userService.Create(adminUser, YukiDrive.Configuration.AdminPassword);
+                    }
+                    settingService.Set("isInit","true").Start();
                 }
-                File.Create(Path.Combine(Directory.GetCurrentDirectory(), "AdminUser.lock"));
             }
         }
 

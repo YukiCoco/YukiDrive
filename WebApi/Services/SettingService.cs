@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using YukiDrive.Contexts;
@@ -5,7 +6,7 @@ using YukiDrive.Models;
 
 namespace YukiDrive.Services
 {
-    public class SettingService
+    public class SettingService: IDisposable
     {
         SettingContext context;
         public SettingService(SettingContext context){
@@ -45,6 +46,10 @@ namespace YukiDrive.Services
                 await context.Settings.AddAsync(setting);
             }
             await context.SaveChangesAsync();
+        }
+
+        public void Dispose(){
+            context.Dispose();
         }
     }
 }
