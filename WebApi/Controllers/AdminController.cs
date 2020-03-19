@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -44,21 +45,28 @@ namespace YukiDrive.Controllers
         [HttpGet("bind/new")]
         public async Task<IActionResult> NewBinding(string code, string session_state)
         {
-            var response = new Response(){
-                Error = false
+            var response = new Response()
+            {
+                Error = true,
+                Message = "未知错误"
             };
             try
             {
                 var result = await driveAccount.Authorize(code);
+                if (result.AccessToken != null)
+                {
+                    await setting.Set("AccountStatus", "已认证");
+                    return Redirect("/#/admin");
+                }
             }
             catch (Exception ex)
             {
                 response.Error = true;
                 response.Message = ex.Message;
+                return Ok(response);
             }
             return Ok(response);
         }
-
         /// <summary>
         /// 添加 SharePoint Site
         /// </summary>
@@ -66,7 +74,7 @@ namespace YukiDrive.Controllers
         [HttpPost("site")]
         public async Task<IActionResult> AddSite(AddSiteModel model)
         {
-            Response result =  new Response();
+            Response result = new Response();
             try
             {
                 result = await driveAccount.AddSiteId(model.siteName, model.nickName);
@@ -86,20 +94,29 @@ namespace YukiDrive.Controllers
         [HttpGet("info")]
         public async Task<IActionResult> GetInfo()
         {
-            try{
-                var driveInfo = await driveAccount.GetDriveInfo();
-                return Ok(new
+            try
             {
-                officeName = Configuration.AccountName,
-                officeType = Enum.GetName(typeof(Configuration.OfficeType), Configuration.Type),
-                driveInfo = driveInfo,
-                appName = setting.Get("AppName"),
-                webName = setting.Get("WebName"),
-                navImg = setting.Get("NavImg"),
-                defaultDrive = setting.Get("DefaultDrive")
-            });
-            } catch(Exception ex){
-                return Ok(new Response(){
+                List<DriveAccountService.DriveInfo> driveInfo = new List<DriveAccountService.DriveInfo>();
+                if (setting.Get("AccountStatus") == "已认证")
+                {
+                    driveInfo = await driveAccount.GetDriveInfo();
+                }
+                return Ok(new
+                {
+                    officeName = Configuration.AccountName,
+                    officeType = Enum.GetName(typeof(Configuration.OfficeType), Configuration.Type),
+                    driveInfo = driveInfo,
+                    appName = setting.Get("AppName"),
+                    webName = setting.Get("WebName"),
+                    navImg = setting.Get("NavImg"),
+                    defaultDrive = setting.Get("DefaultDrive"),
+                    accountStatus = setting.Get("AccountStatus")
+                });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new Response()
+                {
                     Error = true,
                     Message = ex.Message
                 });
@@ -117,6 +134,7 @@ namespace YukiDrive.Controllers
             await setting.Set("AppName", toSaveSetting.appName);
             await setting.Set("WebName", toSaveSetting.webName);
             await setting.Set("NavImg", toSaveSetting.navImg);
+            await setting.Set("DefaultDrive", toSaveSetting.defaultDrive);
             return Ok(new Response()
             {
                 Error = false,
@@ -148,19 +166,30 @@ namespace YukiDrive.Controllers
         [HttpPost("site/rename")]
         public async Task<IActionResult> SiteRename(SiteRenameModel model)
         {
-            Response response = new Response(){
+            Response response = new Response()
+            {
                 Error = false,
                 Message = "success"
             };
-            try{
-                await driveAccount.SiteRename(model.oldName,model.nickName);
+            try
+            {
+                await driveAccount.SiteRename(model.oldName, model.nickName);
             }
-            catch(Exception ex){
+            catch (Exception ex)
+            {
                 response.Error = true;
                 response.Message = ex.Message;
             }
             return Ok(response);
         }
+
+        // /// <summary>
+        // /// 上传文件
+        // /// </summary>
+        // /// <returns></returns>
+        // public async Task<IActionResult> UploadFile(IFormFile file){
+
+        // }
 
         #region 接收表单模型
         public class UpdateSettings
@@ -177,7 +206,8 @@ namespace YukiDrive.Controllers
             public string nickName { get; set; }
         }
 
-        public class SiteRenameModel{
+        public class SiteRenameModel
+        {
             public string oldName { get; set; }
             public string nickName { get; set; }
         }

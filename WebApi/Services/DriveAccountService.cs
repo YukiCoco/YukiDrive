@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Diagnostics;
 using System.IO;
 using System;
@@ -76,6 +77,10 @@ namespace YukiDrive.Services
                 Graph = new Microsoft.Graph.GraphServiceClient($"{Configuration.GraphApi}/v1.0", authProvider);
             }
             this.siteContext = siteContext;
+            //定时更新Token
+            Timer timer = new Timer(o => {
+                authorizeResult = authProvider.ClientApplication.AcquireTokenSilent(Configuration.Scopes, Configuration.AccountName).ExecuteAsync().Result;
+            },null,TimeSpan.FromSeconds(0),TimeSpan.FromHours(1));
         }
         /// <summary>
         /// 返回 Oauth 验证url
@@ -120,6 +125,14 @@ namespace YukiDrive.Services
                 {
                     if (!siteContext.Sites.Any(s => s.SiteId == site.SiteId))
                     {
+                        //若是首次添加则设置为默认的驱动器
+                        using (SettingService setting = new SettingService(new SettingContext()))
+                        {
+                            if (siteContext.Sites.Count() == 0)
+                            {
+                                await setting.Set("DefaultDrive", site.Name);
+                            }
+                        }
                         await siteContext.Sites.AddAsync(site);
                         await siteContext.SaveChangesAsync();
                     }
@@ -155,7 +168,8 @@ namespace YukiDrive.Services
                 drivesInfo.Add(new DriveInfo()
                 {
                     Quota = drive.Quota,
-                    NickName = item.NickName
+                    NickName = item.NickName,
+                    Name = item.Name
                 });
             }
             return drivesInfo;
@@ -175,7 +189,8 @@ namespace YukiDrive.Services
         /// <returns></returns>
         public async Task SiteRename(string oldName, string newName)
         {
-            if(siteContext.Sites.Any(site => site.NickName == oldName)){
+            if (siteContext.Sites.Any(site => site.NickName == oldName))
+            {
                 var site = siteContext.Sites.Single(site => site.NickName == oldName);
                 site.NickName = newName;
                 siteContext.Sites.Update(site);
@@ -186,6 +201,8 @@ namespace YukiDrive.Services
         {
             public Microsoft.Graph.Quota Quota { get; set; }
             public string NickName { get; set; }
+
+            public string Name { get; set; }
         }
     }
 }

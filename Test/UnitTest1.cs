@@ -14,6 +14,7 @@ using System.Net;
 using YukiDrive.Services;
 using YukiDrive.Contexts;
 using YukiDrive;
+using Newtonsoft.Json;
 
 namespace Test
 {
@@ -84,6 +85,31 @@ namespace Test
             Debug.WriteLine(driveAccountService.authorizeResult.AccessToken);
         }
 
+        [TestMethod]
+        public void JsonTest()
+        {
+            string json = @"{
+  'error': {
+    'code': 'itemNotFound',
+    'message': 'Requested site could not be found',
+    'innerError': {
+      'request-id': 'c19041e9-3c92-4551-a41d-88014ac1e0d1',
+      'date': '2020-03-18T18:11:34'
+    }
+  }
+}";
+        JObject jo = JsonConvert.DeserializeObject(json) as JObject;
+        Debug.WriteLine(jo.Property("error").Value["message"].ToString());
+        }
+        [TestMethod]
+        public void TestTimer(){
+            Timer timer = new Timer(o => {
+                Debug.WriteLine("计时计时");
+            },null,TimeSpan.FromSeconds(0),TimeSpan.FromHours(1));
+            while(true){
+                Thread.Sleep(1000);
+            }
+        }
         IConfidentialClientApplication app;
         public void InitDrive()
         {
