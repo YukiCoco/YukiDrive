@@ -3,10 +3,16 @@ import VueRouter from 'vue-router'
 import Index from '../components/Index'
 import Admin from '../components/Admin'
 import Login from '../components/Login'
+import Show from '../components/Show'
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/show',
+    name: 'show',
+    component: Show
+  },
   {
     path: '/admin',
     name: 'admin',

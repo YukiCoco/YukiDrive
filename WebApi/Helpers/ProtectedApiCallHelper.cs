@@ -82,6 +82,12 @@ namespace YukiDrive.Helpers
                     else
                     {
                         string content = await response.Content.ReadAsStringAsync();
+                        JObject result = JsonConvert.DeserializeObject(content) as JObject;
+                        return new Response()
+                        {
+                            Error = true,
+                            Message = result.Property("error").Value["message"].ToString()
+                        };
                     }
                 }
                 catch (System.Exception ex)
@@ -89,7 +95,7 @@ namespace YukiDrive.Helpers
                     return new Response()
                     {
                         Error = true,
-                        Message = "未提供 Token",
+                        Message = "未知错误",
                         Exception = ex
                     };
                 }
@@ -102,11 +108,6 @@ namespace YukiDrive.Helpers
                     Message = "未提供 Token"
                 };
             }
-            return new Response()
-            {
-                Error = true,
-                Message = "未知错误"
-            };
         }
     }
 }

@@ -26,7 +26,7 @@
                     <div v-if="files.length != 0">
                         <v-subheader>文件</v-subheader>
                         <v-list-item-group color="primary">
-                            <v-list-item v-for="(item, i) in files" :key="i">
+                            <v-list-item v-for="(item, i) in files" :key="i" @click="openDetial(item)">
                                 <v-list-item-avatar>
                                     <v-icon large>{{ item.icon }}</v-icon>
                                 </v-list-item-avatar>
@@ -127,6 +127,14 @@ export default {
                 })
             });
             this.router[this.router.length - 1].disabled = true
+        },
+        openDetial:function(payload) {
+            this.$store.commit('showItem',{
+                name : payload.name,
+                url : payload.downloadUrl,
+                icon : payload.icon
+            })
+            this.$router.push('/show')
         }
     },
 }

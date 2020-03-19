@@ -9,10 +9,10 @@
                 <v-card-text>
                     <p>账户类型：{{ settings.officeType }}</p>
                     <p>当前账户：{{ settings.officeName }}</p>
+                    <p>当前状态：{{ settings.accountStatus }}</p>
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn text href="https://localhost:5001/api/admin/bind/url">登录</v-btn>
-                    <v-btn text>取消登录</v-btn>
+                    <v-btn text href="https://localhost:5001/api/admin/bind/url">认证</v-btn>
                 </v-card-actions>
             </v-card>
             <v-card class="mt-4">
@@ -24,16 +24,17 @@
                         <v-col cols="12" md="6" lg="4" v-for="(item, index) in drives" :key="index">
                             <v-card outlined>
                                 <v-card-title class="d-flex justify-center">
-                                    {{ item.name }}
+                                    {{ item.nickName }}
                                 </v-card-title>
+                                <v-card-subtitle class="d-flex justify-center">{{ item.name }}</v-card-subtitle>
                                 <v-card-text class="d-flex justify-center">
                                     <v-progress-circular size="200" width="20" color="primary" :value="item.percent">
                                         {{item.showUsed}} / {{item.showTotal}}
                                     </v-progress-circular>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-btn text @click="openEditDriveDialog(item.name)">修改名称</v-btn>
-                                    <v-btn text @click="unbind(item.name)">解绑</v-btn>
+                                    <v-btn text @click="openEditDriveDialog(item.nickName)">修改名称</v-btn>
+                                    <v-btn text @click="unbind(item.nickName)">解绑</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-col>
@@ -56,7 +57,7 @@
                                 <v-text-field label="导航栏显示名" hint="左侧导航栏头部显示的文字" v-model="settings.appName">
                                 </v-text-field>
                                 <v-text-field label="导航栏背景图片" hint="左侧导航栏背景图片，留空则不显示" v-model="settings.navImg"></v-text-field>
-                                <v-text-field label="设置主驱动器" hint="将被设置为打开网站默认显示的驱动器" v-model="settings.defaultDrive">
+                                <v-text-field label="设置主驱动器" hint="填写创建 SharePoint 站点时输入的名称，将被设置为打开网站默认显示的驱动器" v-model="settings.defaultDrive">
                                 </v-text-field>
                             </v-col>
                         </v-row>
@@ -131,7 +132,8 @@ export default {
                 appName: undefined,
                 webName: undefined,
                 navImg: undefined,
-                defaultDrive: undefined
+                defaultDrive: undefined,
+                accountStatus: undefined
             },
             newBind: {
                 siteName: undefined,
@@ -152,7 +154,6 @@ export default {
                 element.showTotal = helper.bytesToSize(element.quota.total)
                 element.showUsed = helper.bytesToSize(element.quota.used)
                 element.percent = (element.quota.used / element.quota.total) * 100
-                element.name = element.nickName
                 this.drives.push(element)
             })
             this.settings = {
@@ -161,7 +162,8 @@ export default {
                 appName: response.data.appName,
                 webName: response.data.webName,
                 navImg: response.data.navImg,
-                defaultDrive: response.data.defaultDrive
+                defaultDrive: response.data.defaultDrive,
+                accountStatus: response.data.accountStatus
             }
         })
     },

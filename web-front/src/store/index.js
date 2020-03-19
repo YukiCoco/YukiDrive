@@ -18,6 +18,11 @@ export default new Vuex.Store({
       webName:undefined,
       navImg:undefined,
       defaultDrive:undefined
+    },
+    show:{
+      name:undefined,
+      url:undefined,
+      icon:undefined
     }
   },
   mutations: {
@@ -36,6 +41,11 @@ export default new Vuex.Store({
       state.settings.webName = payload.webName
       state.settings.navImg = payload.navImg
       state.settings.defaultDrive = payload.defaultDrive
+    },
+    showItem(state,payload){
+      state.show.name = payload.name
+      state.show.url = payload.url
+      state.show.icon = payload.icon
     }
   },
   actions: {
