@@ -67,6 +67,17 @@
                     <v-btn @click="updateSettings" text>提交</v-btn>
                 </v-card-actions>
             </v-card>
+            <v-card class="mt-4">
+                <v-toolbar dense flat>
+                    <v-toolbar-title>添加 README</v-toolbar-title>
+                </v-toolbar>
+                <div class="markdown pr-3 pl-3">
+                    <Markdown v-model="markdownText" />
+                </div>
+                <v-card-actions>
+                    <v-btn @click="updateReadme" text>提交</v-btn>
+                </v-card-actions>
+            </v-card>
         </v-col>
     </v-row>
     <v-dialog v-model="dialog.newBindDialog" width="500">
@@ -122,7 +133,12 @@
 
 <script>
 import * as helper from '../helpers/helper.js'
+import Markdown from 'vue-meditor'
+
 export default {
+    components: {
+        Markdown,
+    },
     data() {
         return {
             drives: [],
@@ -133,7 +149,8 @@ export default {
                 webName: undefined,
                 navImg: undefined,
                 defaultDrive: undefined,
-                accountStatus: undefined
+                accountStatus: undefined,
+                readme: undefined
             },
             newBind: {
                 siteName: undefined,
@@ -144,7 +161,8 @@ export default {
                 editDriveDialog: false
             },
             toEditDriveName: undefined,
-            newDriveName: undefined
+            newDriveName: undefined,
+            markdownText: ''
         }
     },
     mounted() {
@@ -165,6 +183,7 @@ export default {
                 defaultDrive: response.data.defaultDrive,
                 accountStatus: response.data.accountStatus
             }
+            this.markdownText = response.data.readme
         })
     },
     methods: {
@@ -214,6 +233,20 @@ export default {
             }, response => {
                 if (!response.data.error) {
                     this.$store.commit('openSnackBar', '已更新驱动器名称')
+                    this.dialog.newBindDialog = false
+                    //刷新此页
+                    this.$router.go(0)
+                } else {
+                    this.$store.commit('openSnackBar', '操作失败：' + response.data.message)
+                }
+            })
+        },
+        updateReadme: function(){
+            helper.postWithToken('https://localhost:5001/api/admin/readme',{
+                text:this.markdownText
+            },response => {
+                if (!response.data.error) {
+                    this.$store.commit('openSnackBar', '已更新 readme')
                     this.dialog.newBindDialog = false
                     //刷新此页
                     this.$router.go(0)

@@ -44,6 +44,10 @@
                     </div>
                 </v-list>
             </v-card>
+            <v-card v-if="!this.$route.params.folderPath" class="mt-4">
+                <div class="pa-4 readme" id="readme">
+                </div>
+            </v-card>
         </v-col>
     </v-row>
 </v-container>
@@ -51,6 +55,7 @@
 
 <script>
 import axios from 'axios'
+import marked from 'marked'
 export default {
     data() {
         return {
@@ -66,8 +71,10 @@ export default {
         if (this.$route.params.folderPath) {
             this.changeRouter()
             this.show(this.$route.params.folderPath)
+        //根目录
         } else if (this.$route.params.siteName) {
             this.show()
+            this.loadReadme()
         }
     },
     watch: {
@@ -78,10 +85,16 @@ export default {
             } else {
                 //清除顶部导航
                 this.router.splice(0)
+                this.loadReadme()
             }
         }
     },
     methods: {
+        loadReadme: function (){
+            axios.get("https://localhost:5001/api/readme").then(response => {
+                document.getElementById('readme').innerHTML = marked(response.data.result)
+            })
+        },
         changeProgressBar: function () {
             this.isInProgressing = !this.isInProgressing
         },
@@ -128,11 +141,11 @@ export default {
             });
             this.router[this.router.length - 1].disabled = true
         },
-        openDetial:function(payload) {
-            this.$store.commit('showItem',{
-                name : payload.name,
-                url : payload.downloadUrl,
-                icon : payload.icon
+        openDetial: function (payload) {
+            this.$store.commit('showItem', {
+                name: payload.name,
+                url: payload.downloadUrl,
+                icon: payload.icon
             })
             this.$router.push('/show')
         }
@@ -159,5 +172,7 @@ function getIcon(filename) {
 </script>
 
 <style>
-
+.readme img {
+    width: 100%;
+}
 </style>

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -101,8 +102,30 @@ namespace YukiDrive.Controllers
                 appName = setting.Get("AppName"),
                 webName = setting.Get("WebName"),
                 navImg = setting.Get("NavImg"),
-                defaultDrive = setting.Get("DefaultDrive")
+                defaultDrive = setting.Get("DefaultDrive"),
+                readme = setting.Get("Readme")
             });
+        }
+        /// <summary>
+        /// 获得readme
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("readme")]
+        public IActionResult GetReadme(){
+            Response response = new Response()
+            {
+                Error = false
+            };
+            try
+            {
+                response.Result = setting.Get("Readme");
+            }
+            catch (Exception e)
+            {
+                response.Error = true;
+                response.Message = e.Message;
+            };
+            return Ok(response);
         }
     }
 }

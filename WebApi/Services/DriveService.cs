@@ -144,6 +144,9 @@ namespace YukiDrive.Services
         /// <returns></returns>
         private string GetSiteId(string siteName){
             Models.Site site = siteContext.Sites.SingleOrDefault(site => site.Name == siteName);
+            if(site == null){
+                return null;
+            }
             return site.SiteId;
         }
         #endregion

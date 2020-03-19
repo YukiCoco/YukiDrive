@@ -110,7 +110,8 @@ namespace YukiDrive.Controllers
                     webName = setting.Get("WebName"),
                     navImg = setting.Get("NavImg"),
                     defaultDrive = setting.Get("DefaultDrive"),
-                    accountStatus = setting.Get("AccountStatus")
+                    accountStatus = setting.Get("AccountStatus"),
+                    readme = setting.Get("Readme")
                 });
             }
             catch (Exception ex)
@@ -121,6 +122,30 @@ namespace YukiDrive.Controllers
                     Message = ex.Message
                 });
             }
+        }
+
+        /// <summary>
+        /// 设置readme
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("readme")]
+        public async Task<IActionResult> UpdateReadme(ReadmeModel model)
+        {
+            Response response = new Response()
+            {
+                Error = false
+            };
+            try
+            {
+                await setting.Set("Readme", model.text);
+            }
+            catch (Exception e)
+            {
+                response.Error = true;
+                response.Message = e.Message;
+            };
+            return Ok(response);
         }
 
         /// <summary>
@@ -198,6 +223,7 @@ namespace YukiDrive.Controllers
             public string webName { get; set; }
             public string navImg { get; set; }
             public string defaultDrive { get; set; }
+            public string readme { get; set; }
         }
 
         public class AddSiteModel
@@ -210,6 +236,11 @@ namespace YukiDrive.Controllers
         {
             public string oldName { get; set; }
             public string nickName { get; set; }
+        }
+
+        public class ReadmeModel
+        {
+            public string text { get; set; }
         }
         #endregion
     }
