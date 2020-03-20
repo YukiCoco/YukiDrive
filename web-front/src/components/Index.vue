@@ -62,7 +62,6 @@ export default {
             files: [],
             folders: [],
             router: [],
-            currentSiteName: this.$route.params.siteName,
             isInProgressing: false
         }
     },
@@ -112,9 +111,9 @@ export default {
                         element.icon = getIcon(element.name)
                         this.files.push(element)
                         if (this.$route.params.folderPath) {
-                            element.downloadUrl = `https://localhost:5001/api/down/${this.currentSiteName}/${this.$route.params.folderPath}/${element.name}`
+                            element.downloadUrl = `https://localhost:5001/api/down/${this.$route.params.siteName}/${this.$route.params.folderPath}/${element.name}`
                         } else {
-                            element.downloadUrl = `https://localhost:5001/api/down/${this.currentSiteName}/${element.name}`
+                            element.downloadUrl = `https://localhost:5001/api/down/${this.$route.params.siteName}/${element.name}`
                         }
                     }
                 });
@@ -158,14 +157,18 @@ function getIcon(filename) {
     let imageArray = ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'webp', 'psd', 'svg', 'tiff']
     let videoArray = ['wmv', 'asf', 'asx', 'rm', 'rmvb', 'mpg', 'mpeg', 'mpe', '3gp', 'mov', 'mp4', 'm4v', 'avi', 'dat', 'mkv', 'flv', 'vob']
     let audioArray = ['mp3', 'wav', 'wma', 'ape', 'flac', 'aac']
+    let zipArray = ['zip', 'rar', '7z', 'gz', 'bz2', 'xz','tar','tar.gz','tar.bz2','tar.xz']
     if (imageArray.indexOf(suffix.toLowerCase()) !== -1) {
         return 'mdi-image'
     }
     if (videoArray.indexOf(suffix.toLowerCase()) !== -1) {
-        return 'mdi-video'
+        return 'mdi-movie'
     }
     if (audioArray.indexOf(suffix.toLowerCase()) !== -1) {
         return 'mdi-music'
+    }
+    if (zipArray.indexOf(suffix.toLowerCase()) !== -1) {
+        return 'mdi-folder-zip'
     }
     return 'mdi-file'
 }

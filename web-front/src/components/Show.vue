@@ -16,7 +16,8 @@
                             </v-row>
                         </template>
                     </v-img>
-                    <v-text-field class="mt-4" hide-details readonly label="下载链接" v-model="this.$store.state.show.url"></v-text-field>
+                    <v-text-field class="mt-4" hide-details readonly label="下载链接" :value="this.$store.state.show.url"></v-text-field>
+                    <v-text-field v-if="this.$store.state.show.icon == 'mdi-image'" class="mt-4" hide-details readonly label="Markdown" :value="`![image](${this.$store.state.show.url})`"></v-text-field>
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
@@ -25,6 +26,9 @@
             </v-card>
         </v-col>
     </v-row>
+    <v-btn fab dark color="cyan" class="float-btn" @click="goBack">
+        <v-icon>mdi-undo-variant</v-icon>
+    </v-btn>
 </v-container>
 </template>
 
@@ -33,7 +37,9 @@ import 'dplayer/dist/DPlayer.min.css';
 import DPlayer from 'dplayer';
 export default {
     data() {
-        return {}
+        return {
+            fab: false
+        }
     },
     mounted() {
         if (this.$store.state.show.icon == 'mdi-video') {
@@ -47,9 +53,18 @@ export default {
             });
         }
     },
+    methods: {
+        goBack:function(){
+            this.$router.go(-1)
+        }
+    },
 }
 </script>
 
 <style>
-
+.float-btn{
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+}
 </style>
