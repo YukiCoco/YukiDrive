@@ -57,7 +57,7 @@
                                 <v-text-field label="导航栏显示名" hint="左侧导航栏头部显示的文字" v-model="settings.appName">
                                 </v-text-field>
                                 <v-text-field label="导航栏背景图片" hint="左侧导航栏背景图片，留空则不显示" v-model="settings.navImg"></v-text-field>
-                                <v-text-field label="设置主驱动器" hint="填写创建 SharePoint 站点时输入的名称，将被设置为打开网站默认显示的驱动器" v-model="settings.defaultDrive">
+                                <v-text-field label="设置主驱动器" hint="填写创建 SharePoint 站点时输入的名称，将被设置为打开网站默认显示的驱动器（输入 onedrive 则为 Onedrive ）" v-model="settings.defaultDrive">
                                 </v-text-field>
                             </v-col>
                         </v-row>

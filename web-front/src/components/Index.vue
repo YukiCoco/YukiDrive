@@ -36,6 +36,11 @@
                                     <v-list-item-subtitle v-text="`${item.createdTime}\xa0\xa0${item.size}`"></v-list-item-subtitle>
                                 </v-list-item-content>
                                 <v-list-item-action>
+                                    <v-btn icon class="copy-url" :data-clipboard-text="item.downloadUrl">
+                                        <v-icon>mdi-content-copy</v-icon>
+                                    </v-btn>
+                                </v-list-item-action>
+                                <v-list-item-action class="ml-0">
                                     <v-btn icon :href="item.downloadUrl" @click="downloadFile(item.downloadUrl)">
                                         <v-icon>mdi-download</v-icon>
                                     </v-btn>
@@ -57,7 +62,10 @@
 <script>
 import axios from 'axios'
 import marked from 'marked'
-import {bytesToSize} from '../helpers/helper' 
+import {
+    bytesToSize
+} from '../helpers/helper'
+import ClipboardJS from 'clipboard'
 export default {
     data() {
         return {
@@ -68,6 +76,8 @@ export default {
         }
     },
     mounted() {
+        //初始化复制组件
+        new ClipboardJS('.copy-url')
         //存在子路径
         if (this.$route.params.folderPath) {
             this.changeRouter()
@@ -106,7 +116,7 @@ export default {
             // currentSiteName 显示错误 需要使用 this.$route.params.siteName
             axios.get(`https://localhost:5001/api/show/${this.$route.params.siteName}/${path}`).then(response => {
                 response.data.forEach(element => {
-                    element.createdTime = (new Date(element.createdTime)).toLocaleString('zh-CN',{
+                    element.createdTime = (new Date(element.createdTime)).toLocaleString('zh-CN', {
                         year: 'numeric',
                         month: 'numeric',
                         day: 'numeric'
@@ -155,29 +165,47 @@ export default {
                 url: payload.downloadUrl,
                 icon: payload.icon
             })
+            //调用微软接口预览 Office 文件
+            if(getIcon(payload.name).match('microsoft') != null){
+                window.open('https://view.officeapps.live.com/op/view.aspx?src=' + payload.downloadUrl)
+            }
             this.$router.push('/show')
         }
     },
 }
 
+//返回Icon
 function getIcon(filename) {
     let index = filename.lastIndexOf(".")
-    let suffix = filename.substr(index + 1)
+    let suffix = filename.substr(index + 1).toLowerCase()
     let imageArray = ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'webp', 'psd', 'svg', 'tiff']
     let videoArray = ['wmv', 'asf', 'asx', 'rm', 'rmvb', 'mpg', 'mpeg', 'mpe', '3gp', 'mov', 'mp4', 'm4v', 'avi', 'dat', 'mkv', 'flv', 'vob']
     let audioArray = ['mp3', 'wav', 'wma', 'ape', 'flac', 'aac']
     let zipArray = ['zip', 'rar', '7z', 'gz', 'bz2', 'xz', 'tar', 'tar.gz', 'tar.bz2', 'tar.xz']
-    if (imageArray.indexOf(suffix.toLowerCase()) !== -1) {
+    let wordArray = ['doc', 'docx']
+    if (imageArray.indexOf(suffix) !== -1) {
         return 'mdi-image'
     }
-    if (videoArray.indexOf(suffix.toLowerCase()) !== -1) {
+    if (videoArray.indexOf(suffix) !== -1) {
         return 'mdi-movie'
     }
-    if (audioArray.indexOf(suffix.toLowerCase()) !== -1) {
+    if (audioArray.indexOf(suffix) !== -1) {
         return 'mdi-music'
     }
-    if (zipArray.indexOf(suffix.toLowerCase()) !== -1) {
+    if (zipArray.indexOf(suffix) !== -1) {
         return 'mdi-folder-zip'
+    }
+    if (wordArray.indexOf(suffix) !== -1) {
+        return 'mdi-microsoft-word'
+    }
+    if (suffix == 'xlsx') {
+        return 'mdi-microsoft-excel'
+    }
+    if (suffix == 'ppt') {
+        return 'mdi-microsoft-powerpoint'
+    }
+    if (suffix == 'pdf') {
+        return 'mdi-file-pdf-box'
     }
     return 'mdi-file'
 }
