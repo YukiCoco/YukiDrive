@@ -26,7 +26,7 @@ namespace YukiDrive.Controllers
         /// 返回所有sites
         /// </summary>
         /// <returns></returns>
-        [HttpGet("site")]
+        [HttpGet("sites")]
         public IActionResult GetSites()
         {
             return Ok(siteService.GetSites());
@@ -35,14 +35,13 @@ namespace YukiDrive.Controllers
         /// 根据路径获取文件夹内容
         /// </summary>
         /// <returns></returns>
-        [HttpGet("show/{siteName}/{**path}")]
+        [HttpGet("sites/{siteName}/{**path}")]
         public async Task<IActionResult> GetDrectory(string siteName, string path)
         {
             if (string.IsNullOrEmpty(siteName))
             {
-                return Ok(new Response()
+                return NotFound(new ErrorResponse()
                 {
-                    Error = true,
                     Message = "找不到请求的 Site Name"
                 });
             }
@@ -56,9 +55,8 @@ namespace YukiDrive.Controllers
                 var result = await driveService.GetDriveItemsByPath(path, siteName);
                 if (result == null)
                 {
-                    return Ok(new Response()
+                    return NotFound(new ErrorResponse()
                     {
-                        Error = true,
                         Message = $"路径{path}不存在"
                     });
                 }
@@ -72,7 +70,7 @@ namespace YukiDrive.Controllers
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        [HttpGet("down/{siteName}/{**path}")]
+        [HttpGet("files/{siteName}/{**path}")]
         public async Task<IActionResult> Download(string siteName, string path)
         {
             var result = await driveService.GetDriveItemByPath(path, siteName);
@@ -82,9 +80,8 @@ namespace YukiDrive.Controllers
             }
             else
             {
-                return Ok(new Response()
+                return NotFound(new ErrorResponse()
                 {
-                    Error = true,
                     Message = $"路径{path}不存在"
                 });
             }
@@ -111,21 +108,9 @@ namespace YukiDrive.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("readme")]
-        public IActionResult GetReadme(){
-            Response response = new Response()
-            {
-                Error = false
-            };
-            try
-            {
-                response.Result = setting.Get("Readme");
-            }
-            catch (Exception e)
-            {
-                response.Error = true;
-                response.Message = e.Message;
-            };
-            return Ok(response);
+        public IActionResult GetReadme()
+        {
+            return Ok(setting.Get("Readme"));
         }
     }
 }

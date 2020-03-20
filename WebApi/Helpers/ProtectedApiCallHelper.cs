@@ -56,7 +56,7 @@ namespace YukiDrive.Helpers
         /// <param name="webApiUrl">Url of the Web API to call (supposed to return Json)</param>
         /// <param name="accessToken">Access token used as a bearer security token to call the Web API</param>
         /// <param name="processResult">Callback used to process the result of the call to the Web API</param>
-        public async Task<Response> CallWebApiAndProcessResultASync(string webApiUrl, string accessToken, Action<JObject> processResult)
+        public async Task CallWebApiAndProcessResultASync(string webApiUrl, string accessToken, Action<JObject> processResult)
         {
             if (!string.IsNullOrEmpty(accessToken))
             {
@@ -74,39 +74,22 @@ namespace YukiDrive.Helpers
                         string json = await response.Content.ReadAsStringAsync();
                         JObject result = JsonConvert.DeserializeObject(json) as JObject;
                         processResult(result);
-                        return new Response()
-                        {
-                            Error = false
-                        };
                     }
                     else
                     {
                         string content = await response.Content.ReadAsStringAsync();
                         JObject result = JsonConvert.DeserializeObject(content) as JObject;
-                        return new Response()
-                        {
-                            Error = true,
-                            Message = result.Property("error").Value["message"].ToString()
-                        };
+                        throw new Exception(result.Property("error").Value["message"].ToString());
                     }
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    return new Response()
-                    {
-                        Error = true,
-                        Message = "未知错误",
-                        Exception = ex
-                    };
+                    throw ex;
                 }
             }
             else
             {
-                return new Response()
-                {
-                    Error = true,
-                    Message = "未提供 Token"
-                };
+                throw new Exception("未提供Token");
             }
         }
     }

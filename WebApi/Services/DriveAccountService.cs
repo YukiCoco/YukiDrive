@@ -109,44 +109,36 @@ namespace YukiDrive.Services
         /// <param name="siteName"></param>
         /// <param name="dominName"></param>
         /// <returns></returns>
-        public async Task<Response> AddSiteId(string siteName, string nickName)
+        public async Task AddSiteId(string siteName, string nickName)
         {
             Site site = new Site();
             using (HttpClient httpClient = new HttpClient())
             {
                 httpClient.Timeout = TimeSpan.FromSeconds(20);
                 var apiCaller = new ProtectedApiCallHelper(httpClient);
-                var result = await apiCaller.CallWebApiAndProcessResultASync($"{Configuration.GraphApi}/v1.0/sites/{Configuration.DominName}:/sites/{siteName}", authorizeResult.AccessToken, (result) =>
+                await apiCaller.CallWebApiAndProcessResultASync($"{Configuration.GraphApi}/v1.0/sites/{Configuration.DominName}:/sites/{siteName}", authorizeResult.AccessToken, (result) =>
                 {
                     site.SiteId = result.Properties().Single((prop) => prop.Name == "id").Value.ToString();
                     site.Name = result.Properties().Single((prop) => prop.Name == "name").Value.ToString();
                     site.NickName = nickName;
                 });
-                if (!result.Error)
+                if (!siteContext.Sites.Any(s => s.SiteId == site.SiteId))
                 {
-                    if (!siteContext.Sites.Any(s => s.SiteId == site.SiteId))
+                    //若是首次添加则设置为默认的驱动器
+                    using (SettingService setting = new SettingService(new SettingContext()))
                     {
-                        //若是首次添加则设置为默认的驱动器
-                        using (SettingService setting = new SettingService(new SettingContext()))
+                        if (siteContext.Sites.Count() == 0)
                         {
-                            if (siteContext.Sites.Count() == 0)
-                            {
-                                await setting.Set("DefaultDrive", site.Name);
-                            }
+                            await setting.Set("DefaultDrive", site.Name);
                         }
-                        await siteContext.Sites.AddAsync(site);
-                        await siteContext.SaveChangesAsync();
                     }
-                    else
-                    {
-                        return new Response()
-                        {
-                            Error = true,
-                            Message = "站点已存在"
-                        };
-                    }
+                    await siteContext.Sites.AddAsync(site);
+                    await siteContext.SaveChangesAsync();
                 }
-                return result;
+                else
+                {
+                    throw new Exception("站点已创建");
+                }
             }
         }
 
@@ -170,7 +162,9 @@ namespace YukiDrive.Services
                 if (string.IsNullOrEmpty(item.SiteId))
                 {
                     drive = await Graph.Me.Drive.Request().GetAsync();
-                } else {
+                }
+                else
+                {
                     drive = await Graph.Sites[item.SiteId].Drive.Request().GetAsync();
                 }
                 drivesInfo.Add(new DriveInfo()

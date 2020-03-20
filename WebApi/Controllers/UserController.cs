@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using YukiDrive.Models;
 using YukiDrive.Services;
 
 namespace YukiDrive.Controllers
@@ -42,9 +43,10 @@ namespace YukiDrive.Controllers
             var user = userService.Authenticate(model.Username, model.Password);
 
             if (user == null)
-                return Ok(new {
-                    error = true,
-                    message = "Username or password is incorrect" });
+                return BadRequest(new ErrorResponse()
+                {
+                    Message = "用户名为空"
+                });
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Configuration.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -58,7 +60,6 @@ namespace YukiDrive.Controllers
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
-
             // return basic user info and authentication token
             return Ok(new
             {

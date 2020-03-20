@@ -45,11 +45,6 @@ namespace YukiDrive.Controllers
         [HttpGet("bind/new")]
         public async Task<IActionResult> NewBinding(string code, string session_state)
         {
-            var response = new Response()
-            {
-                Error = true,
-                Message = "未知错误"
-            };
             try
             {
                 var result = await driveAccount.Authorize(code);
@@ -61,30 +56,35 @@ namespace YukiDrive.Controllers
             }
             catch (Exception ex)
             {
-                response.Error = true;
-                response.Message = ex.Message;
-                return Ok(response);
+                return StatusCode(500, new Models.ErrorResponse()
+                {
+                    Message = ex.Message
+                });
             }
-            return Ok(response);
+            return StatusCode(500, new Models.ErrorResponse()
+            {
+                Message = "未知错误"
+            });
         }
         /// <summary>
         /// 添加 SharePoint Site
         /// </summary>
         /// <returns></returns>
-        [HttpPost("site")]
+        [HttpPost("sites")]
         public async Task<IActionResult> AddSite(AddSiteModel model)
         {
-            Response result = new Response();
             try
             {
-                result = await driveAccount.AddSiteId(model.siteName, model.nickName);
+                await driveAccount.AddSiteId(model.siteName, model.nickName);
             }
             catch (Exception ex)
             {
-                result.Error = true;
-                result.Message = ex.Message;
+                return StatusCode(500, new Models.ErrorResponse()
+                {
+                    Message = ex.Message
+                });
             }
-            return Ok(result);
+            return StatusCode(201);
         }
 
         /// <summary>
@@ -116,9 +116,8 @@ namespace YukiDrive.Controllers
             }
             catch (Exception ex)
             {
-                return Ok(new Response()
+                return StatusCode(500, new Models.ErrorResponse()
                 {
-                    Error = true,
                     Message = ex.Message
                 });
             }
@@ -132,20 +131,18 @@ namespace YukiDrive.Controllers
         [HttpPost("readme")]
         public async Task<IActionResult> UpdateReadme(ReadmeModel model)
         {
-            Response response = new Response()
-            {
-                Error = false
-            };
             try
             {
                 await setting.Set("Readme", model.text);
             }
             catch (Exception e)
             {
-                response.Error = true;
-                response.Message = e.Message;
+                return StatusCode(500, new Models.ErrorResponse()
+                {
+                    Message = e.Message
+                });
             };
-            return Ok(response);
+            return StatusCode(204);
         }
 
         /// <summary>
@@ -153,18 +150,24 @@ namespace YukiDrive.Controllers
         /// </summary>
         /// <param name="settings"></param>
         /// <returns></returns>
-        [HttpPost("setting")]
+        [HttpPost("settings")]
         public async Task<IActionResult> UpdateSetting(UpdateSettings toSaveSetting)
         {
-            await setting.Set("AppName", toSaveSetting.appName);
-            await setting.Set("WebName", toSaveSetting.webName);
-            await setting.Set("NavImg", toSaveSetting.navImg);
-            await setting.Set("DefaultDrive", toSaveSetting.defaultDrive);
-            return Ok(new Response()
+            try
             {
-                Error = false,
-                Message = "success"
-            });
+                await setting.Set("AppName", toSaveSetting.appName);
+                await setting.Set("WebName", toSaveSetting.webName);
+                await setting.Set("NavImg", toSaveSetting.navImg);
+                await setting.Set("DefaultDrive", toSaveSetting.defaultDrive);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new Models.ErrorResponse()
+                {
+                    Message = e.Message
+                });
+            };
+            return StatusCode(204);
         }
 
         /// <summary>
@@ -172,15 +175,21 @@ namespace YukiDrive.Controllers
         /// </summary>
         /// <param name="nickName"></param>
         /// <returns></returns>
-        [HttpDelete("site")]
+        [HttpDelete("sites")]
         public async Task<IActionResult> Unbind(string nickName)
         {
-            await driveAccount.Unbind(nickName);
-            return Ok(new Response()
+            try
             {
-                Error = false,
-                Message = "success"
-            });
+                await driveAccount.Unbind(nickName);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new Models.ErrorResponse()
+                {
+                    Message = e.Message
+                });
+            };
+            return StatusCode(204);
         }
 
         /// <summary>
@@ -191,21 +200,18 @@ namespace YukiDrive.Controllers
         [HttpPost("site/rename")]
         public async Task<IActionResult> SiteRename(SiteRenameModel model)
         {
-            Response response = new Response()
-            {
-                Error = false,
-                Message = "success"
-            };
             try
             {
                 await driveAccount.SiteRename(model.oldName, model.nickName);
             }
             catch (Exception ex)
             {
-                response.Error = true;
-                response.Message = ex.Message;
+                return StatusCode(500, new Models.ErrorResponse()
+                {
+                    Message = ex.Message
+                });
             }
-            return Ok(response);
+            return StatusCode(204);
         }
 
         // /// <summary>
