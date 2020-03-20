@@ -12,6 +12,7 @@
     "core-js": "^3.6.4",
     "dplayer": "^1.25.0",
     "js-cookie": "^2.2.1",
+    "markdown": "^0.5.0",
     "vue": "^2.6.11",
     "vue-meditor": "^2.1.1",
     "vue-router": "^3.1.5",

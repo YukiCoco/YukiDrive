@@ -197,7 +197,7 @@ namespace YukiDrive.Controllers
         /// </summary>
         /// <param name="nickName"></param>
         /// <returns></returns>
-        [HttpPost("site/rename")]
+        [HttpPost("sites/rename")]
         public async Task<IActionResult> SiteRename(SiteRenameModel model)
         {
             try

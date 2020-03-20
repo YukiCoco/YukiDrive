@@ -61,11 +61,11 @@
 
 <script>
 import axios from 'axios'
-import marked from 'marked'
 import {
     bytesToSize
 } from '../helpers/helper'
 import ClipboardJS from 'clipboard'
+import {markdown} from 'markdown';
 export default {
     data() {
         return {
@@ -103,7 +103,7 @@ export default {
     methods: {
         loadReadme: function () {
             axios.get("https://localhost:5001/api/readme").then(response => {
-                document.getElementById('readme').innerHTML = marked(response.data.result)
+                document.getElementById('readme').innerHTML = markdown.toHTML(response.data.readme)
             })
         },
         changeProgressBar: function () {
@@ -114,7 +114,7 @@ export default {
             this.folders.splice(0)
             this.files.splice(0)
             // currentSiteName 显示错误 需要使用 this.$route.params.siteName
-            axios.get(`https://localhost:5001/api/show/${this.$route.params.siteName}/${path}`).then(response => {
+            axios.get(`https://localhost:5001/api/sites/${this.$route.params.siteName}/${path}`).then(response => {
                 response.data.forEach(element => {
                     element.createdTime = (new Date(element.createdTime)).toLocaleString('zh-CN', {
                         year: 'numeric',
@@ -130,9 +130,9 @@ export default {
                         element.icon = getIcon(element.name)
                         this.files.push(element)
                         if (this.$route.params.folderPath) {
-                            element.downloadUrl = `https://localhost:5001/api/down/${this.$route.params.siteName}/${this.$route.params.folderPath}/${element.name}`
+                            element.downloadUrl = `https://localhost:5001/api/files/${this.$route.params.siteName}/${this.$route.params.folderPath}/${element.name}`
                         } else {
-                            element.downloadUrl = `https://localhost:5001/api/down/${this.$route.params.siteName}/${element.name}`
+                            element.downloadUrl = `https://localhost:5001/api/files/${this.$route.params.siteName}/${element.name}`
                         }
                     }
                 });

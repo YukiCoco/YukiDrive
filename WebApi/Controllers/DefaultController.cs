@@ -110,7 +110,9 @@ namespace YukiDrive.Controllers
         [HttpGet("readme")]
         public IActionResult GetReadme()
         {
-            return Ok(setting.Get("Readme"));
+            return Ok(new {
+                readme = setting.Get("Readme")
+            });
         }
     }
 }

@@ -31,7 +31,7 @@ export default {
         }
     },
     mounted() {
-        axios.get("https://localhost:5001/api/site").then(response => {
+        axios.get("https://localhost:5001/api/sites").then(response => {
             this.sites = response.data
         })
     },

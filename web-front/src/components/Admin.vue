@@ -188,38 +188,28 @@ export default {
     },
     methods: {
         updateSettings: function () {
-            helper.postWithToken("https://localhost:5001/api/admin/setting", this.settings, response => {
-                if (!response.data.error) {
-                    this.$store.commit('openSnackBar', '更新成功！')
-                    //刷新此页
-                    this.$router.go(0)
-                }
+            helper.postWithToken("https://localhost:5001/api/admin/settings", this.settings, () => {
+                this.$store.commit('openSnackBar', '更新成功！')
+                //刷新此页
+                this.$router.go(0)
             })
         },
         addSite: function () {
-            helper.postWithToken("https://localhost:5001/api/admin/site", this.newBind, response => {
-                if (!response.data.error) {
-                    this.$store.commit('openSnackBar', '绑定成功！')
-                    this.dialog.newBindDialog = false
-                    //刷新此页
-                    this.$router.go(0)
-                } else {
-                    this.$store.commit('openSnackBar', '绑定失败：' + response.data.message)
-                }
+            helper.postWithToken("https://localhost:5001/api/admin/sites", this.newBind, () => {
+                this.$store.commit('openSnackBar', '绑定成功！')
+                this.dialog.newBindDialog = false
+                //刷新此页
+                this.$router.go(0)
             })
         },
         unbind: function (nickName) {
-            helper.deleteWithToken("https://localhost:5001/api/admin/site", {
+            helper.deleteWithToken("https://localhost:5001/api/admin/sites", {
                 nickName: nickName
-            }, response => {
-                if (!response.data.error) {
-                    this.$store.commit('openSnackBar', '已解除绑定')
-                    this.dialog.newBindDialog = false
-                    //刷新此页
-                    this.$router.go(0)
-                } else {
-                    this.$store.commit('openSnackBar', '操作失败：' + response.data.message)
-                }
+            }, () => {
+                this.$store.commit('openSnackBar', '已解除绑定')
+                this.dialog.newBindDialog = false
+                //刷新此页
+                this.$router.go(0)
             })
         },
         openEditDriveDialog: function (nickName) {
@@ -227,32 +217,24 @@ export default {
             this.dialog.editDriveDialog = true
         },
         editDriveName: function () {
-            helper.postWithToken("https://localhost:5001/api/admin/site/rename", {
+            helper.postWithToken("https://localhost:5001/api/admin/sites/rename", {
                 oldName: this.toEditDriveName,
                 nickName: this.newDriveName
-            }, response => {
-                if (!response.data.error) {
-                    this.$store.commit('openSnackBar', '已更新驱动器名称')
-                    this.dialog.newBindDialog = false
-                    //刷新此页
-                    this.$router.go(0)
-                } else {
-                    this.$store.commit('openSnackBar', '操作失败：' + response.data.message)
-                }
+            }, () => {
+                this.$store.commit('openSnackBar', '已更新驱动器名称')
+                this.dialog.newBindDialog = false
+                //刷新此页
+                this.$router.go(0)
             })
         },
-        updateReadme: function(){
-            helper.postWithToken('https://localhost:5001/api/admin/readme',{
-                text:this.markdownText
-            },response => {
-                if (!response.data.error) {
-                    this.$store.commit('openSnackBar', '已更新 readme')
-                    this.dialog.newBindDialog = false
-                    //刷新此页
-                    this.$router.go(0)
-                } else {
-                    this.$store.commit('openSnackBar', '操作失败：' + response.data.message)
-                }
+        updateReadme: function () {
+            helper.postWithToken('https://localhost:5001/api/admin/readme', {
+                text: this.markdownText
+            }, () => {
+                this.$store.commit('openSnackBar', '已更新 readme')
+                this.dialog.newBindDialog = false
+                //刷新此页
+                this.$router.go(0)
             })
         }
     },
