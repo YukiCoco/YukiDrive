@@ -6,6 +6,7 @@
         <router-view />
         <Snackbar />
     </v-content>
+    <Footer ref="footer"/>
 </v-app>
 </template>
 
@@ -14,13 +15,15 @@ import AppBar from './layouts/AppBar'
 import Drawer from './layouts/Drawer'
 import Snackbar from './layouts/Snackbar'
 import axios from 'axios'
+import Footer from './layouts/Footer'
 
 export default {
     name: 'App',
     components: {
         AppBar,
         Drawer,
-        Snackbar
+        Snackbar,
+        Footer
     },
     data: () => ({
         //
@@ -31,7 +34,8 @@ export default {
                 appName: response.data.appName,
                 webName: response.data.webName,
                 navImg: response.data.navImg,
-                defaultDrive: response.data.defaultDrive
+                defaultDrive: response.data.defaultDrive,
+                footer: response.data.footer
             })
             //更新网页 Title
             document.title = response.data.webName
@@ -39,6 +43,8 @@ export default {
             if (this.$route.path == '/') {
                 this.$router.push(this.$store.state.settings.defaultDrive)
             }
+            //更新 Footer
+            this.$refs.footer.updateFooter()
         })
     },
 };

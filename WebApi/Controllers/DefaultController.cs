@@ -14,8 +14,6 @@ namespace YukiDrive.Controllers
         IDriveAccountService siteService;
         IDriveService driveService;
         SettingService setting;
-
-
         public DefaultController(IDriveAccountService siteService, IDriveService driveService, SettingService setting)
         {
             this.siteService = siteService;
@@ -113,9 +111,9 @@ namespace YukiDrive.Controllers
             {
                 appName = setting.Get("AppName"),
                 webName = setting.Get("WebName"),
-                navImg = setting.Get("NavImg"),
                 defaultDrive = setting.Get("DefaultDrive"),
-                readme = setting.Get("Readme")
+                readme = setting.Get("Readme"),
+                footer = setting.Get("Footer")
             });
         }
         /// <summary>

@@ -108,10 +108,10 @@ namespace YukiDrive.Controllers
                     driveInfo = driveInfo,
                     appName = setting.Get("AppName"),
                     webName = setting.Get("WebName"),
-                    navImg = setting.Get("NavImg"),
                     defaultDrive = setting.Get("DefaultDrive"),
                     accountStatus = setting.Get("AccountStatus"),
-                    readme = setting.Get("Readme")
+                    readme = setting.Get("Readme"),
+                    footer = setting.Get("Footer")
                 });
             }
             catch (Exception ex)
@@ -159,6 +159,7 @@ namespace YukiDrive.Controllers
                 await setting.Set("WebName", toSaveSetting.webName);
                 await setting.Set("NavImg", toSaveSetting.navImg);
                 await setting.Set("DefaultDrive", toSaveSetting.defaultDrive);
+                await setting.Set("Footer",toSaveSetting.footer);
             }
             catch (Exception e)
             {
@@ -230,6 +231,7 @@ namespace YukiDrive.Controllers
             public string navImg { get; set; }
             public string defaultDrive { get; set; }
             public string readme { get; set; }
+            public string footer { get; set; }
         }
 
         public class AddSiteModel

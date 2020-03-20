@@ -65,7 +65,7 @@ import {
     bytesToSize
 } from '../helpers/helper'
 import ClipboardJS from 'clipboard'
-import {markdown} from 'markdown';
+import {markdown} from 'markdown'
 export default {
     data() {
         return {
