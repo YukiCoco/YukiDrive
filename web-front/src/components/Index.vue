@@ -18,7 +18,8 @@
                                 </v-list-item-avatar>
                                 <v-list-item-content>
                                     <v-list-item-title v-text="item.name"></v-list-item-title>
-                                    <v-list-item-subtitle v-text="item.createdTime"></v-list-item-subtitle>
+                                    <v-list-item-subtitle v-text="`${item.createdTime}\xa0\xa0${item.size}`">
+                                    </v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-list-item>
                         </v-list-item-group>
@@ -26,16 +27,16 @@
                     <div v-if="files.length != 0">
                         <v-subheader>文件</v-subheader>
                         <v-list-item-group color="primary">
-                            <v-list-item v-for="(item, i) in files" :key="i" @click="openDetial(item)">
+                            <v-list-item v-for="(item, i) in files" :key="i">
                                 <v-list-item-avatar>
-                                    <v-icon large>{{ item.icon }}</v-icon>
+                                    <v-icon large @click="openDetial(item)">{{ item.icon }}</v-icon>
                                 </v-list-item-avatar>
-                                <v-list-item-content>
+                                <v-list-item-content @click="openDetial(item)">
                                     <v-list-item-title v-text="item.name"></v-list-item-title>
-                                    <v-list-item-subtitle v-text="item.createdTime"></v-list-item-subtitle>
+                                    <v-list-item-subtitle v-text="`${item.createdTime}\xa0\xa0${item.size}`"></v-list-item-subtitle>
                                 </v-list-item-content>
                                 <v-list-item-action>
-                                    <v-btn icon :href="item.downloadUrl">
+                                    <v-btn icon :href="item.downloadUrl" @click="downloadFile(item.downloadUrl)">
                                         <v-icon>mdi-download</v-icon>
                                     </v-btn>
                                 </v-list-item-action>
@@ -56,6 +57,7 @@
 <script>
 import axios from 'axios'
 import marked from 'marked'
+import {bytesToSize} from '../helpers/helper' 
 export default {
     data() {
         return {
@@ -70,7 +72,7 @@ export default {
         if (this.$route.params.folderPath) {
             this.changeRouter()
             this.show(this.$route.params.folderPath)
-        //根目录
+            //根目录
         } else if (this.$route.params.siteName) {
             this.show()
             this.loadReadme()
@@ -89,7 +91,7 @@ export default {
         }
     },
     methods: {
-        loadReadme: function (){
+        loadReadme: function () {
             axios.get("https://localhost:5001/api/readme").then(response => {
                 document.getElementById('readme').innerHTML = marked(response.data.result)
             })
@@ -104,10 +106,17 @@ export default {
             // currentSiteName 显示错误 需要使用 this.$route.params.siteName
             axios.get(`https://localhost:5001/api/show/${this.$route.params.siteName}/${path}`).then(response => {
                 response.data.forEach(element => {
-                    element.createdTime = (new Date(element.createdTime)).toLocaleString()
+                    element.createdTime = (new Date(element.createdTime)).toLocaleString('zh-CN',{
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric'
+                    })
+                    element.size = bytesToSize(element.size)
+                    //文件夹
                     if (element.downloadUrl == null) {
                         this.folders.push(element)
                     } else {
+                        //文件
                         element.icon = getIcon(element.name)
                         this.files.push(element)
                         if (this.$route.params.folderPath) {
@@ -157,7 +166,7 @@ function getIcon(filename) {
     let imageArray = ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'webp', 'psd', 'svg', 'tiff']
     let videoArray = ['wmv', 'asf', 'asx', 'rm', 'rmvb', 'mpg', 'mpeg', 'mpe', '3gp', 'mov', 'mp4', 'm4v', 'avi', 'dat', 'mkv', 'flv', 'vob']
     let audioArray = ['mp3', 'wav', 'wma', 'ape', 'flac', 'aac']
-    let zipArray = ['zip', 'rar', '7z', 'gz', 'bz2', 'xz','tar','tar.gz','tar.bz2','tar.xz']
+    let zipArray = ['zip', 'rar', '7z', 'gz', 'bz2', 'xz', 'tar', 'tar.gz', 'tar.bz2', 'tar.xz']
     if (imageArray.indexOf(suffix.toLowerCase()) !== -1) {
         return 'mdi-image'
     }

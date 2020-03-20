@@ -42,7 +42,7 @@ export default {
         }
     },
     mounted() {
-        if (this.$store.state.show.icon == 'mdi-video') {
+        if (this.$store.state.show.icon == 'mdi-movie') {
             new DPlayer({
                 container: document.getElementById('dplayer'),
                 screenshot: true,
