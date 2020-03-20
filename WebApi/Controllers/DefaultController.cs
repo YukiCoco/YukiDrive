@@ -14,8 +14,6 @@ namespace YukiDrive.Controllers
         IDriveAccountService siteService;
         IDriveService driveService;
         SettingService setting;
-
-
         public DefaultController(IDriveAccountService siteService, IDriveService driveService, SettingService setting)
         {
             this.siteService = siteService;
@@ -47,8 +45,15 @@ namespace YukiDrive.Controllers
             }
             if (string.IsNullOrEmpty(path))
             {
-                var result = await driveService.GetRootItems(siteName);
-                return Ok(result);
+                try
+                {
+                    var result = await driveService.GetRootItems(siteName);
+                    return Ok(result);
+                }
+                catch (Exception e)
+                {
+                    return StatusCode(500, e.Message);
+                }
             }
             else
             {
@@ -73,7 +78,15 @@ namespace YukiDrive.Controllers
         [HttpGet("files/{siteName}/{**path}")]
         public async Task<IActionResult> Download(string siteName, string path)
         {
-            var result = await driveService.GetDriveItemByPath(path, siteName);
+            DriveFile result;
+            try
+            {
+                result = await driveService.GetDriveItemByPath(path, siteName);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
             if (result != null)
             {
                 return new RedirectResult(result.DownloadUrl);
@@ -82,7 +95,7 @@ namespace YukiDrive.Controllers
             {
                 return NotFound(new ErrorResponse()
                 {
-                    Message = $"路径{path}不存在"
+                    Message = $"所求的{path}不存在"
                 });
             }
         }
@@ -98,9 +111,9 @@ namespace YukiDrive.Controllers
             {
                 appName = setting.Get("AppName"),
                 webName = setting.Get("WebName"),
-                navImg = setting.Get("NavImg"),
                 defaultDrive = setting.Get("DefaultDrive"),
-                readme = setting.Get("Readme")
+                readme = setting.Get("Readme"),
+                footer = setting.Get("Footer")
             });
         }
         /// <summary>
@@ -110,7 +123,8 @@ namespace YukiDrive.Controllers
         [HttpGet("readme")]
         public IActionResult GetReadme()
         {
-            return Ok(new {
+            return Ok(new
+            {
                 readme = setting.Get("Readme")
             });
         }

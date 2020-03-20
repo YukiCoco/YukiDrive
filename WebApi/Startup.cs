@@ -39,7 +39,7 @@ namespace YukiDrive
                         };
                         userService.Create(adminUser, YukiDrive.Configuration.AdminPassword);
                     }
-                    settingService.Set("IsInit","true").Wait();
+                    settingService.Set("IsInit", "true").Wait();
                 }
             }
         }
@@ -125,17 +125,19 @@ namespace YukiDrive
             {
                 app.UseDeveloperExceptionPage();
             }
+            //spa应用
+            app.UseStaticFiles();
+            app.UseSpa(config =>
+            {
+                config.Options.SourcePath = "wwwroot";
+            });
+
             app.UseHttpsRedirection();
             app.UseRouting();
             //验证
             app.UseAuthentication();
             //授权
             app.UseAuthorization();
-            //spa
-            app.UseSpa(config =>
-            {
-                config.Options.SourcePath = "wwwroot";
-            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

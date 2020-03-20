@@ -17,7 +17,8 @@ export default new Vuex.Store({
       appName:undefined,
       webName:undefined,
       navImg:undefined,
-      defaultDrive:undefined
+      defaultDrive:undefined,
+      footer:undefined
     },
     show:{
       name:undefined,
@@ -41,6 +42,7 @@ export default new Vuex.Store({
       state.settings.webName = payload.webName
       state.settings.navImg = payload.navImg
       state.settings.defaultDrive = payload.defaultDrive
+      state.settings.footer = payload.footer
     },
     showItem(state,payload){
       state.show.name = payload.name

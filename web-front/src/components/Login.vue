@@ -63,7 +63,7 @@ import Cookies from 'js-cookie'
       },
       methods: {
           Login : function(){
-              axios.post('https://localhost:5001/api/user/authenticate',{
+              axios.post('/api/user/authenticate',{
                   username:this.UserName,
                   password:this.UserPassword
               }).then(response => {

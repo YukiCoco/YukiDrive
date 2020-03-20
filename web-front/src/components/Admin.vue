@@ -12,7 +12,7 @@
                     <p>当前状态：{{ settings.accountStatus }}</p>
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn text href="https://localhost:5001/api/admin/bind/url">认证</v-btn>
+                    <v-btn text href="/api/admin/bind/url">认证</v-btn>
                 </v-card-actions>
             </v-card>
             <v-card class="mt-4">
@@ -56,8 +56,9 @@
                                 </v-text-field>
                                 <v-text-field label="导航栏显示名" hint="左侧导航栏头部显示的文字" v-model="settings.appName">
                                 </v-text-field>
-                                <v-text-field label="导航栏背景图片" hint="左侧导航栏背景图片，留空则不显示" v-model="settings.navImg"></v-text-field>
-                                <v-text-field label="设置主驱动器" hint="填写创建 SharePoint 站点时输入的名称，将被设置为打开网站默认显示的驱动器（输入 onedrive 则为 Onedrive ）" v-model="settings.defaultDrive">
+                                <v-text-field label="设置主驱动器" hint="填写创建 SharePoint 站点时输入的名称，将被设置为打开网站默认显示的驱动器（输入 onedrive 则为 OneDrive ）" v-model="settings.defaultDrive">
+                                </v-text-field>
+                                <v-text-field label="页脚" hint="设置网站页脚，支持 Markdown，建议保留 Power by YukiDrive" v-model="settings.footer">
                                 </v-text-field>
                             </v-col>
                         </v-row>
@@ -69,7 +70,7 @@
             </v-card>
             <v-card class="mt-4">
                 <v-toolbar dense flat>
-                    <v-toolbar-title>添加 README</v-toolbar-title>
+                    <v-toolbar-title>首页 README</v-toolbar-title>
                 </v-toolbar>
                 <div class="markdown pr-3 pl-3">
                     <Markdown v-model="markdownText" />
@@ -147,10 +148,9 @@ export default {
                 officeType: undefined,
                 appName: undefined,
                 webName: undefined,
-                navImg: undefined,
                 defaultDrive: undefined,
                 accountStatus: undefined,
-                readme: undefined
+                footer: undefined
             },
             newBind: {
                 siteName: undefined,
@@ -166,7 +166,7 @@ export default {
         }
     },
     mounted() {
-        helper.getWithToken("https://localhost:5001/api/admin/info", null, response => {
+        helper.getWithToken("/api/admin/info", null, response => {
             //计算驱动器容量
             response.data.driveInfo.forEach(element => {
                 element.showTotal = helper.bytesToSize(element.quota.total)
@@ -179,23 +179,23 @@ export default {
                 officeType: response.data.officeType,
                 appName: response.data.appName,
                 webName: response.data.webName,
-                navImg: response.data.navImg,
                 defaultDrive: response.data.defaultDrive,
-                accountStatus: response.data.accountStatus
+                accountStatus: response.data.accountStatus,
+                footer : response.data.footer
             }
             this.markdownText = response.data.readme
         })
     },
     methods: {
         updateSettings: function () {
-            helper.postWithToken("https://localhost:5001/api/admin/settings", this.settings, () => {
+            helper.postWithToken("/api/admin/settings", this.settings, () => {
                 this.$store.commit('openSnackBar', '更新成功！')
                 //刷新此页
                 this.$router.go(0)
             })
         },
         addSite: function () {
-            helper.postWithToken("https://localhost:5001/api/admin/sites", this.newBind, () => {
+            helper.postWithToken("/api/admin/sites", this.newBind, () => {
                 this.$store.commit('openSnackBar', '绑定成功！')
                 this.dialog.newBindDialog = false
                 //刷新此页
@@ -203,7 +203,7 @@ export default {
             })
         },
         unbind: function (nickName) {
-            helper.deleteWithToken("https://localhost:5001/api/admin/sites", {
+            helper.deleteWithToken("/api/admin/sites", {
                 nickName: nickName
             }, () => {
                 this.$store.commit('openSnackBar', '已解除绑定')
@@ -217,7 +217,7 @@ export default {
             this.dialog.editDriveDialog = true
         },
         editDriveName: function () {
-            helper.postWithToken("https://localhost:5001/api/admin/sites/rename", {
+            helper.postWithToken("/api/admin/sites/rename", {
                 oldName: this.toEditDriveName,
                 nickName: this.newDriveName
             }, () => {
@@ -228,7 +228,7 @@ export default {
             })
         },
         updateReadme: function () {
-            helper.postWithToken('https://localhost:5001/api/admin/readme', {
+            helper.postWithToken('/api/admin/readme', {
                 text: this.markdownText
             }, () => {
                 this.$store.commit('openSnackBar', '已更新 readme')
