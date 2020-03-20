@@ -78,9 +78,10 @@ namespace YukiDrive.Services
             }
             this.siteContext = siteContext;
             //定时更新Token
-            Timer timer = new Timer(o => {
+            Timer timer = new Timer(o =>
+            {
                 authorizeResult = authProvider.ClientApplication.AcquireTokenSilent(Configuration.Scopes, Configuration.AccountName).ExecuteAsync().Result;
-            },null,TimeSpan.FromSeconds(0),TimeSpan.FromHours(1));
+            }, null, TimeSpan.FromSeconds(0), TimeSpan.FromHours(1));
         }
         /// <summary>
         /// 返回 Oauth 验证url
@@ -164,7 +165,14 @@ namespace YukiDrive.Services
             List<DriveInfo> drivesInfo = new List<DriveInfo>();
             foreach (var item in siteContext.Sites.ToArray())
             {
-                var drive = await Graph.Sites[item.SiteId].Drive.Request().GetAsync();
+                Microsoft.Graph.Drive drive;
+                //Onedrive
+                if (string.IsNullOrEmpty(item.SiteId))
+                {
+                    drive = await Graph.Me.Drive.Request().GetAsync();
+                } else {
+                    drive = await Graph.Sites[item.SiteId].Drive.Request().GetAsync();
+                }
                 drivesInfo.Add(new DriveInfo()
                 {
                     Quota = drive.Quota,

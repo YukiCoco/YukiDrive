@@ -17,8 +17,9 @@ namespace YukiDrive.Migrations.Site
 
             modelBuilder.Entity("YukiDrive.Models.Site", b =>
                 {
-                    b.Property<string>("SiteId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
@@ -26,7 +27,10 @@ namespace YukiDrive.Migrations.Site
                     b.Property<string>("NickName")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("SiteId");
+                    b.Property<string>("SiteId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Sites");
                 });

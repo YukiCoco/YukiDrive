@@ -32,10 +32,10 @@ namespace YukiDrive.Services
         /// 获取根目录的所有项目
         /// </summary>
         /// <returns></returns>
-        public async Task<List<DriveFile>> GetRootItems(string siteName)
+        public async Task<List<DriveFile>> GetRootItems(string siteName = "onedrive")
         {
             string siteId = GetSiteId(siteName);
-            var drive = graph.Sites[siteId].Drive;
+            var drive = (siteName != "onedrive") ? graph.Sites[siteId].Drive : graph.Me.Drive;
             var result = await drive.Root.Children.Request().GetAsync();
             List<DriveFile> files = GetItems(result);
             return files;
@@ -45,10 +45,10 @@ namespace YukiDrive.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<List<DriveFile>> GetDriveItemsById(string id,string siteName)
+        public async Task<List<DriveFile>> GetDriveItemsById(string id,string siteName = "onedrive")
         {
             string siteId = GetSiteId(siteName);
-            var drive = graph.Sites[siteId].Drive;
+            var drive = (siteName != "onedrive") ? graph.Sites[siteId].Drive : graph.Me.Drive;
             var result = await drive.Items[id].Children.Request().GetAsync();
             List<DriveFile> files = GetItems(result);
             return files;
@@ -58,10 +58,10 @@ namespace YukiDrive.Services
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public async Task<List<DriveFile>> GetDriveItemsByPath(string path,string siteName)
+        public async Task<List<DriveFile>> GetDriveItemsByPath(string path,string siteName = "onedrive")
         {
             string siteId = GetSiteId(siteName);
-            var drive = graph.Sites[siteId].Drive;
+            var drive = (siteName != "onedrive") ? graph.Sites[siteId].Drive : graph.Me.Drive;
             var result = await drive.Root.ItemWithPath(path).Children.Request().GetAsync();
             List<DriveFile> files = GetItems(result);
             return files;
@@ -71,10 +71,10 @@ namespace YukiDrive.Services
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public async Task<DriveFile> GetDriveItemByPath(string path,string siteName)
+        public async Task<DriveFile> GetDriveItemByPath(string path,string siteName = "onedrive")
         {
             string siteId = GetSiteId(siteName);
-            var drive = graph.Sites[siteId].Drive;
+            var drive = (siteName != "onedrive") ? graph.Sites[siteId].Drive : graph.Me.Drive;
             var result = await drive.Root.ItemWithPath(path).Request().GetAsync();
             DriveFile file = GetItem(result);
             return file;
@@ -84,10 +84,10 @@ namespace YukiDrive.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<DriveFile> GetDriveItemById(string id,string siteName)
+        public async Task<DriveFile> GetDriveItemById(string id,string siteName = "onedrive")
         {
             string siteId = GetSiteId(siteName);
-            var drive = graph.Sites[siteId].Drive;
+            var drive = (siteName != "onedrive") ? graph.Sites[siteId].Drive : graph.Me.Drive;
             var result = await drive.Items[id].Request().GetAsync();
             DriveFile file = GetItem(result);
             return file;
