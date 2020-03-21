@@ -45,6 +45,8 @@ export default {
             if (this.$route.path == '/') {
                 this.$router.push(response.data.defaultDrive)
             }
+            //更新 Footer
+            this.$refs.footer.updateFooter()
         })
     },
 };
