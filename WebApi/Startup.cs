@@ -125,15 +125,18 @@ namespace YukiDrive
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseHttpsRedirection();
+            app.UseRouting();
             //spa应用
             app.UseStaticFiles();
             app.UseSpa(config =>
             {
                 config.Options.SourcePath = "wwwroot";
+                // if (env.IsDevelopment())
+                // {
+                //     config.UseProxyToSpaDevelopmentServer("http://localhost:8001");
+                // }
             });
-
-            app.UseHttpsRedirection();
-            app.UseRouting();
             //验证
             app.UseAuthentication();
             //授权

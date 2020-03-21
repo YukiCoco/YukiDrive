@@ -157,7 +157,6 @@ namespace YukiDrive.Controllers
             {
                 await setting.Set("AppName", toSaveSetting.appName);
                 await setting.Set("WebName", toSaveSetting.webName);
-                await setting.Set("NavImg", toSaveSetting.navImg);
                 await setting.Set("DefaultDrive", toSaveSetting.defaultDrive);
                 await setting.Set("Footer",toSaveSetting.footer);
             }

@@ -6,7 +6,7 @@
         <router-view />
         <Snackbar />
     </v-content>
-    <Footer ref="footer"/>
+    <Footer ref="footer" />
 </v-app>
 </template>
 
@@ -29,7 +29,7 @@ export default {
         //
     }),
     mounted() {
-        axios.get('/api/info').then(response => {
+        axios.get(this.$store.state.settings.baseUrl + '/api/info').then(response => {
             this.$store.commit('changeSettings', {
                 appName: response.data.appName,
                 webName: response.data.webName,
@@ -39,12 +39,12 @@ export default {
             })
             //更新网页 Title
             document.title = response.data.webName
-            //没有指定驱动器 跳转到默认驱动器
-            if (this.$route.path == '/') {
-                this.$router.push(this.$store.state.settings.defaultDrive)
-            }
             //更新 Footer
             this.$refs.footer.updateFooter()
+            //没有指定驱动器 跳转到默认驱动器
+            if (this.$route.path == '/') {
+                this.$router.push(response.data.defaultDrive)
+            }
         })
     },
 };

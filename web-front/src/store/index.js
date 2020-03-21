@@ -18,7 +18,9 @@ export default new Vuex.Store({
       webName:undefined,
       navImg:undefined,
       defaultDrive:undefined,
-      footer:undefined
+      footer:undefined,
+      //api请求的基本url
+      baseUrl: (process.env.VUE_APP_BASE_URL == undefined) ? '' : process.env.VUE_APP_BASE_URL
     },
     show:{
       name:undefined,

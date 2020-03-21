@@ -1,6 +1,7 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import Vuex from '../store/index'
+import MarkdownIt from 'markdown-it'
 
 //文件大小转换
 export function bytesToSize(bytes) {
@@ -46,4 +47,10 @@ export function deleteWithToken(url, data, callback) {
             'Authorization': `Bearer ${Cookies.get('token')}`
         }
     }).then(callback).catch(errorCallback)
+}
+
+//markdown parser
+export function markdownIt(data){
+    let md = new MarkdownIt()
+    return md.render(data)
 }

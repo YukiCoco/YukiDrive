@@ -7,18 +7,21 @@
 </template>
 
 <script>
-import {
-    markdown
-} from 'markdown'
+import { markdownIt } from '../helpers/helper'
 export default {
     data() {
         return {
             footer : this.$store.state.settings.footer
         }
     },
+    watch: {
+        footer : function(){
+            this.updateFooter()
+        }
+    },
     methods: {
         updateFooter: function(){
-            document.getElementById('footer').innerHTML = markdown.toHTML(this.$store.state.settings.footer)
+            document.getElementById('footer').innerHTML = markdownIt(this.$store.state.settings.footer)
         }
     },
 }

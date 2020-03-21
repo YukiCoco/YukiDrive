@@ -31,7 +31,7 @@ export default {
         }
     },
     mounted() {
-        axios.get("https://localhost:5001/api/sites").then(response => {
+        axios.get(this.$store.state.settings.baseUrl + "/api/sites").then(response => {
             this.sites = response.data
         })
     },

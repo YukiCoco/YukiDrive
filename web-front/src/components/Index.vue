@@ -62,10 +62,10 @@
 <script>
 import axios from 'axios'
 import {
-    bytesToSize
+    bytesToSize,
+    markdownIt
 } from '../helpers/helper'
 import ClipboardJS from 'clipboard'
-import {markdown} from 'markdown'
 export default {
     data() {
         return {
@@ -102,8 +102,8 @@ export default {
     },
     methods: {
         loadReadme: function () {
-            axios.get("/api/readme").then(response => {
-                document.getElementById('readme').innerHTML = markdown.toHTML(response.data.readme)
+            axios.get("https://localhost:5001/api/readme").then(response => {
+                document.getElementById('readme').innerHTML = markdownIt(response.data.readme)
             })
         },
         changeProgressBar: function () {
@@ -114,7 +114,7 @@ export default {
             this.folders.splice(0)
             this.files.splice(0)
             // currentSiteName 显示错误 需要使用 this.$route.params.siteName
-            axios.get(`/api/sites/${this.$route.params.siteName}/${path}`).then(response => {
+            axios.get(`${this.$store.state.settings.baseUrl}/api/sites/${this.$route.params.siteName}/${path}`).then(response => {
                 response.data.forEach(element => {
                     element.createdTime = (new Date(element.createdTime)).toLocaleString('zh-CN', {
                         year: 'numeric',
@@ -130,9 +130,9 @@ export default {
                         element.icon = getIcon(element.name)
                         this.files.push(element)
                         if (this.$route.params.folderPath) {
-                            element.downloadUrl = `/api/files/${this.$route.params.siteName}/${this.$route.params.folderPath}/${element.name}`
+                            element.downloadUrl = `${this.$store.state.settings.baseUrl}/api/files/${this.$route.params.siteName}/${this.$route.params.folderPath}/${element.name}`
                         } else {
-                            element.downloadUrl = `/api/files/${this.$route.params.siteName}/${element.name}`
+                            element.downloadUrl = `${this.$store.state.settings.baseUrl}/api/files/${this.$route.params.siteName}/${element.name}`
                         }
                     }
                 });
@@ -166,7 +166,7 @@ export default {
                 icon: payload.icon
             })
             //调用微软接口预览 Office 文件
-            if(getIcon(payload.name).match('microsoft') != null){
+            if (getIcon(payload.name).match('microsoft') != null) {
                 window.open('https://view.officeapps.live.com/op/view.aspx?src=' + payload.downloadUrl)
             }
             this.$router.push('/show')

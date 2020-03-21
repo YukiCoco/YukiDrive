@@ -12,7 +12,7 @@
                     <p>当前状态：{{ settings.accountStatus }}</p>
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn text href="/api/admin/bind/url">认证</v-btn>
+                    <v-btn text :href="this.$store.state.settings.baseUrl + '/api/admin/bind/url'">认证</v-btn>
                 </v-card-actions>
             </v-card>
             <v-card class="mt-4">
@@ -166,7 +166,7 @@ export default {
         }
     },
     mounted() {
-        helper.getWithToken("/api/admin/info", null, response => {
+        helper.getWithToken(this.$store.state.settings.baseUrl + "/api/admin/info", null, response => {
             //计算驱动器容量
             response.data.driveInfo.forEach(element => {
                 element.showTotal = helper.bytesToSize(element.quota.total)
@@ -188,14 +188,14 @@ export default {
     },
     methods: {
         updateSettings: function () {
-            helper.postWithToken("/api/admin/settings", this.settings, () => {
+            helper.postWithToken(this.$store.state.settings.baseUrl +  "/api/admin/settings", this.settings, () => {
                 this.$store.commit('openSnackBar', '更新成功！')
                 //刷新此页
                 this.$router.go(0)
             })
         },
         addSite: function () {
-            helper.postWithToken("/api/admin/sites", this.newBind, () => {
+            helper.postWithToken(this.$store.state.settings.baseUrl + "/api/admin/sites", this.newBind, () => {
                 this.$store.commit('openSnackBar', '绑定成功！')
                 this.dialog.newBindDialog = false
                 //刷新此页
@@ -203,7 +203,7 @@ export default {
             })
         },
         unbind: function (nickName) {
-            helper.deleteWithToken("/api/admin/sites", {
+            helper.deleteWithToken(this.$store.state.settings.baseUrl + "/api/admin/sites", {
                 nickName: nickName
             }, () => {
                 this.$store.commit('openSnackBar', '已解除绑定')
@@ -217,7 +217,7 @@ export default {
             this.dialog.editDriveDialog = true
         },
         editDriveName: function () {
-            helper.postWithToken("/api/admin/sites/rename", {
+            helper.postWithToken(this.$store.state.settings.baseUrl + "/api/admin/sites/rename", {
                 oldName: this.toEditDriveName,
                 nickName: this.newDriveName
             }, () => {
@@ -228,7 +228,7 @@ export default {
             })
         },
         updateReadme: function () {
-            helper.postWithToken('/api/admin/readme', {
+            helper.postWithToken(this.$store.state.settings.baseUrl + '/api/admin/readme', {
                 text: this.markdownText
             }, () => {
                 this.$store.commit('openSnackBar', '已更新 readme')

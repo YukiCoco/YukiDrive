@@ -34,6 +34,9 @@ namespace YukiDrive.Services
         /// <param name="value"></param>
         /// <returns></returns>
         public async Task Set(string key,string value){
+            if(string.IsNullOrEmpty(key) || string.IsNullOrEmpty(key)){
+                throw new Exception("键值对为空");
+            }
             //已经存在
             if(context.Settings.Any(setting => setting.Key == key)){
                 Setting setting = context.Settings.Single(setting => setting.Key == key);
