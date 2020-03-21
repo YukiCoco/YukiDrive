@@ -21,7 +21,7 @@ namespace YukiDrive.Services
         GraphServiceClient graph;
         SiteContext siteContext;
         DriveContext driveContext;
-        public DriveService(IDriveAccountService accountService,SiteContext siteContext,DriveContext driveContext)
+        public DriveService(IDriveAccountService accountService, SiteContext siteContext, DriveContext driveContext)
         {
             this.accountService = accountService;
             graph = accountService.Graph;
@@ -32,12 +32,12 @@ namespace YukiDrive.Services
         /// 获取根目录的所有项目
         /// </summary>
         /// <returns></returns>
-        public async Task<List<DriveFile>> GetRootItems(string siteName = "onedrive")
+        public async Task<List<DriveFile>> GetRootItems(string siteName = "onedrive", bool showHiddenFolders = false)
         {
             string siteId = GetSiteId(siteName);
             var drive = (siteName != "onedrive") ? graph.Sites[siteId].Drive : graph.Me.Drive;
             var result = await drive.Root.Children.Request().GetAsync();
-            List<DriveFile> files = GetItems(result);
+            List<DriveFile> files = GetItems(result, siteName, showHiddenFolders);
             return files;
         }
         /// <summary>
@@ -45,12 +45,12 @@ namespace YukiDrive.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<List<DriveFile>> GetDriveItemsById(string id,string siteName = "onedrive")
+        public async Task<List<DriveFile>> GetDriveItemsById(string id, string siteName = "onedrive", bool showHiddenFolders = false)
         {
             string siteId = GetSiteId(siteName);
             var drive = (siteName != "onedrive") ? graph.Sites[siteId].Drive : graph.Me.Drive;
             var result = await drive.Items[id].Children.Request().GetAsync();
-            List<DriveFile> files = GetItems(result);
+            List<DriveFile> files = GetItems(result, siteName, showHiddenFolders);
             return files;
         }
         /// <summary>
@@ -58,12 +58,12 @@ namespace YukiDrive.Services
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public async Task<List<DriveFile>> GetDriveItemsByPath(string path,string siteName = "onedrive")
+        public async Task<List<DriveFile>> GetDriveItemsByPath(string path, string siteName = "onedrive", bool showHiddenFolders = false)
         {
             string siteId = GetSiteId(siteName);
             var drive = (siteName != "onedrive") ? graph.Sites[siteId].Drive : graph.Me.Drive;
             var result = await drive.Root.ItemWithPath(path).Children.Request().GetAsync();
-            List<DriveFile> files = GetItems(result);
+            List<DriveFile> files = GetItems(result, siteName, showHiddenFolders);
             return files;
         }
         /// <summary>
@@ -71,7 +71,7 @@ namespace YukiDrive.Services
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public async Task<DriveFile> GetDriveItemByPath(string path,string siteName = "onedrive")
+        public async Task<DriveFile> GetDriveItemByPath(string path, string siteName = "onedrive")
         {
             string siteId = GetSiteId(siteName);
             var drive = (siteName != "onedrive") ? graph.Sites[siteId].Drive : graph.Me.Drive;
@@ -84,7 +84,7 @@ namespace YukiDrive.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<DriveFile> GetDriveItemById(string id,string siteName = "onedrive")
+        public async Task<DriveFile> GetDriveItemById(string id, string siteName = "onedrive")
         {
             string siteId = GetSiteId(siteName);
             var drive = (siteName != "onedrive") ? graph.Sites[siteId].Drive : graph.Me.Drive;
@@ -113,11 +113,24 @@ namespace YukiDrive.Services
             return file;
         }
 
-        private List<DriveFile> GetItems(IDriveItemChildrenCollectionPage result)
+        private List<DriveFile> GetItems(IDriveItemChildrenCollectionPage result, string siteName = "onedrive", bool showHiddenFolders = false)
         {
             List<DriveFile> files = new List<DriveFile>();
+            string[] hiddenFolders = siteContext.Sites.Single(site => site.Name == siteName).HiddenDrectory;
             foreach (var item in result)
             {
+                //要隐藏文件
+                if (!showHiddenFolders)
+                {
+                    //跳过隐藏的文件
+                    if (hiddenFolders != null)
+                    {
+                        if (hiddenFolders.Any(str => str == item.Name))
+                        {
+                            continue;
+                        }
+                    }
+                }
                 DriveFile file = new DriveFile()
                 {
                     CreatedTime = item.CreatedDateTime,
@@ -142,9 +155,11 @@ namespace YukiDrive.Services
         /// 根据名称返回siteid
         /// </summary>
         /// <returns></returns>
-        private string GetSiteId(string siteName){
+        private string GetSiteId(string siteName)
+        {
             Models.Site site = siteContext.Sites.SingleOrDefault(site => site.Name == siteName);
-            if(site == null){
+            if (site == null)
+            {
                 return null;
             }
             return site.SiteId;

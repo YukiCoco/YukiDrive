@@ -7,7 +7,7 @@ using YukiDrive.Helpers;
 
 namespace YukiDrive.Services
 {
-    class UserService : IUserService, IDisposable
+    public class UserService : IUserService, IDisposable
     {
         private UserContext userContext { get; set; }
         public UserService(UserContext context)

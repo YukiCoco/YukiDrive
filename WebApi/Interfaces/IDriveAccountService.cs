@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Graph.Auth;
 using Microsoft.Identity.Client;
+using YukiDrive.Contexts;
 using YukiDrive.Models;
 using static YukiDrive.Services.DriveAccountService;
 
@@ -9,6 +10,8 @@ namespace YukiDrive.Services
 {
     public interface IDriveAccountService
     {
+
+        public SiteContext SiteContext { get; set; }
         /// <summary>
         /// 返回 Oauth 验证url
         /// </summary>
@@ -51,13 +54,5 @@ namespace YukiDrive.Services
         /// <param name="nickName"></param>
         /// <returns></returns>
         public Task Unbind(string nickName);
-
-        /// <summary>
-        /// 站点重命名
-        /// </summary>
-        /// <param name="oldName"></param>
-        /// <param name="newName"></param>
-        /// <returns></returns>
-        public Task SiteRename(string oldName,string newName);
     }
 }

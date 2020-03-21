@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using YukiDrive.Models;
 using YukiDrive.Services;
@@ -20,6 +21,9 @@ namespace YukiDrive.Controllers
             this.driveService = driveService;
             this.setting = setting;
         }
+
+
+        #region Actions
         /// <summary>
         /// 返回所有sites
         /// </summary>
@@ -43,11 +47,20 @@ namespace YukiDrive.Controllers
                     Message = "找不到请求的 Site Name"
                 });
             }
+            bool isAdmin = false;
+            string token = Request.Headers["Authorization"];
+            if (token != null)
+            {
+                if (Helpers.AuthenticationHelper.VerifyToken(token))
+                {
+                    isAdmin = true;
+                }
+            }
             if (string.IsNullOrEmpty(path))
             {
                 try
                 {
-                    var result = await driveService.GetRootItems(siteName);
+                    var result = await driveService.GetRootItems(siteName, isAdmin);
                     return Ok(result);
                 }
                 catch (Exception e)
@@ -57,7 +70,7 @@ namespace YukiDrive.Controllers
             }
             else
             {
-                var result = await driveService.GetDriveItemsByPath(path, siteName);
+                var result = await driveService.GetDriveItemsByPath(path, siteName, isAdmin);
                 if (result == null)
                 {
                     return NotFound(new ErrorResponse()
@@ -68,7 +81,6 @@ namespace YukiDrive.Controllers
                 return Ok(result);
             }
         }
-
         // catch-all 参数匹配路径
         /// <summary>
         /// 下载文件
@@ -128,5 +140,24 @@ namespace YukiDrive.Controllers
                 readme = setting.Get("Readme")
             });
         }
+
+        /// <summary>
+        /// 测试
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("test")]
+        public IActionResult Test(){
+            string token = Request.Headers["Authorization"];
+            bool isAdmin = false;
+            if (token != null)
+            {
+                if (Helpers.AuthenticationHelper.VerifyToken(token))
+                {
+                    isAdmin = true;
+                }
+            }
+            return Ok(isAdmin);
+        }
+        #endregion
     }
 }

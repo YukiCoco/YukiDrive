@@ -6,8 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using YukiDrive.Models;
+using YukiDrive.Helpers;
 
 namespace YukiDrive
 {
@@ -61,6 +60,7 @@ namespace YukiDrive
             services.AddDbContext<SettingContext>();
             services.AddScoped<SettingService>();
             //配置身份验证
+            //SecretKey
             var key = Encoding.ASCII.GetBytes(YukiDrive.Configuration.Secret);
             services.AddAuthentication(x =>
             {
@@ -104,8 +104,8 @@ namespace YukiDrive
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    ValidateIssuer = false
                 };
             });
 

@@ -18,9 +18,9 @@ namespace YukiDrive.Services
     public class DriveAccountService : IDriveAccountService
     {
         private IConfidentialClientApplication app;
-        public AuthenticationResult authorizeResult;
+        private AuthenticationResult authorizeResult;
         private AuthorizationCodeProvider authProvider;
-        private SiteContext siteContext;
+        public SiteContext SiteContext { get; set; }
         /// <summary>
         /// Graph实例
         /// </summary>
@@ -76,7 +76,7 @@ namespace YukiDrive.Services
             {
                 Graph = new Microsoft.Graph.GraphServiceClient($"{Configuration.GraphApi}/v1.0", authProvider);
             }
-            this.siteContext = siteContext;
+            this.SiteContext = siteContext;
             //定时更新Token
             Timer timer = new Timer(o =>
             {
@@ -122,18 +122,18 @@ namespace YukiDrive.Services
                     site.Name = result.Properties().Single((prop) => prop.Name == "name").Value.ToString();
                     site.NickName = nickName;
                 });
-                if (!siteContext.Sites.Any(s => s.SiteId == site.SiteId))
+                if (!SiteContext.Sites.Any(s => s.SiteId == site.SiteId))
                 {
                     //若是首次添加则设置为默认的驱动器
                     using (SettingService setting = new SettingService(new SettingContext()))
                     {
-                        if (siteContext.Sites.Count() == 0)
+                        if (SiteContext.Sites.Count() == 0)
                         {
                             await setting.Set("DefaultDrive", site.Name);
                         }
                     }
-                    await siteContext.Sites.AddAsync(site);
-                    await siteContext.SaveChangesAsync();
+                    await SiteContext.Sites.AddAsync(site);
+                    await SiteContext.SaveChangesAsync();
                 }
                 else
                 {
@@ -144,7 +144,7 @@ namespace YukiDrive.Services
 
         public List<Site> GetSites()
         {
-            List<Site> result = siteContext.Sites.ToList();
+            List<Site> result = SiteContext.Sites.ToList();
             return result;
         }
 
@@ -155,7 +155,7 @@ namespace YukiDrive.Services
         public async Task<List<DriveInfo>> GetDriveInfo()
         {
             List<DriveInfo> drivesInfo = new List<DriveInfo>();
-            foreach (var item in siteContext.Sites.ToArray())
+            foreach (var item in SiteContext.Sites.ToArray())
             {
                 Microsoft.Graph.Drive drive;
                 //Onedrive
@@ -179,25 +179,8 @@ namespace YukiDrive.Services
 
         public async Task Unbind(string nickName)
         {
-            siteContext.Sites.Remove(siteContext.Sites.Single(site => site.NickName == nickName));
-            await siteContext.SaveChangesAsync();
-        }
-
-        /// <summary>
-        /// 重命名
-        /// </summary>
-        /// <param name="oldName"></param>
-        /// <param name="newName"></param>
-        /// <returns></returns>
-        public async Task SiteRename(string oldName, string newName)
-        {
-            if (siteContext.Sites.Any(site => site.NickName == oldName))
-            {
-                var site = siteContext.Sites.Single(site => site.NickName == oldName);
-                site.NickName = newName;
-                siteContext.Sites.Update(site);
-                await siteContext.SaveChangesAsync();
-            }
+            SiteContext.Sites.Remove(SiteContext.Sites.Single(site => site.NickName == nickName));
+            await SiteContext.SaveChangesAsync();
         }
         public class DriveInfo
         {
