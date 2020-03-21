@@ -171,7 +171,8 @@ namespace YukiDrive.Services
                 {
                     Quota = drive.Quota,
                     NickName = item.NickName,
-                    Name = item.Name
+                    Name = item.Name,
+                    HiddenFolders = item.HiddenFolders
                 });
             }
             return drivesInfo;
@@ -186,8 +187,8 @@ namespace YukiDrive.Services
         {
             public Microsoft.Graph.Quota Quota { get; set; }
             public string NickName { get; set; }
-
             public string Name { get; set; }
+            public string[] HiddenFolders { get; set; }
         }
     }
 }

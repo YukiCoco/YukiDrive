@@ -23,7 +23,7 @@ namespace YukiDrive.Contexts
                 data => data.Split(',',StringSplitOptions.None)
             );
             //转换隐藏的文件夹
-            modelBuilder.Entity<Site>().Property("HiddenDrectory").HasConversion(converter);
+            modelBuilder.Entity<Site>().Property("HiddenFolders").HasConversion(converter);
         }
     }
 }

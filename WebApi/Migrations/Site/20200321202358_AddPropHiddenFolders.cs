@@ -2,12 +2,12 @@
 
 namespace YukiDrive.Migrations.Site
 {
-    public partial class HiddenDrectory : Migration
+    public partial class AddPropHiddenFolders : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "HiddenDrectory",
+                name: "HiddenFolders",
                 table: "Sites",
                 nullable: true);
         }
@@ -15,7 +15,7 @@ namespace YukiDrive.Migrations.Site
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "HiddenDrectory",
+                name: "HiddenFolders",
                 table: "Sites");
         }
     }

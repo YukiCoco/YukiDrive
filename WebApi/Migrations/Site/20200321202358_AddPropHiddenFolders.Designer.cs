@@ -8,8 +8,8 @@ using YukiDrive.Contexts;
 namespace YukiDrive.Migrations.Site
 {
     [DbContext(typeof(SiteContext))]
-    [Migration("20200321135051_HiddenDrectory")]
-    partial class HiddenDrectory
+    [Migration("20200321202358_AddPropHiddenFolders")]
+    partial class AddPropHiddenFolders
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace YukiDrive.Migrations.Site
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("HiddenDrectory")
+                    b.Property<string>("HiddenFolders")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")

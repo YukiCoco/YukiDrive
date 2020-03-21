@@ -116,7 +116,7 @@ namespace YukiDrive.Services
         private List<DriveFile> GetItems(IDriveItemChildrenCollectionPage result, string siteName = "onedrive", bool showHiddenFolders = false)
         {
             List<DriveFile> files = new List<DriveFile>();
-            string[] hiddenFolders = siteContext.Sites.Single(site => site.Name == siteName).HiddenDrectory;
+            string[] hiddenFolders = siteContext.Sites.Single(site => site.Name == siteName).HiddenFolders;
             foreach (var item in result)
             {
                 //要隐藏文件

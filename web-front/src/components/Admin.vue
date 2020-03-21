@@ -33,7 +33,7 @@
                                     </v-progress-circular>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-btn text @click="openEditDriveDialog(item.nickName)">修改名称</v-btn>
+                                    <v-btn text @click="openEditDriveDialog(item)">设置</v-btn>
                                     <v-btn text @click="unbind(item.nickName)">解绑</v-btn>
                                 </v-card-actions>
                             </v-card>
@@ -109,11 +109,13 @@
     <v-dialog v-model="dialog.editDriveDialog" width="500">
         <v-card>
             <v-card-title class="headline" primary-title>
-                修改驱动器名称
+                修改驱动器设置
             </v-card-title>
             <v-card-text>
                 <v-form>
-                    <v-text-field label="新名称" v-model="newDriveName">
+                    <v-text-field label="名称" v-model="editDriveSettings.nickName">
+                    </v-text-field>
+                    <v-text-field label="隐藏文件夹" hint="填写需要隐藏的文件夹，文件夹名称间用 , 隔开，仅管理员可查看被隐藏的文件夹" v-model="editDriveSettings.hiddenFolders">
                     </v-text-field>
                 </v-form>
             </v-card-text>
@@ -160,9 +162,12 @@ export default {
                 newBindDialog: false,
                 editDriveDialog: false
             },
-            toEditDriveName: undefined,
-            newDriveName: undefined,
-            markdownText: ''
+            editDriveSettings: {
+                siteName: '',
+                nickName : '',
+                hiddenFolders : ''
+            },
+            markdownText : ''
         }
     },
     mounted() {
@@ -212,16 +217,15 @@ export default {
                 this.$router.go(0)
             })
         },
-        openEditDriveDialog: function (nickName) {
-            this.toEditDriveName = nickName
+        openEditDriveDialog: function (driveInfo) {
+            this.editDriveSettings.nickName = driveInfo.nickName
+            this.editDriveSettings.hiddenFolders = driveInfo.hiddenFolders
+            this.editDriveSettings.siteName = driveInfo.name
             this.dialog.editDriveDialog = true
         },
         editDriveName: function () {
-            helper.postWithToken(this.$store.state.settings.baseUrl + "/api/admin/sites/rename", {
-                oldName: this.toEditDriveName,
-                nickName: this.newDriveName
-            }, () => {
-                this.$store.commit('openSnackBar', '已更新驱动器名称')
+            helper.postWithToken(this.$store.state.settings.baseUrl + "/api/admin/sites/settings",this.editDriveSettings, () => {
+                this.$store.commit('openSnackBar', '已更新驱动器设置')
                 this.dialog.newBindDialog = false
                 //刷新此页
                 this.$router.go(0)

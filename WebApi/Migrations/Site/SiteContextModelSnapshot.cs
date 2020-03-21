@@ -21,7 +21,7 @@ namespace YukiDrive.Migrations.Site
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("HiddenDrectory")
+                    b.Property<string>("HiddenFolders")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")

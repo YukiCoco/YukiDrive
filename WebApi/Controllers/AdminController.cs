@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -193,16 +194,23 @@ namespace YukiDrive.Controllers
         }
 
         /// <summary>
-        /// 解除绑定
+        /// 更新站点设置
         /// </summary>
         /// <param name="nickName"></param>
         /// <returns></returns>
-        [HttpPost("sites/rename")]
-        public async Task<IActionResult> SiteRename(SiteRenameModel model)
+        [HttpPost("sites/settings")]
+        public async Task<IActionResult> UpdateSiteSettings(SiteSettingsModel model)
         {
             try
             {
-                await driveAccount.SiteRename(model.oldName, model.nickName);
+                var site = driveAccount.SiteContext.Sites.SingleOrDefault(site => site.Name == model.siteName);
+                if (site != null)
+                {
+                    site.NickName = model.nickName;
+                    site.HiddenFolders = model.hiddenFolders.Split(',');
+                    driveAccount.SiteContext.Sites.Update(site);
+                    await driveAccount.SiteContext.SaveChangesAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -239,10 +247,11 @@ namespace YukiDrive.Controllers
             public string nickName { get; set; }
         }
 
-        public class SiteRenameModel
+        public class SiteSettingsModel
         {
-            public string oldName { get; set; }
+            public string siteName { get; set; }
             public string nickName { get; set; }
+            public string hiddenFolders { get; set; }
         }
 
         public class ReadmeModel
