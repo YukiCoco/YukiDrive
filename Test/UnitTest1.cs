@@ -67,8 +67,8 @@ namespace Test
     {
         [TestMethod]
         public void TestConfig(){
-            Debug.WriteLine(System.IO.Directory.GetCurrentDirectory());
-            Debug.WriteLine(Configuration.HttpsCertificate.FilePath);
+            //Debug.WriteLine(System.IO.Directory.GetCurrentDirectory());
+            Debug.WriteLine(Guid.NewGuid().ToString());
         }
 
         [TestMethod]

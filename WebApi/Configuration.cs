@@ -39,7 +39,7 @@ namespace YukiDrive
         /// 返回 Scopes
         /// </summary>
         /// <value></value>
-        public static string[] Scopes => new string[] { "Sites.ReadWrite.All" ,"Files.ReadWrite.All" };
+        public static string[] Scopes => new string[] { "Sites.ReadWrite.All", "Files.ReadWrite.All" };
 
         /// <summary>
         /// 代理路径
@@ -83,7 +83,7 @@ namespace YukiDrive
         /// <summary>
         /// 验证密钥
         /// </summary>
-        public static string Secret => configurationRoot["Secret"];
+        public static string Secret => GetSecret();
 
         /// <summary>
         /// 管理员名称
@@ -102,10 +102,25 @@ namespace YukiDrive
         /// <returns></returns>
         public static Certificate HttpsCertificate => configurationRoot.GetSection("Certificate").Get<Certificate>();
 
-        public class Certificate {
+        public class Certificate
+        {
             public bool Enable { get; set; }
             public string FilePath { get; set; }
             public string Password { get; set; }
+        }
+
+        private static string GetSecret()
+        {
+            if (File.Exists("Secret"))
+            {
+                return File.ReadAllText("Secret");
+            }
+            else
+            {
+                string randomStr = Guid.NewGuid().ToString();
+                File.WriteAllText("Secret", randomStr);
+                return randomStr;
+            }
         }
     }
 }
