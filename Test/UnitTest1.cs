@@ -75,15 +75,15 @@ namespace Test
                 Thread.Sleep(1000);
             }
         }
-        [TestMethod]
-        public void TestMethod1()
-        {
-            DriveAccountService driveAccountService = new DriveAccountService(new SiteContext());
-            DriveService service = new DriveService(driveAccountService, new SiteContext(), new DriveContext());
-            //var drive = driveAccountService.Graph.Sites["alphaone.sharepoint.cn,217fb322-ee69-4fe7-af84-a1d018d1cf2b,c5bc7d0b-0a0f-49f6-9589-61481d4266ab"].Drive.Request().GetAsync().Result;
-            Debug.WriteLine(driveAccountService.Graph.Sites["alphaone.sharepoint.cn,217fb322-ee69-4fe7-af84-a1d018d1cf2b,c5bc7d0b-0a0f-49f6-9589-61481d4266ab"].Drive.RequestUrl);
-            Debug.WriteLine(driveAccountService.authorizeResult.AccessToken);
-        }
+        // [TestMethod]
+        // public void TestMethod1()
+        // {
+        //     DriveAccountService driveAccountService = new DriveAccountService(new SiteContext());
+        //     DriveService service = new DriveService(driveAccountService, new SiteContext(), new DriveContext());
+        //     //var drive = driveAccountService.Graph.Sites["alphaone.sharepoint.cn,217fb322-ee69-4fe7-af84-a1d018d1cf2b,c5bc7d0b-0a0f-49f6-9589-61481d4266ab"].Drive.Request().GetAsync().Result;
+        //     Debug.WriteLine(driveAccountService.Graph.Sites["alphaone.sharepoint.cn,217fb322-ee69-4fe7-af84-a1d018d1cf2b,c5bc7d0b-0a0f-49f6-9589-61481d4266ab"].Drive.RequestUrl);
+        //     Debug.WriteLine(driveAccountService.authorizeResult.AccessToken);
+        // }
 
         [TestMethod]
         public void JsonTest()
