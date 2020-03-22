@@ -85,7 +85,14 @@ namespace YukiDrive.Helpers
                 ValidateIssuer = false
             };
             SecurityToken validatedToken;
-            tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
+            try
+            {
+                tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
             if(validatedToken != null){
                 return true;
             } else {
