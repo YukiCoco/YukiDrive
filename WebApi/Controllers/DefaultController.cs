@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using YukiDrive.Models;
 using YukiDrive.Services;
 
@@ -15,11 +16,13 @@ namespace YukiDrive.Controllers
         IDriveAccountService siteService;
         IDriveService driveService;
         SettingService setting;
-        public DefaultController(IDriveAccountService siteService, IDriveService driveService, SettingService setting)
+        private readonly ILogger logger;
+        public DefaultController(IDriveAccountService siteService, IDriveService driveService, SettingService setting,ILogger<DefaultController> logger)
         {
             this.siteService = siteService;
             this.driveService = driveService;
             this.setting = setting;
+            this.logger = logger;
         }
 
 

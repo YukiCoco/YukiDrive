@@ -109,7 +109,7 @@ namespace YukiDrive
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseRouting();
             //spa应用
             app.UseStaticFiles();

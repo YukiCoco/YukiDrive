@@ -41,3 +41,5 @@ TokenCache.*
 
 #数据库
 YukiDrive.db
+
+logs

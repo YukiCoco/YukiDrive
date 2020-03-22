@@ -69,6 +69,11 @@ namespace YukiDrive
         /// <param name="="></param>
         /// <returns></returns>
         public static string GraphApi => (configurationRoot["Type"] == "China") ? "https://microsoftgraph.chinacloudapi.cn" : "https://graph.microsoft.com";
+
+        /// <summary>
+        /// 主机使用的URL
+        /// </summary>
+        public static string Urls => configurationRoot["Urls"];
         public enum OfficeType
         {
             Global,

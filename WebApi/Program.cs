@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using YukiDrive.Services;
 using YukiDrive.Models;
 using YukiDrive.Contexts;
+using Microsoft.AspNetCore;
+using NLog.Web;
 
 namespace YukiDrive
 {
@@ -17,6 +19,7 @@ namespace YukiDrive
     {
         public static void Main(string[] args)
         {
+
             //首次启动初始化
             Init();
             //忘记密码
@@ -25,14 +28,43 @@ namespace YukiDrive
                 string pw = args.Single(str => str.Contains("newPassword:"));
                 ChangePassword(pw);
             }
-            CreateHostBuilder(args).Build().Run();
+            //初始化 Logger
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            try
+            {
+                logger.Debug("init main");
+                CreateHostBuilder().Build().Run();
+            }
+            catch (Exception exception)
+            {
+                //NLog: catch setup errors
+                logger.Error(exception, "Stopped program because of exception");
+                throw;
+            }
+            finally
+            {
+                // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
+                NLog.LogManager.Shutdown();
+            }
+            System.Console.WriteLine("程序已启动");
         }
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+        /// <summary>
+        /// 创建主机
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static IWebHostBuilder CreateHostBuilder()
+        {
+            return WebHost.CreateDefaultBuilder()
+            .UseUrls(Configuration.Urls) //使用自定义url
+            .ConfigureLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+            })
+            .UseNLog()
+            .UseStartup<Startup>();
+        }
 
         public static void Init()
         {
@@ -69,6 +101,12 @@ namespace YukiDrive
                 userService.Update(userService.GetByUsername(Configuration.AdminName), YukiDrive.Configuration.AdminPassword);
             }
             System.Console.WriteLine("密码更新成功");
+        }
+
+        static void AppDomain_CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            // use logger here to log the events exception object
+            // before the application quits
         }
     }
 }
