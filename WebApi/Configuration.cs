@@ -33,7 +33,7 @@ namespace YukiDrive
         /// <summary>
         /// Binding 回调 Url
         /// </summary>
-        public static string RedirectUri => configurationRoot["RedirectUri"];
+        public static string BaseUri => configurationRoot["BaseUri"];
 
         /// <summary>
         /// 返回 Scopes

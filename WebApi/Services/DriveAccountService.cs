@@ -33,7 +33,7 @@ namespace YukiDrive.Services
                 app = ConfidentialClientApplicationBuilder
             .Create(Configuration.ClientId)
             .WithClientSecret(Configuration.ClientSecret)
-            .WithRedirectUri(Configuration.RedirectUri)
+            .WithRedirectUri(Configuration.BaseUri + "/api/admin/bind/new")
             .WithAuthority(AzureCloudInstance.AzureChina, "common")
             .Build();
             }
@@ -42,7 +42,7 @@ namespace YukiDrive.Services
                 app = ConfidentialClientApplicationBuilder
             .Create(Configuration.ClientId)
             .WithClientSecret(Configuration.ClientSecret)
-            .WithRedirectUri(Configuration.RedirectUri)
+            .WithRedirectUri(Configuration.BaseUri + "/api/admin/bind/new")
             .WithAuthority(AzureCloudInstance.AzurePublic, "common")
             .Build();
             }

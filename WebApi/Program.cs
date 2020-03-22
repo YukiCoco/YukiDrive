@@ -37,10 +37,10 @@ namespace YukiDrive
         public static void Init()
         {
             //初始化
-            if (File.Exists("YukiDrive.template.db"))
+            if (!File.Exists("YukiDrive.db"))
             {
-                File.Move("YukiDrive.template.db", "YukiDrive.db");
-                System.Console.WriteLine("sqlite 数据库创建成功");
+                File.Copy("YukiDrive.template.db", "YukiDrive.db");
+                System.Console.WriteLine("数据库创建成功");
             }
             using (SettingService settingService = new SettingService(new SettingContext()))
             {
@@ -57,6 +57,7 @@ namespace YukiDrive
                     settingService.Set("IsInit", "true").Wait();
                     System.Console.WriteLine($"管理员初始名称：{Configuration.AdminName}");
                     System.Console.WriteLine($"管理员初始密码：{Configuration.AdminPassword}");
+                    System.Console.WriteLine($"请登录 {Configuration.BaseUri}/#/login 进行身份认证");
                 }
             }
         }
