@@ -112,33 +112,41 @@ namespace YukiDrive.Services
         public async Task AddSiteId(string siteName, string nickName)
         {
             Site site = new Site();
-            using (HttpClient httpClient = new HttpClient())
+            //使用 Onedrive
+            if(siteName == "onedrive"){
+                site.Name = siteName;
+                site.NickName = nickName;
+            }
+            else
             {
-                httpClient.Timeout = TimeSpan.FromSeconds(20);
-                var apiCaller = new ProtectedApiCallHelper(httpClient);
-                await apiCaller.CallWebApiAndProcessResultASync($"{Configuration.GraphApi}/v1.0/sites/{Configuration.DominName}:/sites/{siteName}", authorizeResult.AccessToken, (result) =>
+                using (HttpClient httpClient = new HttpClient())
                 {
-                    site.SiteId = result.Properties().Single((prop) => prop.Name == "id").Value.ToString();
-                    site.Name = result.Properties().Single((prop) => prop.Name == "name").Value.ToString();
-                    site.NickName = nickName;
-                });
-                if (!SiteContext.Sites.Any(s => s.SiteId == site.SiteId))
-                {
-                    //若是首次添加则设置为默认的驱动器
-                    using (SettingService setting = new SettingService(new SettingContext()))
+                    httpClient.Timeout = TimeSpan.FromSeconds(20);
+                    var apiCaller = new ProtectedApiCallHelper(httpClient);
+                    await apiCaller.CallWebApiAndProcessResultASync($"{Configuration.GraphApi}/v1.0/sites/{Configuration.DominName}:/sites/{siteName}", authorizeResult.AccessToken, (result) =>
                     {
-                        if (SiteContext.Sites.Count() == 0)
-                        {
-                            await setting.Set("DefaultDrive", site.Name);
-                        }
-                    }
-                    await SiteContext.Sites.AddAsync(site);
-                    await SiteContext.SaveChangesAsync();
+                        site.SiteId = result.Properties().Single((prop) => prop.Name == "id").Value.ToString();
+                        site.Name = result.Properties().Single((prop) => prop.Name == "name").Value.ToString();
+                        site.NickName = nickName;
+                    });
                 }
-                else
+            }
+            if (!SiteContext.Sites.Any(s => s.SiteId == site.SiteId))
+            {
+                //若是首次添加则设置为默认的驱动器
+                using (SettingService setting = new SettingService(new SettingContext()))
                 {
-                    throw new Exception("站点已创建");
+                    if (SiteContext.Sites.Count() == 0)
+                    {
+                        await setting.Set("DefaultDrive", site.Name);
+                    }
                 }
+                await SiteContext.Sites.AddAsync(site);
+                await SiteContext.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("站点已被创建");
             }
         }
 

@@ -38,6 +38,11 @@ namespace YukiDrive.Services
             return userContext.Users.Find(id);
         }
 
+        public User GetByUsername(string userName)
+        {
+            return userContext.Users.SingleOrDefault(user => user.Username == userName);
+        }
+
         public User Create(User user, string password)
         {
             // validation

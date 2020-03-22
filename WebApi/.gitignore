@@ -39,4 +39,5 @@ msbuild.wrn
 #token
 TokenCache.*
 
-AdminUser.lock
+#数据库
+YukiDrive.db

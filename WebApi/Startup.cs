@@ -25,22 +25,6 @@ namespace YukiDrive
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            //首次使用，添加管理员账户
-            using (SettingService settingService = new SettingService(new SettingContext()))
-            {
-                if (settingService.Get("IsInit") == null)
-                {
-                    using (UserService userService = new UserService(new UserContext()))
-                    {
-                        User adminUser = new User()
-                        {
-                            Username = YukiDrive.Configuration.AdminName
-                        };
-                        userService.Create(adminUser, YukiDrive.Configuration.AdminPassword);
-                    }
-                    settingService.Set("IsInit", "true").Wait();
-                }
-            }
         }
 
         public IConfiguration Configuration { get; }
