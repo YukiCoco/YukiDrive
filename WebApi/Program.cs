@@ -69,7 +69,7 @@ namespace YukiDrive
         public static void Init()
         {
             //初始化
-            if (!File.Exists("YukiDrive.db"))
+            if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory(),"YukiDrive.db")))
             {
                 File.Copy("YukiDrive.template.db", "YukiDrive.db");
                 System.Console.WriteLine("数据库创建成功");
@@ -87,9 +87,10 @@ namespace YukiDrive
                         userService.Create(adminUser, YukiDrive.Configuration.AdminPassword);
                     }
                     settingService.Set("IsInit", "true").Wait();
-                    System.Console.WriteLine($"管理员初始名称：{Configuration.AdminName}");
-                    System.Console.WriteLine($"管理员初始密码：{Configuration.AdminPassword}");
-                    System.Console.WriteLine($"请登录 {Configuration.BaseUri}/#/login 进行身份认证");
+                    System.Console.WriteLine("数据初始化成功");
+                    System.Console.WriteLine($"管理员名称：{Configuration.AdminName}");
+                    System.Console.WriteLine($"管理员密码：{Configuration.AdminPassword}");
+                    System.Console.WriteLine($"请登录 {Configuration.BaseUri}/#/login 进行身份及其他配置");
                 }
             }
         }
