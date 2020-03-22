@@ -103,7 +103,7 @@ export default {
     },
     methods: {
         loadReadme: function () {
-            axios.get("https://localhost:5001/api/readme").then(response => {
+            axios.get(`${this.$store.state.settings.baseUrl}/api/readme`).then(response => {
                 document.getElementById('readme').innerHTML = markdownIt(response.data.readme)
             })
         },

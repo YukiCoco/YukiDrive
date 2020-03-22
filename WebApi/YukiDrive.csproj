@@ -22,6 +22,7 @@
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.0" />
     <PackageReference Include="System.IO.Pipelines" Version="4.7.0" />
     <Content Update="nlog.config" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="YukiDrive.template.db" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
