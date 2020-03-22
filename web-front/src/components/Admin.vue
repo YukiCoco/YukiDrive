@@ -171,7 +171,7 @@ export default {
         }
     },
     mounted() {
-        helper.getWithToken(this.$store.state.settings.baseUrl + "/api/admin/info", null, response => {
+        helper.get(this.$store.state.settings.baseUrl + "/api/admin/info", null, response => {
             //计算驱动器容量
             response.data.driveInfo.forEach(element => {
                 element.showTotal = helper.bytesToSize(element.quota.total)

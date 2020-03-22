@@ -49,7 +49,7 @@ namespace YukiDrive.Controllers
             }
             bool isAdmin = false;
             string token = Request.Headers["Authorization"];
-            if (token != null)
+            if (!string.IsNullOrEmpty(token))
             {
                 if (Helpers.AuthenticationHelper.VerifyToken(token))
                 {

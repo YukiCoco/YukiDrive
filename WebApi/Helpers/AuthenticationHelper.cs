@@ -71,6 +71,10 @@ namespace YukiDrive.Helpers
         /// <returns></returns>
         public static bool VerifyToken(string token)
         {
+            if(string.IsNullOrEmpty(token))
+                throw new ArgumentException("Token is empty");
+            if(token.Contains("Bearer "))
+                token = token.Replace("Bearer ","");
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Configuration.Secret);
             var validationParameters = new TokenValidationParameters()

@@ -27,13 +27,13 @@ export function postWithToken(url, data, callback) {
     }).then(callback).catch(errorCallback)
 }
 
-export function getWithToken(url, data, callback) {
+export function get(url, data, callback) {
     axios({
         url: url,
         method: 'get',
         data: data,
         headers: {
-            'Authorization': `Bearer ${Cookies.get('token')}`
+            'Authorization': Cookies.get('token') ? `Bearer ${Cookies.get('token')}` : ''
         }
     }).then(callback).catch(errorCallback)
 }

@@ -63,7 +63,8 @@
 import axios from 'axios'
 import {
     bytesToSize,
-    markdownIt
+    markdownIt,
+    get
 } from '../helpers/helper'
 import ClipboardJS from 'clipboard'
 export default {
@@ -114,7 +115,7 @@ export default {
             this.folders.splice(0)
             this.files.splice(0)
             // currentSiteName 显示错误 需要使用 this.$route.params.siteName
-            axios.get(`${this.$store.state.settings.baseUrl}/api/sites/${this.$route.params.siteName}/${path}`).then(response => {
+            let showCallback = response => {
                 response.data.forEach(element => {
                     element.createdTime = (new Date(element.createdTime)).toLocaleString('zh-CN', {
                         year: 'numeric',
@@ -137,7 +138,8 @@ export default {
                     }
                 });
                 this.changeProgressBar()
-            })
+            }
+            get(`${this.$store.state.settings.baseUrl}/api/sites/${this.$route.params.siteName}/${path}`,null,showCallback)
         },
         changeRouter: function () {
             this.router.splice(0)
