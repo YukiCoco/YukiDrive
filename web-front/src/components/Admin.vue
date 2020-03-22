@@ -137,6 +137,7 @@
 <script>
 import * as helper from '../helpers/helper.js'
 import Markdown from 'vue-meditor'
+import Cookies from 'js-cookie'
 
 export default {
     components: {
@@ -171,6 +172,10 @@ export default {
         }
     },
     mounted() {
+        //判断是否登录
+        if(Cookies.get("token") == null) {
+            this.$router.push('login')
+        }
         helper.get(this.$store.state.settings.baseUrl + "/api/admin/info", null, response => {
             //计算驱动器容量
             response.data.driveInfo.forEach(element => {
