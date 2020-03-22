@@ -66,6 +66,12 @@ namespace Test
     public class UnitTest1
     {
         [TestMethod]
+        public void TestConfig(){
+            Debug.WriteLine(System.IO.Directory.GetCurrentDirectory());
+            Debug.WriteLine(Configuration.HttpsCertificate.FilePath);
+        }
+
+        [TestMethod]
         public void TestJson()
         {
             while (true)

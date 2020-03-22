@@ -12,6 +12,8 @@ using YukiDrive.Models;
 using YukiDrive.Contexts;
 using Microsoft.AspNetCore;
 using NLog.Web;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace YukiDrive
 {
@@ -63,6 +65,13 @@ namespace YukiDrive
                 logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
             })
             .UseNLog()
+            .ConfigureKestrel(options => {
+                options.ConfigureHttpsDefaults(options => {
+                    if(Configuration.HttpsCertificate.Enable){
+                        options.ServerCertificate = new X509Certificate2(Configuration.HttpsCertificate.FilePath,Configuration.HttpsCertificate.Password);
+                    }
+                });
+            })
             .UseStartup<Startup>();
         }
 
