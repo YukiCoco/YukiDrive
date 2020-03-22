@@ -19,7 +19,7 @@ namespace YukiDrive
     {
         public static void Main(string[] args)
         {
-
+            System.Console.WriteLine("开始启动程序...");
             //首次启动初始化
             Init();
             //忘记密码
@@ -46,7 +46,7 @@ namespace YukiDrive
                 // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
                 NLog.LogManager.Shutdown();
             }
-            System.Console.WriteLine("程序已启动");
+            System.Console.WriteLine("程序已关闭");
         }
         /// <summary>
         /// 创建主机
