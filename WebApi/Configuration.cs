@@ -73,7 +73,7 @@ namespace YukiDrive
         /// <summary>
         /// 主机使用的URL
         /// </summary>
-        public static string Urls => configurationRoot["Urls"];
+        public static string Urls => configurationRoot["ListeningUrls"];
         public enum OfficeType
         {
             Global,
@@ -94,5 +94,18 @@ namespace YukiDrive
         /// 管理员密码
         /// </summary>
         public static string AdminPassword => configurationRoot["AdminPassword"];
+
+        /// <summary>
+        /// Https 证书
+        /// </summary>
+        /// <typeparam name="Certificate"></typeparam>
+        /// <returns></returns>
+        public static Certificate HttpsCertificate => configurationRoot.GetSection("Certificate").Get<Certificate>();
+
+        public class Certificate {
+            public bool Enable { get; set; }
+            public string FilePath { get; set; }
+            public string Password { get; set; }
+        }
     }
 }
