@@ -20,7 +20,7 @@ export default new Vuex.Store({
       defaultDrive:undefined,
       footer:undefined,
       //api请求的基本url
-      baseUrl: (process.env.VUE_APP_BASE_URL == undefined) ? '' : process.env.VUE_APP_BASE_URL
+      baseUrl: (process.env.VUE_APP_BASE_URL == undefined || process.env.VUE_APP_BASE_URL == '') ? `${window.location.protocol}//${window.location.host}` : process.env.VUE_APP_BASE_URL
     },
     show:{
       name:undefined,

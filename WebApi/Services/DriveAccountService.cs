@@ -80,7 +80,10 @@ namespace YukiDrive.Services
             //定时更新Token
             Timer timer = new Timer(o =>
             {
+                if (File.Exists(TokenCacheHelper.CacheFilePath))
+            {
                 authorizeResult = authProvider.ClientApplication.AcquireTokenSilent(Configuration.Scopes, Configuration.AccountName).ExecuteAsync().Result;
+            }
             }, null, TimeSpan.FromSeconds(0), TimeSpan.FromHours(1));
         }
         /// <summary>

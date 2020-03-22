@@ -46,7 +46,7 @@ namespace YukiDrive.Controllers
             if (user == null)
                 return BadRequest(new ErrorResponse()
                 {
-                    Message = "用户名为空"
+                    Message = "错误的用户名或密码"
                 });
             string tokenString = AuthenticationHelper.CreateToken(user);
             // return basic user info and authentication token
