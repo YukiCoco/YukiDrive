@@ -25,7 +25,8 @@ export default new Vuex.Store({
     show:{
       name:undefined,
       url:undefined,
-      icon:undefined
+      icon:undefined,
+      downloadUrl:undefined
     }
   },
   mutations: {
@@ -50,6 +51,7 @@ export default new Vuex.Store({
       state.show.name = payload.name
       state.show.url = payload.url
       state.show.icon = payload.icon
+      state.show.downloadUrl = payload.downloadUrl
     }
   },
   actions: {
