@@ -129,12 +129,14 @@ export default {
                     } else {
                         //文件
                         element.icon = getIcon(element.name)
-                        this.files.push(element)
+                        //获取原始下载链接
+                        element.url = element.downloadUrl
                         if (this.$route.params.folderPath) {
                             element.downloadUrl = `${this.$store.state.settings.baseUrl}/api/files/${this.$route.params.siteName}/${this.$route.params.folderPath}/${element.name}`
                         } else {
                             element.downloadUrl = `${this.$store.state.settings.baseUrl}/api/files/${this.$route.params.siteName}/${element.name}`
                         }
+                        this.files.push(element)
                     }
                 });
                 this.changeProgressBar()
@@ -164,8 +166,9 @@ export default {
         openDetial: function (payload) {
             this.$store.commit('showItem', {
                 name: payload.name,
-                url: payload.downloadUrl,
-                icon: payload.icon
+                url: payload.url,
+                icon: payload.icon,
+                downloadUrl : payload.downloadUrl
             })
             //调用微软接口预览 Office 文件
             if (getIcon(payload.name).match('microsoft') != null) {
