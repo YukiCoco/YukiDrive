@@ -224,7 +224,7 @@ export default {
         },
         openEditDriveDialog: function (driveInfo) {
             this.editDriveSettings.nickName = driveInfo.nickName
-            this.editDriveSettings.hiddenFolders = driveInfo.hiddenFolders.join()
+            this.editDriveSettings.hiddenFolders = (driveInfo.hiddenFolders) ? driveInfo.hiddenFolders.join() : ''
             this.editDriveSettings.siteName = driveInfo.name
             this.dialog.editDriveDialog = true
         },
