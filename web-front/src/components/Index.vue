@@ -212,6 +212,9 @@ function getIcon(filename) {
     if (suffix == 'pdf') {
         return 'mdi-file-pdf-box'
     }
+    if (suffix == 'md') {
+        return 'mdi-text-box-outline'
+    }
     return 'mdi-file'
 }
 </script>

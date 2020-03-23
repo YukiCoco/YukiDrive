@@ -16,6 +16,7 @@
                             </v-row>
                         </template>
                     </v-img>
+                    <div id="markdown"></div>
                     <v-text-field class="mt-4" hide-details readonly label="下载链接" :value="this.$store.state.show.downloadUrl"></v-text-field>
                     <v-text-field v-if="this.$store.state.show.icon == 'mdi-image'" class="mt-4" hide-details readonly label="Markdown" :value="`![image](${this.$store.state.show.downloadUrl})`"></v-text-field>
                 </v-card-text>
@@ -33,8 +34,12 @@
 </template>
 
 <script>
-import 'dplayer/dist/DPlayer.min.css';
-import DPlayer from 'dplayer';
+import 'dplayer/dist/DPlayer.min.css'
+import DPlayer from 'dplayer'
+import {
+    markdownIt
+} from '../helpers/helper'
+import axios from 'axios'
 export default {
     data() {
         return {
@@ -42,6 +47,11 @@ export default {
         }
     },
     mounted() {
+        if (this.$store.state.show.icon == 'mdi-text-box-outline') {
+            axios.get(this.$store.state.show.url).then(response => {
+                document.getElementById('markdown').innerHTML = markdownIt(response.data)
+            })
+        }
         if (this.$store.state.show.icon == 'mdi-movie') {
             new DPlayer({
                 container: document.getElementById('dplayer'),
