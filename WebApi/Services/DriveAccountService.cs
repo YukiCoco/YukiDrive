@@ -103,8 +103,8 @@ namespace YukiDrive.Services
         public async Task<AuthenticationResult> Authorize(string code)
         {
             AuthorizationCodeProvider authProvider = new AuthorizationCodeProvider(app);
-            var result = await authProvider.ClientApplication.AcquireTokenByAuthorizationCode(Configuration.Scopes, code).ExecuteAsync();
-            return result;
+            authorizeResult = await authProvider.ClientApplication.AcquireTokenByAuthorizationCode(Configuration.Scopes, code).ExecuteAsync();
+            return authorizeResult;
         }
         /// <summary>
         /// 添加 SharePoint Site-ID 到数据库
