@@ -33,12 +33,13 @@ namespace YukiDrive
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            //不要被 CG 采用单一实例
-            services.AddSingleton<IDriveAccountService, DriveAccountService>(provider => new DriveAccountService(new SiteContext()));
             services.AddDbContext<SiteContext>(ServiceLifetime.Transient);
-            services.AddDbContext<DriveContext>(ServiceLifetime.Transient);
-            services.AddTransient<IDriveService, DriveService>();
             services.AddDbContext<UserContext>(ServiceLifetime.Scoped);
+            services.AddDbContext<DriveContext>(ServiceLifetime.Transient);
+            //不要被 CG Token获取采用单一实例
+            services.AddSingleton<TokenService>();
+            services.AddTransient<IDriveAccountService, DriveAccountService>();
+            services.AddTransient<IDriveService, DriveService>();
             services.AddScoped<IUserService, UserService>();
             //设置
             services.AddDbContext<SettingContext>();

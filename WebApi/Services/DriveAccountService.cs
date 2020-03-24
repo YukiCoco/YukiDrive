@@ -26,65 +26,16 @@ namespace YukiDrive.Services
         /// </summary>
         /// <value></value>
         public Microsoft.Graph.GraphServiceClient Graph { get; set; }
-        public DriveAccountService(SiteContext siteContext)
+
+        private TokenService tokenService;
+        public DriveAccountService(SiteContext siteContext,TokenService tokenService)
         {
-            if (Configuration.Type == Configuration.OfficeType.China)
-            {
-                app = ConfidentialClientApplicationBuilder
-            .Create(Configuration.ClientId)
-            .WithClientSecret(Configuration.ClientSecret)
-            .WithRedirectUri(Configuration.BaseUri + "/api/admin/bind/new")
-            .WithAuthority(AzureCloudInstance.AzureChina, "common")
-            .Build();
-            }
-            else
-            {
-                app = ConfidentialClientApplicationBuilder
-            .Create(Configuration.ClientId)
-            .WithClientSecret(Configuration.ClientSecret)
-            .WithRedirectUri(Configuration.BaseUri + "/api/admin/bind/new")
-            .WithAuthority(AzureCloudInstance.AzurePublic, "common")
-            .Build();
-            }
-            //缓存Token
-            TokenCacheHelper.EnableSerialization(app.UserTokenCache);
-            //这里要传入一个 Scope 否则默认使用 https://graph.microsoft.com/.default
-            //而导致无法使用世纪互联版本
-            authProvider = new AuthorizationCodeProvider(app, Configuration.Scopes);
-            //获取Token
-            if (File.Exists(TokenCacheHelper.CacheFilePath))
-            {
-                authorizeResult = authProvider.ClientApplication.AcquireTokenSilent(Configuration.Scopes, Configuration.AccountName).ExecuteAsync().Result;
-                //Debug.WriteLine(authorizeResult.AccessToken);
-            }
-            //启用代理
-            if (!string.IsNullOrEmpty(Configuration.Proxy))
-            {
-                // Configure your proxy
-                var httpClientHandler = new HttpClientHandler
-                {
-                    Proxy = new WebProxy(Configuration.Proxy),
-                    UseDefaultCredentials = true
-                };
-                var httpProvider = new Microsoft.Graph.HttpProvider(httpClientHandler, false)
-                {
-                    OverallTimeout = TimeSpan.FromSeconds(10)
-                };
-                Graph = new Microsoft.Graph.GraphServiceClient($"{Configuration.GraphApi}/v1.0", authProvider, httpProvider);
-            }
-            else
-            {
-                Graph = new Microsoft.Graph.GraphServiceClient($"{Configuration.GraphApi}/v1.0", authProvider);
-            }
             this.SiteContext = siteContext;
-            //定时更新Token
-            Timer timer = new Timer(o =>
-            {
-                if (File.Exists(TokenCacheHelper.CacheFilePath))
-            {
-                authorizeResult = authProvider.ClientApplication.AcquireTokenSilent(Configuration.Scopes, Configuration.AccountName).ExecuteAsync().Result;
-            }
-            }, null, TimeSpan.FromSeconds(0), TimeSpan.FromHours(1));
+            this.tokenService = tokenService;
+            this.app = tokenService.app;
+            this.authorizeResult = tokenService.authorizeResult;
+            this.authProvider = tokenService.authProvider;
+            this.Graph = tokenService.Graph;
         }
         /// <summary>
         /// 返回 Oauth 验证url
