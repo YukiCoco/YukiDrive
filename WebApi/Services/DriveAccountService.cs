@@ -47,17 +47,6 @@ namespace YukiDrive.Services
             return redirectUrl.AbsoluteUri;
         }
         /// <summary>
-        /// 验证
-        /// </summary>
-        /// <param name="code"></param>
-        /// <returns></returns>
-        public async Task<AuthenticationResult> Authorize(string code)
-        {
-            AuthorizationCodeProvider authProvider = new AuthorizationCodeProvider(app);
-            authorizeResult = await authProvider.ClientApplication.AcquireTokenByAuthorizationCode(Configuration.Scopes, code).ExecuteAsync();
-            return authorizeResult;
-        }
-        /// <summary>
         /// 添加 SharePoint Site-ID 到数据库
         /// </summary>
         /// <param name="siteName"></param>

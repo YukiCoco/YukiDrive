@@ -21,10 +21,12 @@ namespace YukiDrive.Controllers
     {
         private IDriveAccountService driveAccount;
         private SettingService setting;
-        public AdminController(IDriveAccountService driveAccount, SettingService setting)
+        private TokenService tokenService;
+        public AdminController(IDriveAccountService driveAccount, SettingService setting,TokenService tokenService)
         {
             this.driveAccount = driveAccount;
             this.setting = setting;
+            this.tokenService = tokenService;
         }
         /// <summary>
         /// 重定向到 M$ 的 Oauth
@@ -48,7 +50,7 @@ namespace YukiDrive.Controllers
         {
             try
             {
-                var result = await driveAccount.Authorize(code);
+                var result = await tokenService.Authorize(code);
                 if (result.AccessToken != null)
                 {
                     await setting.Set("AccountStatus", "已认证");
