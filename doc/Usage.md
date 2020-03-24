@@ -1,10 +1,10 @@
-# Usage
+# 部署
 
-## 获取 Client_Id 与 Client_Secret
+## 获取 ClientId 与 ClientSecret
 
 登录Azure：https://portal.azure.com/ 或 https://portal.azure.cn/ （世纪互联）
 
-点击 概述，记录应用程序（客户端）ID，即为 Client_Id
+点击 概述，记录应用程序（客户端）ID，即为 ClientId
 
 点击 Azure Active Directory / 应用注册 / 新注册
 
@@ -14,7 +14,7 @@
 
 勾选 `Files.ReadWrite.All` 和 `Sites.ReadWrite.All`
 
-点击 证书和密码 / 新客户端密码，创建密码并记录为 Client_Secret
+点击 证书和密码 / 新客户端密码，创建密码并记录为 ClientSecret
 
 ## 配置 appsettings.json
 
