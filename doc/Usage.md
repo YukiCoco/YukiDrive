@@ -288,7 +288,7 @@ Environment=ASPNETCORE_ENVIRONMENT=Production
 Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
 
 [Install]
-WantedBy=multi-user.target" > ~/YukiDrive.service
+WantedBy=multi-user.target" > /etc/systemd/system/YukiDrive.service
 ```
 
 启动服务
