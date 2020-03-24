@@ -18,12 +18,6 @@ namespace YukiDrive.Services
         /// <returns></returns>
         public Task<string> GetAuthorizationRequestUrl();
         /// <summary>
-        /// 验证
-        /// </summary>
-        /// <param name="code"></param>
-        /// <returns></returns>
-        public Task<AuthenticationResult> Authorize(string code);
-        /// <summary>
         /// 添加 SharePoint Site-ID
         /// </summary>
         /// <param name="siteName"></param>

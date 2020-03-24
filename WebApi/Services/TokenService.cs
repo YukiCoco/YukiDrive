@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Graph.Auth;
 using Microsoft.Identity.Client;
 using YukiDrive.Helpers;
@@ -11,7 +12,7 @@ namespace YukiDrive.Services
 {
     public class TokenService
     {
-        
+
         public AuthorizationCodeProvider authProvider;
 
         public AuthenticationResult authorizeResult;
@@ -79,10 +80,22 @@ namespace YukiDrive.Services
             Timer timer = new Timer(o =>
             {
                 if (File.Exists(TokenCacheHelper.CacheFilePath))
-            {
-                authorizeResult = authProvider.ClientApplication.AcquireTokenSilent(Configuration.Scopes, Configuration.AccountName).ExecuteAsync().Result;
-            }
+                {
+                    authorizeResult = authProvider.ClientApplication.AcquireTokenSilent(Configuration.Scopes, Configuration.AccountName).ExecuteAsync().Result;
+                }
             }, null, TimeSpan.FromSeconds(0), TimeSpan.FromHours(1));
+        }
+
+        /// <summary>
+        /// 验证
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public async Task<AuthenticationResult> Authorize(string code)
+        {
+            AuthorizationCodeProvider authProvider = new AuthorizationCodeProvider(app);
+            authorizeResult = await authProvider.ClientApplication.AcquireTokenByAuthorizationCode(Configuration.Scopes, code).ExecuteAsync();
+            return authorizeResult;
         }
     }
 }
