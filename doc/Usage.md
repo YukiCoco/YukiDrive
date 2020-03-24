@@ -10,7 +10,7 @@
 
 点击 概述，记录应用程序（客户端）ID，即为 ClientId
 
-点击 api 权限 / Microsoft Graph / 委托的权限
+点击 API 权限 / 添加权限 / Microsoft Graph / 委托的权限
 
 勾选 `Files.ReadWrite.All` 和 `Sites.ReadWrite.All`
 
@@ -48,7 +48,7 @@
 }
 ```
 
-ClientId 与 ClientSecret 填写在上一步所得值
+`ClientId` 与 `ClientSecret` 填写在上一步所得值
 
 `ListeningUrls` 和 `Certificate` 与 https 证书有关，下一步再讲
 
@@ -248,7 +248,11 @@ Windows 用户直接打开 YukiDrive.exe 开始运行。
 
 ### 绑定账号
 
-在浏览器中访问 https://你的域名/#/login 登录，进入后台后找到 SharePoint 账户，点击认证后登录你的微软账户。认证完成后会跳转回后台，此时将会显示为已认证
+*未绑定之前直接访问域名会出错*
+
+请先确认站点的 https 可用再进行下一步操作。
+
+在浏览器中访问 `https://你的域名/#/login` 登录，进入后台后找到 SharePoint 账户，点击认证后登录你的微软账户。认证完成后会跳转回后台，此时将会显示为已认证
 
 ### 添加 Onedrive
 
