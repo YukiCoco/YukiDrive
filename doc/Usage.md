@@ -86,7 +86,7 @@
 
 修改 appsettings.json 的 `Certificate` 项
 
-`FilePath` 填写为证书路径，`Password` 即为证书的密码，Enable 保持为 true
+`FilePath` 填写为证书路径，`Password` 即为证书的密码，`Enable` 保持为 true
 
 此时 `Https://你的域名:1272` 为你的网盘程序访问路径
 
