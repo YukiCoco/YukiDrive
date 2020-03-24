@@ -1,6 +1,6 @@
 # Usage
 
-### 获取 Client_Id 与 Client_Secret
+## 获取 Client_Id 与 Client_Secret
 
 登录Azure：https://portal.azure.com/ 或 https://portal.azure.cn/ （世纪互联）
 
@@ -16,7 +16,7 @@
 
 点击 证书和密码 / 新客户端密码，创建密码并记录为 Client_Secret
 
-### 配置 appsettings.json
+## 配置 appsettings.json
 
 从解压后的文件目录中找到 appsettings.json 并修改
 
@@ -65,9 +65,9 @@ DominName 为你的 SharePoint 域名，登录 SharePoint 就能在浏览器地�
 
 AdminName 和 AdminPassword 为网站后台的账户和密码
 
-### 设置 https
+## 设置 https
 
-#### Listening Urls
+### Listening Urls
 
 ListeningUrls 项仅为多ip服务器设置ip，默认只需要改变端口即可
 
@@ -75,7 +75,7 @@ ListeningUrls 项仅为多ip服务器设置ip，默认只需要改变端口即�
 
 Http://你的域名:1273 就是你的程序。
 
-#### 不使用诸如 nginx、apache 此类的服务器
+### 不使用诸如 nginx、apache 此类的服务器
 
 使用程序自带服务器，但你要手动配置 https
 
@@ -87,15 +87,15 @@ FilePath 填写为证书路径，Password 即为证书的密码，Enable 保持�
 
 此时 Https://你的域名:1272 为你的网盘程序访问路径
 
-#### 使用宝塔面板
+### 使用宝塔面板
 
-##### 修改配置文件
+#### 修改配置文件
 
 删除 ListeningUrls 下的 `https://localhost:1272`
 
 将 Certificate 的 Enable 修改为 `false`
 
-##### 宝塔设置
+#### 宝塔设置
 
 创建网站，设置为纯静态。
 
@@ -196,15 +196,15 @@ server
 }
 ```
 
-#### 使用 nginx 反代
+### 使用 nginx 反代
 
-##### 修改配置文件
+#### 修改配置文件
 
 删除 ListeningUrls 下的 `https://localhost:1272`
 
 将 Certificate 的 Enable 修改为 `false`
 
-##### 配置 Nginx
+#### 配置 Nginx
 
 创建站点配置文件，并将内容替换为以下内容：
 
@@ -240,23 +240,23 @@ server
 }
 ```
 
-### 启动并登录后台绑定账户
+## 启动并登录后台绑定账户
 
 配置完成后，跳转到程序目录执行 ./YukiDrive 就开始运行了。
 
-##### 绑定账号
+### 绑定账号
 
 在浏览器中访问 https://你的域名/#/login 登录，进入后台后找到 SharePoint 账户，点击认证后登录你的微软账户。认证完成后会跳转回后台，此时将会显示为已认证
 
-##### 添加 Onedrive
+### 添加 Onedrive
 
 点击添加站点，站点名称填写为 onedrive ，显示名随意。
 
-##### 添加任意多个 SharePoint
+### 添加任意多个 SharePoint
 
 点击添加站点，站点名称填写为 SharePoint 创建网站时所填写的站点名称（建议创建为英文字符），显示名随意。
 
-### 守护程序进程
+## 守护程序进程
 
 在Linux上的程序仅运行于本地账户，退出即关闭，应该将其注册为服务以便能够开机自启和出错重启
 
@@ -283,13 +283,13 @@ WantedBy=multi-user.target" > ~/YukiDrive.service
 
 启动服务
 
-systemctl enable YukiDrive.service
+`systemctl enable YukiDrive.service`
 
-systemctl start YukiDrive.service
+`systemctl start YukiDrive.service`
 
 查看服务状态
 
-systemctl status YukiDrive.service
+`systemctl status YukiDrive.service`
 
 显示以下语句即为正常运行
 
@@ -312,4 +312,4 @@ Mar 23 23:39:54 ThoroughUnconscious-VM dotnet-YukiDrive[7206]: Application start
 
 退出服务
 
-systemctl stop YukiDrive.service
+`systemctl stop YukiDrive.service`
