@@ -48,52 +48,52 @@
 }
 ```
 
-ClientId 与 ClientSecret 填写为上一步做得
+ClientId 与 ClientSecret 填写在上一步所得值
 
-ListeningUrls 和 Certificate 与 https 证书有关，下一步再讲
+`ListeningUrls` 和 `Certificate` 与 https 证书有关，下一步再讲
 
-BaseUri 修改为你的域名，有端口必须带上端口号，必须使用 https
+`BaseUri` 修改为你的域名，有端口必须带上端口号，必须使用 https
 
-Type 为你的 Office 账户地区，可选择为
+`Type` 为你的 Office 账户地区，可选择为
 
-+ China 世纪互联
-+ Global 国际版
++ `China` 世纪互联
++ `Global` 国际版
 
-AccountName 为你的 Office账户名，如：`Sakura@yukistudio.onmicrosoft.com`
+`AccountName` 为你的 Office账户名，如：`Sakura@yukistudio.onmicrosoft.com`
 
-DominName 为你的 SharePoint 域名，登录 SharePoint 就能在浏览器地址栏看到，如：`yukistudio.sharepoint.com`
+`DominName` 为你的 SharePoint 域名，登录 SharePoint 就能在浏览器地址栏看到，如：`yukistudio.sharepoint.com`
 
-AdminName 和 AdminPassword 为网站后台的账户和密码
+`AdminName` 和 `AdminPassword` 为网站后台的账户和密码
 
 ## 设置 https
 
-### Listening Urls
+### 了解配置中的 ListeningUrls
 
-ListeningUrls 项仅为多ip服务器设置ip，默认只需要改变端口即可
+`ListeningUrls` 项仅为多ip服务器设置ip，默认只需要改变端口即可
 
-例如 http://localhost:1273 为监听 1273 端口，你可以将域名解析至服务器，访问
+例如 `http://localhost:1273` 为监听 1273 端口，你可以将域名解析至服务器，访问
 
-Http://你的域名:1273 就是你的程序。
+`Http://你的域名:1273` 就是你的程序。
 
-### 不使用诸如 nginx、apache 此类的服务器
+### 类型1：不使用诸如 nginx、apache 此类的服务器
 
 使用程序自带服务器，但你要手动配置 https
 
 将你的域名证书转换为 pfx 格式，会得到 pfx文件 和 密码，放置于任意目录
 
-修改 appsettings.json 的 Certificate 项
+修改 appsettings.json 的 `Certificate` 项
 
-FilePath 填写为证书路径，Password 即为证书的密码，Enable 保持为 true
+`FilePath` 填写为证书路径，`Password` 即为证书的密码，Enable 保持为 true
 
-此时 Https://你的域名:1272 为你的网盘程序访问路径
+此时 `Https://你的域名:1272` 为你的网盘程序访问路径
 
-### 使用宝塔面板
+### 类型2：使用宝塔面板
 
 #### 修改配置文件
 
-删除 ListeningUrls 下的 `https://localhost:1272`
+删除 `ListeningUrls` 下的 `https://localhost:1272`
 
-将 Certificate 的 Enable 修改为 `false`
+将 `Certificate` 的 `Enable` 修改为 `false`
 
 #### 宝塔设置
 
@@ -103,7 +103,7 @@ FilePath 填写为证书路径，Password 即为证书的密码，Enable 保持�
 
 点击 站点修改 / 配置文件
 
-**删除**
+删除
 
 ```nginx
 location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$
@@ -114,7 +114,7 @@ location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$
     }
 ```
 
-**添加**
+添加
 
 ```nginx
 location / {
@@ -129,7 +129,7 @@ location / {
     }
 ```
 
-**修改**
+修改
 
 ```nginx
 root /www/wwwroot/yukidrive/linux/wwwroot;  # 填写为 程序所在目录/wwwroot
@@ -196,7 +196,7 @@ server
 }
 ```
 
-### 使用 nginx 反代
+### 类型3：使用 nginx 反代
 
 #### 修改配置文件
 
@@ -244,6 +244,8 @@ server
 
 配置完成后，跳转到程序目录执行 ./YukiDrive 就开始运行了。
 
+Windows 用户直接打开 YukiDrive.exe 开始运行。
+
 ### 绑定账号
 
 在浏览器中访问 https://你的域名/#/login 登录，进入后台后找到 SharePoint 账户，点击认证后登录你的微软账户。认证完成后会跳转回后台，此时将会显示为已认证
@@ -257,8 +259,9 @@ server
 点击添加站点，站点名称填写为 SharePoint 创建网站时所填写的站点名称（建议创建为英文字符），显示名随意。
 
 ## 守护程序进程
+*Windows 用户不必考虑此配置*
 
-在Linux上的程序仅运行于本地账户，退出即关闭，应该将其注册为服务以便能够开机自启和出错重启
+在 Linux 上的程序仅运行于本地账户，退出即关闭，应该将其注册为服务以便能够开机自启和出错重启
 
 做一些修改后复制下列**整条**语句到控制台执行
 
