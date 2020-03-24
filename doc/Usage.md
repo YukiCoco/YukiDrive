@@ -35,7 +35,7 @@
   "ConnectionString": "Data Source=YukiDrive.db;",
   "ClientId": "",
   "ClientSecret": "",
-  "ListeningUrls": "https://localhost:1272;http://localhost:1273",
+  "ListeningUrls": "https://*:1272;http://*:1273",
   "Certificate" : {
     "Enable" : true,
     "FilePath" : "",
@@ -74,11 +74,9 @@
 
 `ListeningUrls` 项仅为多ip服务器设置ip，默认只需要改变端口即可
 
-例如填 `http://localhost:1273` 为监听 1273 端口，你可以将域名解析至服务器，访问
+例如填 `http://*:1273` 为监听 1273 端口，你可以将域名解析至服务器，访问
 
 `Http://你的域名:1273` 就是你的程序。
-
-不必修改 localhost
 
 ### 类型1：不使用诸如 nginx、apache 此类的服务器
 
@@ -96,7 +94,7 @@
 
 #### 修改配置文件
 
-删除 `ListeningUrls` 下的 `https://localhost:1272`
+删除 `ListeningUrls` 下的 `https://*:1272`
 
 将 `Certificate` 的 `Enable` 修改为 `false`
 
@@ -205,7 +203,7 @@ server
 
 #### 修改配置文件
 
-删除 ListeningUrls 下的 `https://localhost:1272`
+删除 ListeningUrls 下的 `https://*:1272`
 
 将 Certificate 的 Enable 修改为 `false`
 
