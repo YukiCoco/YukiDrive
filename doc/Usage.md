@@ -1,5 +1,8 @@
 # 部署
 
+## 获取程序
+从 [Release](https://github.com/YukiCoco/YukiDrive/releases) 获取对应系统的最新版本
+
 ## 获取 ClientId 与 ClientSecret
 
 登录Azure：https://portal.azure.com/ 或 https://portal.azure.cn/ （世纪互联）
