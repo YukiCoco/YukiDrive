@@ -4,11 +4,11 @@
 
 登录Azure：https://portal.azure.com/ 或 https://portal.azure.cn/ （世纪互联）
 
-点击 概述，记录应用程序（客户端）ID，即为 ClientId
-
 点击 Azure Active Directory / 应用注册 / 新注册
 
 名字任意取，账户类型为 `任何组织目录(任何 Azure AD 目录 - 多租户)中的帐户`，重定向URL为  `https://你的域名/api/admin/bind/new`
+
+点击 概述，记录应用程序（客户端）ID，即为 ClientId
 
 点击 api 权限 / Microsoft Graph / 委托的权限
 
