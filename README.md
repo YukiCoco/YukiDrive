@@ -6,7 +6,13 @@
 
 无需搭建运行环境，下载并配置完成后直接运行。
 
-演示地址：https://drive.yukino.co/
+
+## 演示
+Demo：https://drive.yukino.co/
+
+![image](https://drive.yukino.co/api/files/onedrive/图床/demo2.png)
+
+![image](https://drive.yukino.co/api/files/onedrive/图床/demo1.png)
 
 ## 部署
 
