@@ -11,10 +11,6 @@
 ## 演示
 Demo：https://drive.yukino.co/
 
-![image](https://drive.yukino.co/api/files/onedrive/图床/demo2.png)
-
-![image](https://drive.yukino.co/api/files/onedrive/图床/demo1.png)
-
 ## 部署
 
 查看[安装文档](https://github.com/YukiCoco/YukiDrive/blob/master/doc/Usage.md)
