@@ -92,6 +92,20 @@ namespace YukiDrive.Services
             DriveFile file = GetItem(result);
             return file;
         }
+
+        /// <summary>
+        /// 获得上传url
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="siteName"></param>
+        /// <returns></returns>
+        public string GetUploadUrl(string path ,string siteName = "onedrive"){
+            string siteId = GetSiteId(siteName);
+            var drive = (siteName != "onedrive") ? graph.Sites[siteId].Drive : graph.Me.Drive;
+            string result = drive.Root.ItemWithPath(path).CreateUploadSession().Request().RequestUrl;
+            return result;
+        }
+
         #region PrivateMethod
         private DriveFile GetItem(DriveItem result)
         {

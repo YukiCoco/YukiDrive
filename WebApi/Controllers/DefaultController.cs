@@ -161,6 +161,14 @@ namespace YukiDrive.Controllers
             }
             return Ok(isAdmin);
         }
+
+        // /// <summary>
+        // /// 上传
+        // /// </summary>
+        // /// <returns></returns>
+        // public async Task<IActionResult> GetUploadUrl(){
+
+        // }
         #endregion
     }
 }

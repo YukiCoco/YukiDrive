@@ -56,7 +56,7 @@ namespace YukiDrive.Helpers
         /// <param name="webApiUrl">Url of the Web API to call (supposed to return Json)</param>
         /// <param name="accessToken">Access token used as a bearer security token to call the Web API</param>
         /// <param name="processResult">Callback used to process the result of the call to the Web API</param>
-        public async Task CallWebApiAndProcessResultASync(string webApiUrl, string accessToken, Action<JObject> processResult)
+        public async Task CallWebApiAndProcessResultASync(string webApiUrl, string accessToken, Action<JObject> processResult,Method method = Method.Get, HttpContent sendContent = null)
         {
             if (!string.IsNullOrEmpty(accessToken))
             {
@@ -68,7 +68,19 @@ namespace YukiDrive.Helpers
                 defaultRequetHeaders.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
                 try
                 {
-                    HttpResponseMessage response = await HttpClient.GetAsync(webApiUrl);
+                    HttpResponseMessage response = new HttpResponseMessage();
+                    switch (method)
+                    {
+                        case Method.Get:
+                        response = await HttpClient.GetAsync(webApiUrl);
+                        break;
+                        case Method.Post:
+                        response = await HttpClient.PostAsync(webApiUrl,sendContent);
+                        break;
+                        case Method.Put:
+                        response = await HttpClient.PutAsync(webApiUrl,sendContent);
+                        break;
+                    }
                     if (response.IsSuccessStatusCode)
                     {
                         string json = await response.Content.ReadAsStringAsync();
@@ -92,5 +104,13 @@ namespace YukiDrive.Helpers
                 throw new Exception("未提供Token");
             }
         }
+
+        public enum Method
+        {
+            Post,
+            Get,
+            Put
+        }
+        
     }
 }

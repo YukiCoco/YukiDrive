@@ -134,6 +134,10 @@ namespace YukiDrive.Services
             SiteContext.Sites.Remove(SiteContext.Sites.Single(site => site.NickName == nickName));
             await SiteContext.SaveChangesAsync();
         }
+
+        public string GetToken(){
+            return authorizeResult.AccessToken;
+        }
         public class DriveInfo
         {
             public Microsoft.Graph.Quota Quota { get; set; }
