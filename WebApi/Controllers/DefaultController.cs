@@ -162,13 +162,33 @@ namespace YukiDrive.Controllers
             return Ok(isAdmin);
         }
 
-        // /// <summary>
-        // /// 上传
-        // /// </summary>
-        // /// <returns></returns>
-        // public async Task<IActionResult> GetUploadUrl(){
-
-        // }
+        /// <summary>
+        /// 获取文件分片上传路径
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("upload/{siteName}/{**path}")]
+        public async Task<IActionResult> GetUploadUrl(string siteName, string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return BadRequest(new ErrorResponse()
+                {
+                    Message = "必须存在上传路径"
+                });
+            }
+            try
+            {
+                var result = await driveService.GetUploadUrl(path, siteName);
+                return Ok(new {
+                    requestUrl = result
+                });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
         #endregion
     }
 }

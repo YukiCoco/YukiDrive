@@ -11,5 +11,6 @@ namespace YukiDrive.Services
           public Task<List<DriveFile>> GetDriveItemsByPath(string path,string siteName, bool showHiddenFolders);
           public Task<DriveFile> GetDriveItemByPath(string path,string siteName);
           public Task<DriveFile> GetDriveItemById(string id,string siteName);
+          public Task<string> GetUploadUrl(string path,string siteName = "onedrive");
     }
 }

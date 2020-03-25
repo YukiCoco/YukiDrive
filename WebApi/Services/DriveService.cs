@@ -99,11 +99,18 @@ namespace YukiDrive.Services
         /// <param name="path"></param>
         /// <param name="siteName"></param>
         /// <returns></returns>
-        public string GetUploadUrl(string path ,string siteName = "onedrive"){
+        public async Task<string> GetUploadUrl(string path, string siteName = "onedrive")
+        {
             string siteId = GetSiteId(siteName);
             var drive = (siteName != "onedrive") ? graph.Sites[siteId].Drive : graph.Me.Drive;
-            string result = drive.Root.ItemWithPath(path).CreateUploadSession().Request().RequestUrl;
-            return result;
+            string requestUrl = drive.Root.ItemWithPath(path).CreateUploadSession().Request().RequestUrl;
+            ProtectedApiCallHelper apiCallHelper = new ProtectedApiCallHelper(new HttpClient());
+            string uploadUrl = "";
+            await apiCallHelper.CallWebApiAndProcessResultASync(requestUrl, accountService.GetToken(), o =>
+            {
+                uploadUrl = o["uploadUrl"].ToString();
+            }, ProtectedApiCallHelper.Method.Post);
+            return uploadUrl;
         }
 
         #region PrivateMethod
