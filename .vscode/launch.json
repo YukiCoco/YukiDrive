@@ -4,6 +4,17 @@
    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
    "version": "0.2.0",
    "configurations": [
+   {
+       "name": ".NET Core Launch (console)",
+       "type": "coreclr",
+       "request": "launch",
+       "preLaunchTask": "build",
+       "program": "${workspaceFolder}/YukiDrive.CLI/bin/Debug/netcoreapp3.1/YukiDrive.CLI.dll",
+       "args": [],
+       "cwd": "${workspaceFolder}/YukiDrive.CLI",
+       "stopAtEntry": false,
+       "console": "internalConsole"
+   },
         {
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
