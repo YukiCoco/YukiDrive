@@ -10,7 +10,6 @@ namespace YukiDrive.CLI
         {
             Console.WriteLine("Hello World!");
             HttpClient httpClient = new HttpClient();
-            
             //HttpService httpService = new HttpService();
         }
     }

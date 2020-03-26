@@ -115,8 +115,8 @@ namespace YukiDrive.Controllers
                     accountStatus = setting.Get("AccountStatus"),
                     readme = setting.Get("Readme"),
                     footer = setting.Get("Footer"),
-                    allowAnonymouslyUpload = string.IsNullOrEmpty(setting.Get("allowAnonymouslyUpload")) ? false : Convert.ToBoolean(setting.Get("allowAnonymouslyUpload")),
-                    uploadPassword = setting.Get("uploadPassword"),
+                    allowAnonymouslyUpload = string.IsNullOrEmpty(setting.Get("AllowAnonymouslyUpload")) ? false : Convert.ToBoolean(setting.Get("AllowAnonymouslyUpload")),
+                    uploadPassword = setting.Get("UploadPassword"),
                 });
             }
             catch (Exception ex)
@@ -164,8 +164,8 @@ namespace YukiDrive.Controllers
                 await setting.Set("WebName", toSaveSetting.webName);
                 await setting.Set("DefaultDrive", toSaveSetting.defaultDrive);
                 await setting.Set("Footer",toSaveSetting.footer);
-                await setting.Set("uploadPassword",toSaveSetting.uploadPassword);
-                await setting.Set("allowAnonymouslyUpload",toSaveSetting.allowAnonymouslyUpload.ToString());
+                await setting.Set("UploadPassword",toSaveSetting.uploadPassword);
+                await setting.Set("AllowAnonymouslyUpload",toSaveSetting.allowAnonymouslyUpload.ToString());
             }
             catch (Exception e)
             {
