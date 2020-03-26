@@ -90,10 +90,11 @@ namespace Test
             DriveService service = new DriveService(driveAccountService, new SiteContext(), new DriveContext());
             //var drive = driveAccountService.Graph.Sites["alphaone.sharepoint.cn,217fb322-ee69-4fe7-af84-a1d018d1cf2b,c5bc7d0b-0a0f-49f6-9589-61481d4266ab"].Drive.Request().GetAsync().Result;
             //Debug.WriteLine(driveAccountService.Graph.Sites["alphaone.sharepoint.cn,217fb322-ee69-4fe7-af84-a1d018d1cf2b,c5bc7d0b-0a0f-49f6-9589-61481d4266ab"].Drive.RequestUrl);
-            string uploadStr = driveAccountService.Graph.Me.Drive.Root.ItemWithPath("44D4F468-3255-4BC2-9757-F0CB6A1139D5.jpeg").CreateUploadSession().Request().RequestUrl;
-            Debug.WriteLine(uploadStr);
+            // string uploadStr = driveAccountService.Graph.Me.Drive.Root.ItemWithPath("TestUpload/TestUpload").CreateUploadSession().Request().RequestUrl;
+            // Debug.WriteLine(uploadStr);
             string token = driveAccountService.GetToken();
             Debug.WriteLine(token);
+            var result = driveAccountService.Graph.Me.Drive.Root.ItemWithPath("TestUpload/photo7.jpeg").Thumbnails.Request().GetAsync().Result;
             // ProtectedApiCallHelper apiCallHelper = new ProtectedApiCallHelper(new HttpClient());
             // apiCallHelper.CallWebApiAndProcessResultASync(uploadStr,token,o => {
             //     Debug.WriteLine(o["uploadUrl"]);

@@ -57,5 +57,10 @@ namespace YukiDrive.CLI.Test
             Debug.WriteLine(uploadUrl);
             service.UploadFile(uploadUrl,"/Users/yukino/Desktop/October - Time To Love.mp3").Wait();
         }
+        
+        [TestMethod]
+        public void TestExtension(){
+            Debug.WriteLine(Path.GetExtension("/Users/yukino/Desktop/NewFile.txt"));
+        }
     }
 }
