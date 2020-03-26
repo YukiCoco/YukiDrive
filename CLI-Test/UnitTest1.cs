@@ -52,7 +52,10 @@ namespace YukiDrive.CLI.Test
 
         [TestMethod]
         public void TestService(){
-            HttpService service = new HttpService(new HttpClient());
+            HttpService service = new HttpService(new HttpClient(),new SettingService());
+            string uploadUrl = service.GetUploadUrl("upload/October - Time To Love.mp3").Result;
+            Debug.WriteLine(uploadUrl);
+            service.UploadFile(uploadUrl,"/Users/yukino/Desktop/October - Time To Love.mp3").Wait();
         }
     }
 }

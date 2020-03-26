@@ -47,3 +47,5 @@ logs
 wwwroot
 
 Secret
+
+settings.json

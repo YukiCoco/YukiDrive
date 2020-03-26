@@ -10,7 +10,7 @@
        "request": "launch",
        "preLaunchTask": "build",
        "program": "${workspaceFolder}/YukiDrive.CLI/bin/Debug/netcoreapp3.1/YukiDrive.CLI.dll",
-       "args": [],
+       "args": ["-upload","onedrive","/Users/yukino/Desktop/7E0CA36A-4696-4091-9B11-F27EC5B879C2.png","testupload.png"],
        "cwd": "${workspaceFolder}/YukiDrive.CLI",
        "stopAtEntry": false,
        "console": "internalConsole"

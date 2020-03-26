@@ -3,15 +3,19 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.IO;
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace YukiDrive.CLI.Services
 {
     public class HttpService
     {
         HttpClient httpClient;
-        public HttpService(HttpClient httpClient)
+        SettingService setting;
+        public HttpService(HttpClient httpClient,SettingService setting)
         {
             this.httpClient = httpClient;
+            this.setting = setting;
         }
 
         /// <summary>
@@ -36,18 +40,16 @@ namespace YukiDrive.CLI.Services
                 maxBuffer = (int)fileStream.Length;
             do
             {
-                byte[] fileBytes = new byte[maxBuffer];
-                result = fileStream.Read(fileBytes, 0, maxBuffer);
+                byte[] buffer = new byte[maxBuffer];
+                result = fileStream.Read(buffer, 0, maxBuffer);
                 long nextBytes = offset + result;
                 if (result > 0)
                 {
-                    
-                    ByteArrayContent uploadContent = new ByteArrayContent(fileBytes);
+                    ByteArrayContent uploadContent = new ByteArrayContent(buffer.Take(result).ToArray());
                     HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Put, url);
                     //添加 Content Header
                     uploadContent.Headers.Add("Content-Range", $"bytes {offset}-{nextBytes - 1}/{fileStream.Length}");
                     uploadContent.Headers.Add("Content-Length", $"{result}");
-
                     requestMessage.Content = uploadContent;
                     //上传文件
                     var response = await httpClient.SendAsync(requestMessage);
@@ -65,8 +67,17 @@ namespace YukiDrive.CLI.Services
         /// </summary>
         /// <param name="apiUrl"></param>
         /// <param name="uploadPassword"></param>
-        public void GetUploadUrl(string apiUrl,string uploadPassword){
-            //httpClient.GetAsync()
+        public async Task<string> GetUploadUrl(string uploadPath, string siteName = "onedrive")
+        {
+            string requestUrl = $"{setting.settings.ApiUrl}/api/cli/upload/{siteName}/:/{uploadPath}?uploadPassword={setting.settings.UploadPassword}";
+            var response = await httpClient.GetAsync(requestUrl);
+            string responseStr = await response.Content.ReadAsStringAsync();
+            JObject o = JObject.Parse(responseStr);
+            if(response.IsSuccessStatusCode) {
+                return o["requestUrl"].ToString();
+            } else {
+                throw new Exception(o["message"].ToString());
+            }
         }
     }
 }
