@@ -59,5 +59,14 @@ namespace YukiDrive.CLI.Services
             }
             while (result > 0);
         }
+
+        /// <summary>
+        /// 获取上传路径
+        /// </summary>
+        /// <param name="apiUrl"></param>
+        /// <param name="uploadPassword"></param>
+        public void GetUploadUrl(string apiUrl,string uploadPassword){
+            //httpClient.GetAsync()
+        }
     }
 }

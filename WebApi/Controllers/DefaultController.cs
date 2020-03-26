@@ -167,7 +167,7 @@ namespace YukiDrive.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize]
-        [HttpGet("upload/{siteName}/{**path}")]
+        [HttpGet("upload/{siteName}/:/{**path}")]
         public async Task<IActionResult> GetUploadUrl(string siteName, string path)
         {
             if (string.IsNullOrEmpty(path))
