@@ -10,7 +10,7 @@
        "request": "launch",
        "preLaunchTask": "build",
        "program": "${workspaceFolder}/YukiDrive.CLI/bin/Debug/netcoreapp3.1/YukiDrive.CLI.dll",
-       "args": ["-upload","onedrive","/Users/yukino/Desktop/27 - KFR - 🍭🐰🥕[pid=78905115].jpeg","TestUpload/27 - KFR - 🍭🐰🥕[pid=78905115].jpeg"],
+       "args": ["--uploadFolder","YukiStudio","/Users/yukino/Desktop/TestUpload","AnimeImg","6"],
        "cwd": "${workspaceFolder}/YukiDrive.CLI",
        "stopAtEntry": false,
        "console": "internalConsole"
