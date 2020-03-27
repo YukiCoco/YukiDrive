@@ -13,8 +13,8 @@ Demo：https://drive.yukino.co/
 
 ## 部署
 
-查看[安装文档](https://github.com/YukiCoco/YukiDrive/blob/master/doc/Usage.md)  
-查看[常见问题](https://github.com/YukiCoco/YukiDrive/blob/master/doc/FAQ.md)
+1. 查看[安装文档](https://github.com/YukiCoco/YukiDrive/blob/master/doc/Usage.md)  
+2. 遇到问题请查看[常见问题](https://github.com/YukiCoco/YukiDrive/blob/master/doc/FAQ.md)
 
 ## TODO
 
