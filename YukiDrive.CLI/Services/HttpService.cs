@@ -59,7 +59,7 @@ namespace YukiDrive.CLI.Services
                     var response = httpClient.SendAsync(requestMessage).Result;
                     //计算进度
                     double progress = Math.Round((double)(offset + result) / (double)fileStream.Length, 2);
-                    Console.WriteLine($"文件 {Path.GetFileName(fileName)} ：当前上传进度为：{progress*100}%");
+                    Console.WriteLine($"文件 {Path.GetFileName(fileName)} ：当前上传进度为：{progress * 100}%");
                     offset += result;
                 }
             }

@@ -74,18 +74,19 @@ namespace YukiDrive.CLI.Test
         [TestMethod]
         public void TestUploadTask()
         {
-            TaskScheduler taskScheduler = new LimitedConcurrencyLevelTaskScheduler(2);
-            TaskFactory taskFactory = new TaskFactory(taskScheduler);
-            for (int i = 0; i < 10; i++)
-            {
-                taskFactory.StartNew(() =>
-                {
-                    Thread.Sleep(TimeSpan.FromSeconds(2));
-                    Debug.WriteLine($"{Thread.CurrentThread.ManagedThreadId}");
-                });
-            }
+            // TaskScheduler taskScheduler = new LimitedConcurrencyLevelTaskScheduler(2);
+            // TaskFactory taskFactory = new TaskFactory(taskScheduler);
+            // for (int i = 0; i < 10; i++)
+            // {
+            //     taskFactory.StartNew(() =>
+            //     {
+            //         Thread.Sleep(TimeSpan.FromSeconds(2));
+            //         Debug.WriteLine($"{Thread.CurrentThread.ManagedThreadId}");
+            //     });
+            // }
 
-            Thread.Sleep(TimeSpan.FromSeconds(20));
+            // Thread.Sleep(TimeSpan.FromSeconds(20));
+            Debug.WriteLine(Path.GetFileName("/Users/yukino/Desktop/85677DCC-F7E1-4153-BE07-63D3FDA50365_1_105_c.jpeg"));
         }
 
         // Provides a task scheduler that ensures a maximum concurrency level while 

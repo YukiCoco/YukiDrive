@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.IO;
+using System.Net.Http;
 using System;
 using System.Net.Http.Headers;
 using YukiDrive.CLI.Services;
@@ -29,8 +30,14 @@ namespace YukiDrive.CLI
                 //-upload sitename localpath uploadpath
                 case "--upload":
                 System.Console.WriteLine("开始上传文件");
-                string uploadUrl = httpService.GetUploadUrl(args[3],args[1]).Result;
-                httpService.UploadFile(uploadUrl,args[2]);
+                string uploadpath = args[3];
+                string localpath = args[2];
+                //如果没有指定文件名 默认使用上传的文件名
+                if(string.IsNullOrEmpty(Path.GetExtension(uploadpath))){
+                    uploadpath = Path.Combine(uploadpath,Path.GetFileName(localpath));
+                }
+                string uploadUrl = httpService.GetUploadUrl(uploadpath,args[1]).Result;
+                httpService.UploadFile(uploadUrl,localpath);
                 break;
                 case "--upload-folder":
                 //-upload sitename localpath uploadpath thread

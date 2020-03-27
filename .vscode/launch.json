@@ -10,7 +10,8 @@
        "request": "launch",
        "preLaunchTask": "build",
        "program": "${workspaceFolder}/YukiDrive.CLI/bin/Debug/netcoreapp3.1/YukiDrive.CLI.dll",
-       "args": ["--uploadFolder","YukiStudio","/Users/yukino/Desktop/TestUpload","AnimeImg","6"],
+       "args": ["--upload","YukiStudio","/Users/yukino/Desktop/85677DCC-F7E1-4153-BE07-63D3FDA50365_1_105_c.jpeg","AnimeImg/test4.jpeg"],
+       //"args": ["--upload-folder","YukiStudio","/Users/yukino/Desktop/TestUpload","AnimeImg","6"],
        "cwd": "${workspaceFolder}/YukiDrive.CLI",
        "stopAtEntry": false,
        "console": "internalConsole"
