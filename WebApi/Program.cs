@@ -124,11 +124,5 @@ namespace YukiDrive
             }
             System.Console.WriteLine("密码更新成功");
         }
-
-        static void AppDomain_CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            // use logger here to log the events exception object
-            // before the application quits
-        }
     }
 }

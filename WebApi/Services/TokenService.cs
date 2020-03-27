@@ -81,6 +81,7 @@ namespace YukiDrive.Services
             {
                 if (File.Exists(TokenCacheHelper.CacheFilePath))
                 {
+                    //TODO:自动刷新 Token 失效
                     authorizeResult = authProvider.ClientApplication.AcquireTokenSilent(Configuration.Scopes, Configuration.AccountName).ExecuteAsync().Result;
                 }
             }, null, TimeSpan.FromSeconds(0), TimeSpan.FromHours(1));

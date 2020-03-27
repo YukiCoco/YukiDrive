@@ -1,3 +1,4 @@
+using System.IO;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -167,8 +168,8 @@ namespace YukiDrive.Controllers
         /// 获取文件分片上传路径
         /// </summary>
         /// <returns></returns>
-        [HttpGet("upload/{siteName}/:/{**path}")]
-        public async Task<IActionResult> GetUploadUrl(string siteName, string path)
+        [HttpGet("upload/{siteName}/{**fileName}")]
+        public async Task<IActionResult> GetUploadUrl(string siteName, string fileName)
         {
             bool isAollowAnonymous = string.IsNullOrEmpty(setting.Get("AllowAnonymouslyUpload")) ? false : Convert.ToBoolean(setting.Get("AllowAnonymouslyUpload"));
             bool isAdmin = false;
@@ -194,18 +195,13 @@ namespace YukiDrive.Controllers
                     });
                 }
             }
-            if (string.IsNullOrEmpty(path))
-            {
-                return BadRequest(new ErrorResponse()
-                {
-                    Message = "必须存在上传路径"
-                });
-            }
+            string path = Path.Combine($"upload/{Guid.NewGuid().ToString()}",fileName);
             try
             {
                 var result = await driveService.GetUploadUrl(path, siteName);
                 return Ok(new {
-                    requestUrl = result
+                    requestUrl = result,
+                    fileUrl = $"{Configuration.BaseUri}/api/files/{siteName}/{path}"
                 });
             }
             catch (Exception e)
