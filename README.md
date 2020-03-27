@@ -13,11 +13,12 @@ Demo：https://drive.yukino.co/
 
 ## 部署
 
-查看[安装文档](https://github.com/YukiCoco/YukiDrive/blob/master/doc/Usage.md)
+查看[安装文档](https://github.com/YukiCoco/YukiDrive/blob/master/doc/Usage.md)  
+查看[常见问题](https://github.com/YukiCoco/YukiDrive/blob/master/doc/FAQ.md)
 
 ## TODO
 
-+ 文件上传命令行接口
++ 文件上传命令行接口（已完成）
 + 网页文件上传
 + 离线下载
 + 多账户支持
