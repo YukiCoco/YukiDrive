@@ -209,5 +209,22 @@ namespace Test
             // ClientCredentialProvider authProvider = new ClientCredentialProvider(confidentialClientApplication);
             // Debug.WriteLine(authProvider.Scope);
         }
+
+        [TestMethod]
+        public void TestTimer2(){
+            //定时更新Token
+            Timer timer = new Timer(o =>
+            {
+                // if (File.Exists(TokenCacheHelper.CacheFilePath))
+                // {
+                //     authorizeResult = authProvider.ClientApplication.AcquireTokenSilent(Configuration.Scopes, Configuration.AccountName).ExecuteAsync().Result;
+                // }
+                Debug.WriteLine("计时");
+            }, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(2));
+            while (true)
+            {
+                Thread.Sleep(1000);
+            }
+        }
     }
 }
