@@ -37,6 +37,8 @@ namespace YukiDrive.Services
             if(string.IsNullOrEmpty(key) || string.IsNullOrEmpty(key)){
                 throw new Exception("键值对为空");
             }
+            if(string.IsNullOrEmpty(value))
+                value = "";
             //已经存在
             if(context.Settings.Any(setting => setting.Key == key)){
                 Setting setting = context.Settings.Single(setting => setting.Key == key);
