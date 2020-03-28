@@ -29,6 +29,7 @@ import 'filepond/dist/filepond.min.css';
 // // Import image preview and file type validation plugins
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import axios from 'axios'
+import { get } from '../helpers/helper'
 const FilePond = vueFilePond(FilePondPluginFileValidateType);
 // Create component
 export default {
@@ -46,7 +47,7 @@ export default {
                         return
                     }
                     //获取上传 url
-                    axios.get(`${this.$store.state.settings.baseUrl}/api/upload/${this.selectedDrive}/${file.name}`).then(response => {
+                        get(`${this.$store.state.settings.baseUrl}/api/upload/${this.selectedDrive}/${file.name}`,null,response => {
                         let requestUrl = response.data.requestUrl
                         this.downloadUrls.push(response.data.fileUrl)
                         const request = new XMLHttpRequest()
