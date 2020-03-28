@@ -18,8 +18,6 @@ namespace YukiDrive.Services
     public class DriveAccountService : IDriveAccountService
     {
         private IConfidentialClientApplication app;
-        private AuthenticationResult authorizeResult;
-        private AuthorizationCodeProvider authProvider;
         public SiteContext SiteContext { get; set; }
         /// <summary>
         /// Graph实例
@@ -33,8 +31,6 @@ namespace YukiDrive.Services
             this.SiteContext = siteContext;
             this.tokenService = tokenService;
             this.app = tokenService.app;
-            this.authorizeResult = tokenService.authorizeResult;
-            this.authProvider = tokenService.authProvider;
             this.Graph = tokenService.Graph;
         }
         /// <summary>
@@ -66,7 +62,7 @@ namespace YukiDrive.Services
                 {
                     httpClient.Timeout = TimeSpan.FromSeconds(20);
                     var apiCaller = new ProtectedApiCallHelper(httpClient);
-                    await apiCaller.CallWebApiAndProcessResultASync($"{Configuration.GraphApi}/v1.0/sites/{Configuration.DominName}:/sites/{siteName}", authorizeResult.AccessToken, (result) =>
+                    await apiCaller.CallWebApiAndProcessResultASync($"{Configuration.GraphApi}/v1.0/sites/{Configuration.DominName}:/sites/{siteName}", GetToken(), (result) =>
                     {
                         site.SiteId = result.Properties().Single((prop) => prop.Name == "id").Value.ToString();
                         site.Name = result.Properties().Single((prop) => prop.Name == "name").Value.ToString();
@@ -133,6 +129,14 @@ namespace YukiDrive.Services
         {
             SiteContext.Sites.Remove(SiteContext.Sites.Single(site => site.NickName == nickName));
             await SiteContext.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// 获取 Token
+        /// </summary>
+        /// <returns></returns>
+        public string GetToken(){
+            return app.AcquireTokenSilent(Configuration.Scopes, Configuration.AccountName).ExecuteAsync().Result.AccessToken;
         }
         public class DriveInfo
         {

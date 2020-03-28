@@ -9,7 +9,7 @@
                 <v-divider></v-divider>
                 <v-card-text>
                     <div id="dplayer"></div>
-                    <v-img v-if="this.$store.state.show.icon == 'mdi-image'" :src="this.$store.state.show.url">
+                    <v-img v-if="this.$store.state.show.icon == 'mdi-image'" :src="this.$store.state.show.downloadUrl">
                         <template v-slot:placeholder>
                             <v-row class="fill-height ma-0" align="center" justify="center">
                                 <v-progress-circular size="75" indeterminate></v-progress-circular>

@@ -48,5 +48,11 @@ namespace YukiDrive.Services
         /// <param name="nickName"></param>
         /// <returns></returns>
         public Task Unbind(string nickName);
+
+        /// <summary>
+        /// 获得账户 Token
+        /// </summary>
+        /// <returns></returns>
+        public string GetToken();
     }
 }

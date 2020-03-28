@@ -15,6 +15,7 @@ using YukiDrive.Services;
 using YukiDrive.Contexts;
 using YukiDrive;
 using Newtonsoft.Json;
+using static YukiDrive.Helpers.ProtectedApiCallHelper;
 
 namespace Test
 {
@@ -81,15 +82,25 @@ namespace Test
                 Thread.Sleep(1000);
             }
         }
-        // [TestMethod]
-        // public void TestMethod1()
-        // {
-        //     DriveAccountService driveAccountService = new DriveAccountService(new SiteContext());
-        //     DriveService service = new DriveService(driveAccountService, new SiteContext(), new DriveContext());
-        //     //var drive = driveAccountService.Graph.Sites["alphaone.sharepoint.cn,217fb322-ee69-4fe7-af84-a1d018d1cf2b,c5bc7d0b-0a0f-49f6-9589-61481d4266ab"].Drive.Request().GetAsync().Result;
-        //     Debug.WriteLine(driveAccountService.Graph.Sites["alphaone.sharepoint.cn,217fb322-ee69-4fe7-af84-a1d018d1cf2b,c5bc7d0b-0a0f-49f6-9589-61481d4266ab"].Drive.RequestUrl);
-        //     Debug.WriteLine(driveAccountService.authorizeResult.AccessToken);
-        // }
+        [TestMethod]
+        public void TestMethod1()
+        {
+            Debug.WriteLine(System.IO.Directory.GetCurrentDirectory());
+            DriveAccountService driveAccountService = new DriveAccountService(new SiteContext(),new TokenService());
+            DriveService service = new DriveService(driveAccountService, new SiteContext(), new DriveContext());
+            //var drive = driveAccountService.Graph.Sites["alphaone.sharepoint.cn,217fb322-ee69-4fe7-af84-a1d018d1cf2b,c5bc7d0b-0a0f-49f6-9589-61481d4266ab"].Drive.Request().GetAsync().Result;
+            //Debug.WriteLine(driveAccountService.Graph.Sites["alphaone.sharepoint.cn,217fb322-ee69-4fe7-af84-a1d018d1cf2b,c5bc7d0b-0a0f-49f6-9589-61481d4266ab"].Drive.RequestUrl);
+            // string uploadStr = driveAccountService.Graph.Me.Drive.Root.ItemWithPath("TestUpload/TestUpload").CreateUploadSession().Request().RequestUrl;
+            // Debug.WriteLine(uploadStr);
+            string token = driveAccountService.GetToken();
+            Debug.WriteLine(token);
+            var result = driveAccountService.Graph.Me.Drive.Root.ItemWithPath("TestUpload/photo7.jpeg").Thumbnails.Request().GetAsync().Result;
+            // ProtectedApiCallHelper apiCallHelper = new ProtectedApiCallHelper(new HttpClient());
+            // apiCallHelper.CallWebApiAndProcessResultASync(uploadStr,token,o => {
+            //     Debug.WriteLine(o["uploadUrl"]);
+            // },Method.Post).Wait();
+            // Debug.WriteLine(service.GetUploadUrl("615.png"));
+        }
 
         [TestMethod]
         public void JsonTest()
@@ -197,6 +208,23 @@ namespace Test
 
             // ClientCredentialProvider authProvider = new ClientCredentialProvider(confidentialClientApplication);
             // Debug.WriteLine(authProvider.Scope);
+        }
+
+        [TestMethod]
+        public void TestTimer2(){
+            //定时更新Token
+            Timer timer = new Timer(o =>
+            {
+                // if (File.Exists(TokenCacheHelper.CacheFilePath))
+                // {
+                //     authorizeResult = authProvider.ClientApplication.AcquireTokenSilent(Configuration.Scopes, Configuration.AccountName).ExecuteAsync().Result;
+                // }
+                Debug.WriteLine("计时");
+            }, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(2));
+            while (true)
+            {
+                Thread.Sleep(1000);
+            }
         }
     }
 }

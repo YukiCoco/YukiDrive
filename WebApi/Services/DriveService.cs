@@ -12,6 +12,7 @@ using YukiDrive.Models;
 using System.Threading.Tasks;
 using YukiDrive.Helpers;
 using YukiDrive.Contexts;
+using System.IO;
 
 namespace YukiDrive.Services
 {
@@ -73,8 +74,14 @@ namespace YukiDrive.Services
         /// <returns></returns>
         public async Task<DriveFile> GetDriveItemByPath(string path, string siteName = "onedrive")
         {
+            string[] imgArray = { ".png", ".jpg", ".jpeg", ".bmp", ".webp"};
+            string extension = Path.GetExtension(path);
             string siteId = GetSiteId(siteName);
             var drive = (siteName != "onedrive") ? graph.Sites[siteId].Drive : graph.Me.Drive;
+            //这么写是因为：分块上传图片后直接获取会报错。
+            if(imgArray.Contains(extension)) {
+                await drive.Root.ItemWithPath(path).Thumbnails.Request().GetAsync();
+            }
             var result = await drive.Root.ItemWithPath(path).Request().GetAsync();
             DriveFile file = GetItem(result);
             return file;
@@ -92,6 +99,27 @@ namespace YukiDrive.Services
             DriveFile file = GetItem(result);
             return file;
         }
+
+        /// <summary>
+        /// 获得上传url
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="siteName"></param>
+        /// <returns></returns>
+        public async Task<string> GetUploadUrl(string path, string siteName = "onedrive")
+        {
+            string siteId = GetSiteId(siteName);
+            var drive = (siteName != "onedrive") ? graph.Sites[siteId].Drive : graph.Me.Drive;
+            string requestUrl = drive.Root.ItemWithPath(path).CreateUploadSession().Request().RequestUrl;
+            ProtectedApiCallHelper apiCallHelper = new ProtectedApiCallHelper(new HttpClient());
+            string uploadUrl = "";
+            await apiCallHelper.CallWebApiAndProcessResultASync(requestUrl, accountService.GetToken(), o =>
+            {
+                uploadUrl = o["uploadUrl"].ToString();
+            }, ProtectedApiCallHelper.Method.Post);
+            return uploadUrl;
+        }
+
         #region PrivateMethod
         private DriveFile GetItem(DriveItem result)
         {

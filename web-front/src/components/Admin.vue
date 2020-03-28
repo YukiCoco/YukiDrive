@@ -60,6 +60,15 @@
                                 </v-text-field>
                                 <v-text-field label="页脚" hint="设置网站页脚，支持 Markdown，建议保留 Power by YukiDrive" v-model="settings.footer">
                                 </v-text-field>
+                                <v-row>
+                                    <v-col cols="9">
+                                        <v-text-field label="CLI 上传密码" hint="设置密码后配合 YukiDrive 的上传工具使用" v-model="settings.uploadPassword">
+                                        </v-text-field>
+                                    </v-col>
+                                    <v-col cols="3">
+                                        <v-switch v-model="settings.allowAnonymouslyUpload" label="是否允许匿名上传"></v-switch>
+                                    </v-col>
+                                </v-row>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -153,7 +162,9 @@ export default {
                 webName: undefined,
                 defaultDrive: undefined,
                 accountStatus: undefined,
-                footer: undefined
+                footer: undefined,
+                allowAnonymouslyUpload: undefined,
+                uploadPassword: undefined
             },
             newBind: {
                 siteName: undefined,
@@ -165,15 +176,15 @@ export default {
             },
             editDriveSettings: {
                 siteName: '',
-                nickName : '',
-                hiddenFolders : ''
+                nickName: '',
+                hiddenFolders: ''
             },
-            markdownText : ''
+            markdownText: ''
         }
     },
     mounted() {
         //判断是否登录
-        if(Cookies.get("token") == null) {
+        if (Cookies.get("token") == null) {
             this.$router.push('login')
         }
         helper.get(this.$store.state.settings.baseUrl + "/api/admin/info", null, response => {
@@ -191,14 +202,16 @@ export default {
                 webName: response.data.webName,
                 defaultDrive: response.data.defaultDrive,
                 accountStatus: response.data.accountStatus,
-                footer : response.data.footer
+                footer: response.data.footer,
+                allowAnonymouslyUpload : response.data.allowAnonymouslyUpload,
+                uploadPassword : response.data.uploadPassword
             }
             this.markdownText = response.data.readme
         })
     },
     methods: {
         updateSettings: function () {
-            helper.postWithToken(this.$store.state.settings.baseUrl +  "/api/admin/settings", this.settings, () => {
+            helper.postWithToken(this.$store.state.settings.baseUrl + "/api/admin/settings", this.settings, () => {
                 this.$store.commit('openSnackBar', '更新成功！')
                 //刷新此页
                 this.$router.go(0)
@@ -229,7 +242,7 @@ export default {
             this.dialog.editDriveDialog = true
         },
         editDriveName: function () {
-            helper.postWithToken(this.$store.state.settings.baseUrl + "/api/admin/sites/settings",this.editDriveSettings, () => {
+            helper.postWithToken(this.$store.state.settings.baseUrl + "/api/admin/sites/settings", this.editDriveSettings, () => {
                 this.$store.commit('openSnackBar', '已更新驱动器设置')
                 this.dialog.newBindDialog = false
                 //刷新此页

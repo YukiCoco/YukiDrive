@@ -114,7 +114,9 @@ namespace YukiDrive.Controllers
                     defaultDrive = setting.Get("DefaultDrive"),
                     accountStatus = setting.Get("AccountStatus"),
                     readme = setting.Get("Readme"),
-                    footer = setting.Get("Footer")
+                    footer = setting.Get("Footer"),
+                    allowAnonymouslyUpload = string.IsNullOrEmpty(setting.Get("AllowAnonymouslyUpload")) ? false : Convert.ToBoolean(setting.Get("AllowAnonymouslyUpload")),
+                    uploadPassword = setting.Get("UploadPassword"),
                 });
             }
             catch (Exception ex)
@@ -162,6 +164,8 @@ namespace YukiDrive.Controllers
                 await setting.Set("WebName", toSaveSetting.webName);
                 await setting.Set("DefaultDrive", toSaveSetting.defaultDrive);
                 await setting.Set("Footer",toSaveSetting.footer);
+                await setting.Set("UploadPassword",toSaveSetting.uploadPassword);
+                await setting.Set("AllowAnonymouslyUpload",toSaveSetting.allowAnonymouslyUpload.ToString());
             }
             catch (Exception e)
             {
@@ -232,6 +236,8 @@ namespace YukiDrive.Controllers
 
         // }
 
+        
+
         #region 接收表单模型
         public class UpdateSettings
         {
@@ -241,6 +247,8 @@ namespace YukiDrive.Controllers
             public string defaultDrive { get; set; }
             public string readme { get; set; }
             public string footer { get; set; }
+            public bool allowAnonymouslyUpload { get; set; }
+            public string uploadPassword {get; set; }
         }
 
         public class AddSiteModel

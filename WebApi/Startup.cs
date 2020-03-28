@@ -37,7 +37,7 @@ namespace YukiDrive
             services.AddDbContext<UserContext>(ServiceLifetime.Scoped);
             services.AddDbContext<DriveContext>(ServiceLifetime.Transient);
             //不要被 CG Token获取采用单一实例
-            services.AddSingleton<TokenService>();
+            services.AddSingleton<TokenService>(new TokenService());
             services.AddTransient<IDriveAccountService, DriveAccountService>();
             services.AddTransient<IDriveService, DriveService>();
             services.AddScoped<IUserService, UserService>();

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Cookies from 'js-cookie'
 
 Vue.use(Vuex)
 
@@ -27,7 +28,8 @@ export default new Vuex.Store({
       url:undefined,
       icon:undefined,
       downloadUrl:undefined
-    }
+    },
+    token: (Cookies.get('token') == undefined) ? '' : Cookies.get('token')
   },
   mutations: {
     changeDrawerState(state,payload){

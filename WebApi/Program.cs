@@ -65,11 +65,23 @@ namespace YukiDrive
                 logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
             })
             .UseNLog()
-            .ConfigureKestrel(options => {
-                options.ConfigureHttpsDefaults(options => {
-                    if(Configuration.HttpsCertificate.Enable){
-                        options.ServerCertificate = new X509Certificate2(Configuration.HttpsCertificate.FilePath,Configuration.HttpsCertificate.Password);
+            .ConfigureKestrel(options =>
+            {
+                options.ConfigureHttpsDefaults(options =>
+                {
+                    try
+                    {
+                        if (Configuration.HttpsCertificate.Enable)
+                        {
+                            options.ServerCertificate = new X509Certificate2(Configuration.HttpsCertificate.FilePath, Configuration.HttpsCertificate.Password);
+                        }
                     }
+                    catch (System.Exception e)
+                    {
+                        System.Console.WriteLine("https 证书配置错误");
+                        System.Console.WriteLine(e.Message);
+                    }
+
                 });
             })
             .UseStartup<Startup>();
@@ -78,7 +90,7 @@ namespace YukiDrive
         public static void Init()
         {
             //初始化
-            if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory(),"YukiDrive.db")))
+            if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "YukiDrive.db")))
             {
                 File.Copy("YukiDrive.template.db", "YukiDrive.db");
                 System.Console.WriteLine("数据库创建成功");
@@ -111,12 +123,6 @@ namespace YukiDrive
                 userService.Update(userService.GetByUsername(Configuration.AdminName), YukiDrive.Configuration.AdminPassword);
             }
             System.Console.WriteLine("密码更新成功");
-        }
-
-        static void AppDomain_CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            // use logger here to log the events exception object
-            // before the application quits
         }
     }
 }
