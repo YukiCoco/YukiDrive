@@ -49,7 +49,6 @@ export default {
             this.$refs.footer.updateFooter()
             //更新 Drawer
             //添加上传文件页面
-            console.log(response.data.allowUpload)
             //接口的 boolean 这么奇怪？
             if (response.data.allowUpload || (this.$store.state.token != '')) {
                 this.$refs.drawer.updateActions({
