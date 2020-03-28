@@ -16,7 +16,7 @@ Demo：https://drive.yukino.co/
 + 前后端分离，无刷新加载  
 + 可挂载 OneDrive 和任意多个 SharePoint 站点  
 + 提供文件上传 CLI
-+ 可上传文件
++ 上传文件
     + 无大小限制
     + 由 浏览器&CLI 直接对微软服务器上传，不消耗流量
 
