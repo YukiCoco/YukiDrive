@@ -9,12 +9,28 @@
     </v-list-item>
     <v-divider></v-divider>
     <v-list dense nav>
-        <v-list-item v-for="site in sites" :key="site.name" link :to="'/' + site.name">
-            <v-list-item-icon>
-                <v-icon>mdi-microsoft-onedrive</v-icon>
-            </v-list-item-icon>
+        <v-list-group
+            prepend-icon="mdi-microsoft-onedrive"
+            value="true"
+        >
+            <template v-slot:activator>
+            <v-list-item-content>
+              <v-list-item-title>驱动器</v-list-item-title>
+            </v-list-item-content>
+          </template>
+          <v-list-item v-for="site in sites" :key="site.name" link :to="'/' + site.name">
             <v-list-item-content>
                 <v-list-item-title>{{ site.nickName }}</v-list-item-title>
+            </v-list-item-content>
+        </v-list-item>
+        </v-list-group>
+
+        <v-list-item link :to="item.to" v-for="(item, index) in actions" :key="index">
+            <v-list-item-icon>
+                <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item-content>
         </v-list-item>
     </v-list>
@@ -27,7 +43,8 @@ import axios from 'axios'
 export default {
     data() {
         return {
-            sites: []
+            sites: [],
+            actions: []
         }
     },
     mounted() {
@@ -43,6 +60,11 @@ export default {
             set (value){
                 this.$store.commit('changeDrawerState',value)
             }
+        }
+    },
+    methods: {
+        updateActions: function(payload) {
+            this.actions.push(payload)
         }
     },
 }

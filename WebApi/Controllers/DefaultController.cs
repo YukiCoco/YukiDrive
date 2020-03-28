@@ -124,13 +124,15 @@ namespace YukiDrive.Controllers
         [HttpGet("info")]
         public IActionResult GetInfo()
         {
+            bool isAollowAnonymous = string.IsNullOrEmpty(setting.Get("AllowAnonymouslyUpload")) ? false : Convert.ToBoolean(setting.Get("AllowAnonymouslyUpload"));
             return Ok(new
             {
                 appName = setting.Get("AppName"),
                 webName = setting.Get("WebName"),
                 defaultDrive = setting.Get("DefaultDrive"),
                 readme = setting.Get("Readme"),
-                footer = setting.Get("Footer")
+                footer = setting.Get("Footer"),
+                allowUpload = isAollowAnonymous
             });
         }
         /// <summary>
