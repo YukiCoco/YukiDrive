@@ -35,13 +35,6 @@ Demo：https://drive.yukino.co/
 + 多账户支持
 + ...
 
-## 捐助  
-感谢每一位捐助的人
-<p>
- <img src="http://imglf5.nosdn0.126.net/img/UmRyZjRmMGJuY0dsZFNLYmUwdGhPa2l3NEdWQms4Nmh3c01hVzVkV0REZFluN0wvQnl2aVd3PT0.jpg" width = "30%" height = "30%" alt="图片名称" />
- <img src="http://imglf5.nosdn0.126.net/img/UmRyZjRmMGJuY0dsZFNLYmUwdGhPclZoUUpqZ2hOSVVIYWduYXYxR3NJZk4yb1lhWUZWdi93PT0.jpg" width = "30%" height = "30%" alt="图片名称" />
-</p>
-
 ## 引用  
 
 ### 前端
