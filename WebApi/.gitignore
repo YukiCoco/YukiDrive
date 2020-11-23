@@ -50,4 +50,4 @@ Secret
 
 publish.sh
 
-appsettings.json
+appsettings.Development.json
