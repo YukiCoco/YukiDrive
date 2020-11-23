@@ -213,7 +213,6 @@ server
 server
 {
     listen 80;
-		listen 443 ssl http2;
     server_name example.com *.example.com; #你的域名
     root /www/wwwroot/yukidrive/linux/wwwroot; # 填写为 程序所在目录/wwwroot
     
@@ -227,19 +226,10 @@ server
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header   X-Forwarded-Proto $scheme;
     }
-    
-    #SSL-START
-    ssl on;
-		ssl_certificate server.crt; #(证书公钥)
-		ssl_certificate_key server.key; #(证书私钥)
-
-		ssl_session_timeout 5m;
-		ssl_protocols  SSLv2 SSLv3 TLSv1;
-		ssl_ciphers  HIGH:!aNULL:!MD5;
-		ssl_prefer_server_ciphers on;
-    #SSL-END
 }
 ```
+
+然后使用 `certbot` 之类的自动脚本申请证书就可以
 
 ## 启动并登录后台绑定账户
 
