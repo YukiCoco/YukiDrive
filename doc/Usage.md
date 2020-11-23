@@ -271,12 +271,13 @@ Windows 用户直接打开 YukiDrive.exe 开始运行。
 做一些修改后复制下列**整条**语句到控制台执行
 
 ```shell
+RUNDIR=/www/wwwroot/drive.kurisu.moe/YukiDrive-1.1.2-linux-x64  #修改为程序所在目录
 echo "[Unit]
 Description=YukiDrive
 
 [Service]
-WorkingDirectory=/www/wwwroot/yukidrive/linux #修改为 程序所在目录
-ExecStart=/www/wwwroot/yukidrive/linux/YukiDrive #修改为 程序目录/YukiDrive
+WorkingDirectory=$RUNDIR
+ExecStart=$RUNDIR/YukiDrive
 Restart=always
 RestartSec=10
 KillSignal=SIGINT
