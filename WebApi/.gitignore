@@ -48,4 +48,10 @@ wwwroot
 
 Secret
 
+<<<<<<< HEAD
 publish.sh
+=======
+publish.sh
+
+appsettings.json
+>>>>>>> dev
