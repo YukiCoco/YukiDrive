@@ -53,5 +53,9 @@ publish.sh
 =======
 publish.sh
 
+<<<<<<< HEAD
 appsettings.json
+>>>>>>> dev
+=======
+appsettings.Development.json
 >>>>>>> dev

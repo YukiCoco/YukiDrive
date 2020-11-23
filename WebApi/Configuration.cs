@@ -12,7 +12,13 @@ namespace YukiDrive
         {
             //throw new Exception(Directory.GetCurrentDirectory());
             //File.WriteAllText("debug.log",Directory.GetCurrentDirectory());
-            builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", true, reloadOnChange: true);
+            bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+            if(!isDevelopment){
+                builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", true, reloadOnChange: true);
+            }
+            else{
+                builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.Development.json", true, reloadOnChange: true);
+            }
             configurationRoot = builder.Build();
         }
         /// <summary>
