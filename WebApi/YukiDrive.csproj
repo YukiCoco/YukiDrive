@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PublishSingleFile>true</PublishSingleFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,8 +22,9 @@
     <PackageReference Include="NLog" Version="4.7.0" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.0" />
     <PackageReference Include="System.IO.Pipelines" Version="4.7.0" />
-    <Content Update="nlog.config" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="YukiDrive.template.db" CopyToOutputDirectory="PreserveNewest" />
+    <Content Update="nlog.config" CopyToOutputDirectory="Always" ExcludeFromSingleFile="true"/>
+    <Content Include="YukiDrive.template.db" CopyToOutputDirectory="Always" ExcludeFromSingleFile="true"/>
+    <Content Remove="appsettings.Development.json" />
   </ItemGroup>
 
 </Project>
