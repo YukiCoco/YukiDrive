@@ -7,7 +7,8 @@
 无需搭建运行环境，下载并配置完成后直接运行。
 
 ## 演示
-Demo：https://drive.kurisu.moe/
+Demo：https://drive.kurisu.moe
+Telegram 交流群：https://t.me/yukidrive
 
 ## Feature
 + .Net Core 多线程高并发  
