@@ -47,3 +47,7 @@ logs
 wwwroot
 
 Secret
+
+publish.sh
+
+appsettings.json
