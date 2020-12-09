@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using System.Linq;
 
 namespace YukiDrive
 {
@@ -128,5 +129,10 @@ namespace YukiDrive
                 return randomStr;
             }
         }
+
+        /// <summary>
+        /// CDN URL
+        /// </summary>
+        public static string[] CDNUrls => configurationRoot.GetSection("CDNUrls").GetChildren().Select(x => x.Value).ToArray();
     }
 }
