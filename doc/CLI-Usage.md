@@ -2,6 +2,10 @@
 
 ## 使用方法
 
+### 前言
+
+目前处于 BETA 版本，将会是接下来开发的重心
+
 ### 变量介绍
 
 站点名： SharePoint 创建时输入的名字，可在后台查看。输入 onedrive 则为 OneDrive。
@@ -14,7 +18,7 @@
 
 命令：`YukiDrive.CLI --init 网址 CLI密码`
 
-Sample：`./YukiDrive.CLI --init https://drive.yukino.co myPassword`
+示例：`./YukiDrive.CLI --init https://drive.yukino.co myPassword`
 
 ### 上传
 
@@ -22,7 +26,7 @@ Sample：`./YukiDrive.CLI --init https://drive.yukino.co myPassword`
 
 命令：`YukiDrive.CLI --upload 站点名 本地路径 远程路径`
 
-Sample：
+示例：
 
 `./YukiDrive.CLI --upload onedrive /Users/yukino/Desktop/upload.jpeg upload ` 将 upload.jpeg 上传到 OneDrive 的 upload 文件夹里
 
@@ -34,7 +38,7 @@ Sample：
 
 命令：`YukiDrive.CLI --upload-folder 站点名 本地路径 远程路径 线程数`
 
-Sample：
+示例：
 
 `./YukiDrive.CLI --upload-folder onedrive /Users/yukino/Desktop/1.0.0 YukiDrive/WebApi/1.1.0 4` 使用4线程将文件夹 /Users/yukino/Desktop/1.0.0 上传到 OneDrive 的 YukiDrive/WebApi/1.1.0 文件夹里
 
