@@ -312,3 +312,5 @@ Mar 23 23:39:54 ThoroughUnconscious-VM dotnet-YukiDrive[7206]: Application start
 退出服务
 
 `systemctl stop YukiDrive.service`
+## 使用 CDN 加速下载
+见：https://github.com/YukiCoco/YukiDrive/blob/master/doc/CDN-usage.md
