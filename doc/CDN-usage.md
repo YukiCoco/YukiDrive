@@ -1,8 +1,8 @@
 ## 使用 CDN 加速下载
 
 ### 准备
-首先在您的 CDN 供应商中回源地址填写为您实际下载文件文件域名，比如我的为 `yukistudio-my.sharepoint.com`，然后您的 CDN 提供商会为您提供 CDN 的加速域名，如 `ancient-wind-69a2.yukinococo.workers.dev`，记录这个域名
-
+首先在您的 CDN 供应商中回源地址填写为您实际下载文件文件域名，比如我的为 `yukistudio-my.sharepoint.com`，然后您的 CDN 提供商会为您提供 CDN 的加速域名，如 `ancient-wind-69a2.yukinococo.workers.dev`，记录这个域名  
+**获得下载文件域名的方法**：使用浏览器随便下载一个文件，然后右键 `复制下载链接`，复制到的就是实际下载域名
 ### 配置
 打开 `appsettings.json` 文件，在 `CDNUrls` 字段中添加 `实际下载域名;CDN 加速域名`，如我的就填写为 `yukistudio-my.sharepoint.com;ancient-wind-69a2.yukinococo.workers.dev`，然后重启 YukiDrive 即可.
 
