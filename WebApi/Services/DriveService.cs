@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using YukiDrive.Helpers;
 using YukiDrive.Contexts;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace YukiDrive.Services
 {
@@ -74,12 +75,13 @@ namespace YukiDrive.Services
         /// <returns></returns>
         public async Task<DriveFile> GetDriveItemByPath(string path, string siteName = "onedrive")
         {
-            string[] imgArray = { ".png", ".jpg", ".jpeg", ".bmp", ".webp"};
+            string[] imgArray = { ".png", ".jpg", ".jpeg", ".bmp", ".webp" };
             string extension = Path.GetExtension(path);
             string siteId = GetSiteId(siteName);
             var drive = (siteName != "onedrive") ? graph.Sites[siteId].Drive : graph.Me.Drive;
             //这么写是因为：分块上传图片后直接获取会报错。
-            if(imgArray.Contains(extension)) {
+            if (imgArray.Contains(extension))
+            {
                 await drive.Root.ItemWithPath(path).Thumbnails.Request().GetAsync();
             }
             var result = await drive.Root.ItemWithPath(path).Request().GetAsync();
@@ -135,7 +137,11 @@ namespace YukiDrive.Services
             {
                 //可能是文件夹
                 if (result.AdditionalData.TryGetValue("@microsoft.graph.downloadUrl", out downloadUrl))
-                    file.DownloadUrl = (string)downloadUrl;
+                {
+                    var dlurl = (string)downloadUrl;
+                    ReplaceCDNUrls(ref dlurl);
+                    file.DownloadUrl = dlurl;
+                }
             }
 
             return file;
@@ -171,7 +177,12 @@ namespace YukiDrive.Services
                 {
                     //可能是文件夹
                     if (item.AdditionalData.TryGetValue("@microsoft.graph.downloadUrl", out downloadUrl))
-                        file.DownloadUrl = (string)downloadUrl;
+                    {
+                        var dlurl = (string)downloadUrl;
+                        ReplaceCDNUrls(ref dlurl);
+                        file.DownloadUrl = dlurl;
+                    }
+
                 }
                 files.Add(file);
             }
@@ -191,6 +202,18 @@ namespace YukiDrive.Services
                 return null;
             }
             return site.SiteId;
+        }
+
+        private void ReplaceCDNUrls(ref string downloadUrl)
+        {
+            if (Configuration.CDNUrls.Count() != 0)
+            {
+                foreach (var item in Configuration.CDNUrls)
+                {
+                    var a = item.Split(";");
+                    downloadUrl = downloadUrl.Replace(a[0], a[1]);
+                }
+            }
         }
         #endregion
     }
