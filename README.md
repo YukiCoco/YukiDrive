@@ -6,9 +6,6 @@
 
 无需搭建运行环境，下载并配置完成后直接运行。
 
-## 演示
-Demo：https://drive.kurisu.moe  
-
 ## Feature
 + .Net Core 多线程高并发  
 + 前后端分离，无刷新加载  
