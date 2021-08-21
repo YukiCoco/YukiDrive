@@ -8,7 +8,6 @@
 
 ## 演示
 Demo：https://drive.kurisu.moe  
-Telegram 交流群：https://t.me/yukidrive
 
 ## Feature
 + .Net Core 多线程高并发  
