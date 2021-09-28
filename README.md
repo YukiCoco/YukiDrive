@@ -4,7 +4,9 @@
 
 后端采用 .net core 3.1，前端使用 Vue ，前后端分离，无刷新加载。
 
-无需搭建运行环境，下载并配置完成后直接运行。
+无需搭建运行环境，下载并配置完成后直接运行。  
+
+Demo: https://drive.kurisu.moe
 
 ## Feature
 + .Net Core 多线程高并发  
