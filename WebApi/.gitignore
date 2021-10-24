@@ -47,15 +47,6 @@ logs
 wwwroot
 
 Secret
-
-<<<<<<< HEAD
-publish.sh
-=======
-publish.sh
-
-<<<<<<< HEAD
 appsettings.json
->>>>>>> dev
-=======
+publish.sh
 appsettings.Development.json
->>>>>>> dev
