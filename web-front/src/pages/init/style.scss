@@ -1,0 +1,62 @@
+// .app-container {
+//     height: 100%;
+// }
+
+#main {
+    display: flex;
+    min-height: 100vh;
+    width: 100vw;
+    background-image: url('./background.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+h1,
+p {
+    color: #454545;
+}
+
+body {
+    margin: 0px !important;
+}
+
+#setting-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+#setting-page>div {
+    width: 100%;
+    display: grid;
+    grid-template-rows: auto repeat(2, 1fr);
+    opacity: 90%;
+    padding: 1rem;
+    background: rgba(241, 241, 241, 0.90);
+    box-shadow: 5px 5px 20px 0 rgba(0, 0, 0, 0.50);
+    row-gap: 0.5rem;
+}
+
+.setting-title span {
+    display: block;
+    background-color: #454545;
+    height: 0.4rem;
+    //width: auto;
+}
+
+.setting-title>div {
+    display: inline-block;
+    //width: auto;
+}
+
+.setting-title {
+    padding-bottom: 1rem;
+    padding-top: 0.5rem;
+}
+
+.setting-item>p {
+    font-size: 16px;
+    font-weight: bold;
+}

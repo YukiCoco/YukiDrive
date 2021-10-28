@@ -1,0 +1,43 @@
+
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <polygon id="path-p3e0l2j6xg-1" points="707.932702 0 320 1024 0 1024 0 0"></polygon>
+        <filter x="-3.5%" y="-3.2%" width="109.9%" height="106.8%" filterUnits="objectBoundingBox" id="filter-p3e0l2j6xg-2">
+            <feOffset dx="10" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="10" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <polygon id="path-p3e0l2j6xg-3" points="400 0 800 1024 5.68434189e-14 1024 5.68434189e-14 0"></polygon>
+        <filter x="-2.9%" y="-3.3%" width="109.2%" height="107.2%" filterUnits="objectBoundingBox" id="filter-p3e0l2j6xg-4">
+            <feOffset dx="14" dy="3" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="10" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <polygon id="path-p3e0l2j6xg-5" points="200 0 707.932702 512 280 1024 5.68434189e-14 1024 5.68434189e-14 0"></polygon>
+        <filter x="-4.0%" y="-3.5%" width="110.8%" height="107.4%" filterUnits="objectBoundingBox" id="filter-p3e0l2j6xg-6">
+            <feMorphology radius="1" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="10" dy="2" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="10" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.591264205 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Init-Page" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="桌面端">
+            <g id="Background" transform="translate(-0.000000, 0.000000)">
+                <rect id="矩形" fill="#BB4678" x="540" y="0" width="484" height="1024"></rect>
+                <g id="路径-3">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-p3e0l2j6xg-2)" xlink:href="#path-p3e0l2j6xg-1"></use>
+                    <use fill="#D484AF" fill-rule="evenodd" xlink:href="#path-p3e0l2j6xg-1"></use>
+                </g>
+                <g id="路径-2">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-p3e0l2j6xg-4)" xlink:href="#path-p3e0l2j6xg-3"></use>
+                    <use fill="#E6A5C8" fill-rule="evenodd" xlink:href="#path-p3e0l2j6xg-3"></use>
+                </g>
+                <g id="路径">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-p3e0l2j6xg-6)" xlink:href="#path-p3e0l2j6xg-5"></use>
+                    <use fill="#F4D7E6" fill-rule="evenodd" xlink:href="#path-p3e0l2j6xg-5"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
