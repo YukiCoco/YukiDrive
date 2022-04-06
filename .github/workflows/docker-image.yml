@@ -22,7 +22,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD_DOCKERHUB }}
     # 推送到dockerhub
     - name: push to DockerHub
-      uses: docker/push-action@v2
+      uses: docker/build-push-action@v2
       with:
           push: true
           platforms: linux/386,linux/amd64
