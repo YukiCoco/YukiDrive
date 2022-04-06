@@ -26,5 +26,5 @@ jobs:
       with:
           push: true
           platforms: linux/386,linux/amd64
-          tags: yukidrive:$(date +%s)
+          tags: yukidrive:latest
 
