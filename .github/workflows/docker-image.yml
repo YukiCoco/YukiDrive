@@ -10,19 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     # 构建Docker镜像
-    - uses: actions/checkout@v3
+    - name: Checkout Github
+      uses: actions/checkout@v3
     - name: Build the Docker image
-    - run: docker build . --file Dockerfile --tag yukidrive:$(date +%s)
+      run: docker build . --file Dockerfile --tag yukidrive:$(date +%s)
     # 登陆dockerhub
-    - uses: docker/login-action@v2
     - name: Login to DockerHub
-    - with:
+      uses: docker/login-action@v2
+      with:
           username: ${{ secrets.DOCKER_USERNAME_DOCKERHUB }}
           password: ${{ secrets.DOCKER_PASSWORD_DOCKERHUB }}
     # 推送到dockerhub
     - name: push to DockerHub
-    - uses: docker/push-action@v2
-    - with:
+      uses: docker/push-action@v2
+      with:
           push: true
           platforms: linux/386,linux/amd64
           tags: secrets.DOCKER_USERNAME_DOCKERHUB/yukidrive:$(date +%s)
