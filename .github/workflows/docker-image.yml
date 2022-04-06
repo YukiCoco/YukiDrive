@@ -2,17 +2,15 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ release-linux-x86-64 ]
+    branches: [ master ]
   pull_request:
-    branches: [ release-linux-x86-64 ]
+    branches: [ master ]
 
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag YukiDrive:$(date +%s)
+      run: pwd && docker build . --file Dockerfile --tag yukidrive:$(date +%s)
