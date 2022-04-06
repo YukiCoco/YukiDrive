@@ -6,4 +6,5 @@ RUN cd /root/&& unzip YukiDrive.zip
 RUN mkdir -p /data
 RUN mv /root/YukiDrive.db /data/YukiDrive.db
 RUN ln -s /data/YukiDrive.db /root/YukiDrive.db
+EXPOSE 1273
 CMD cd /root/ && nohup /root/YukiDrive
