@@ -25,6 +25,6 @@ jobs:
       uses: docker/build-push-action@v2
       with:
           push: true
-          platforms: linux/386,linux/amd64
+          platforms: linux/amd64
           tags: yukidrive:latest
 
