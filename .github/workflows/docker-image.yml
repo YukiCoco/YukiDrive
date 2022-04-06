@@ -26,5 +26,5 @@ jobs:
       with:
           push: true
           platforms: linux/386,linux/amd64
-          tags: secrets.DOCKER_USERNAME_DOCKERHUB/yukidrive:$(date +%s)
+          tags: ${{ secrets.DOCKER_USERNAME_DOCKERHUB }}/yukidrive:$(date +%s)
 
