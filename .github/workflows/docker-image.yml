@@ -13,7 +13,7 @@ jobs:
     - name: Checkout Github
       uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag yukidrive:latest && docker login --username=${{ secrets.DOCKER_USERNAME_DOCKERHUB }} --password=${{ secrets.DOCKER_PASSWORD_DOCKERHUB }} && docker push ${{ secrets.DOCKER_USERNAME_DOCKERHUB }}/yukidrive-server:latest
+      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME_DOCKERHUB }}/yukidrive-server:latest && docker login --username=${{ secrets.DOCKER_USERNAME_DOCKERHUB }} --password=${{ secrets.DOCKER_PASSWORD_DOCKERHUB }} && docker push ${{ secrets.DOCKER_USERNAME_DOCKERHUB }}/yukidrive-server:latest
 #     # 登陆dockerhub
 #     - name: Login to DockerHub
 #       uses: docker/login-action@v1
