@@ -9,10 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    # 
+    # 构建Docker镜像
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag yukidrive:$(date +%s)
+    - run: docker build . --file Dockerfile --tag yukidrive:$(date +%s)
     # 登陆dockerhub
     - uses: docker/login-action@v2
     - name: Login to DockerHub
