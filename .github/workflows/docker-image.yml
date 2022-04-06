@@ -9,6 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    # 
     - uses: actions/checkout@v3
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag yukidrive:$(date +%s)
@@ -18,7 +19,7 @@ jobs:
     - with:
           username: ${{ secrets.DOCKER_USERNAME_DOCKERHUB }}
           password: ${{ secrets.DOCKER_PASSWORD_DOCKERHUB }}
-    # 编译并且推送到dockerhub
+    # 推送到dockerhub
     - name: push to DockerHub
     - uses: docker/push-action@v2
     - with:
