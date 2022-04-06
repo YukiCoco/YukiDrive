@@ -1,5 +1,4 @@
 name: Docker Image CI
-
 on:
   push:
     branches: [ master ]
@@ -7,10 +6,24 @@ on:
     branches: [ master ]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: pwd && docker build . --file Dockerfile --tag yukidrive:$(date +%s)
+      run: docker build . --file Dockerfile --tag yukidrive:$(date +%s)
+    # 登陆dockerhub
+    - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME_DOCKERHUB }}
+          password: ${{ secrets.DOCKER_PASSWORD_DOCKERHUB }}
+    # 编译并且推送到dockerhub
+    - name: push to DockerHub
+        uses: docker/push-action@v2
+        with:
+          push: true
+          platforms: linux/386,linux/amd64
+          tags: |
+            secrets.DOCKER_USERNAME_DOCKERHUB/yukidrive:$(date +%s)
+
