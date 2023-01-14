@@ -11,7 +11,7 @@
     "@babel/compat-data": "7.9.0",
     "clipboard": "^2.0.6",
     "core-js": "^3.6.4",
-    "dplayer": "^1.25.0",
+    "dplayer": "^1.27.0",
     "filepond": "^4.13.0",
     "filepond-plugin-file-validate-type": "^1.2.5",
     "js-cookie": "^2.2.1",
